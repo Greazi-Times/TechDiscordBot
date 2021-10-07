@@ -6,8 +6,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import me.TechsCode.TechDiscordBot.client.APIClient;
 import me.TechsCode.TechDiscordBot.spigotmc.data.Cost;
-import me.TechsCode.TechDiscordBot.spigotmc.data.User;
 import me.TechsCode.TechDiscordBot.spigotmc.data.Time;
+import me.TechsCode.TechDiscordBot.spigotmc.data.User;
 import me.TechsCode.TechDiscordBot.util.Plugin;
 
 import java.io.IOException;

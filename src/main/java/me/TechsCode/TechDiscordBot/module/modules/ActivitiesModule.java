@@ -1,4 +1,4 @@
-package me.TechsCode.TechDiscordBot.module.modules;
+/*package me.TechsCode.TechDiscordBot.module.modules;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
@@ -7,8 +7,6 @@ import me.TechsCode.TechDiscordBot.mysql.storage.Verification;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Review;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Update;
 import me.TechsCode.TechDiscordBot.util.Plugin;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
@@ -132,3 +130,4 @@ public class ActivitiesModule extends Module {
                 .queue(ACTIVITIES_CHANNEL.query().first());
     }
 }
+*/

@@ -20,13 +20,40 @@ public class Storage {
     private final MySQL mysql;
     private boolean connected;
 
+<<<<<<< Updated upstream
     private final String VERIFICATIONS_TABLE = "VerificationsOld";
+=======
+    /* OLD DATBASES
+    private final String VERIFICATIONS_TABLE_OLD = "VerificationsOld";
+>>>>>>> Stashed changes
     private final String REMINDERS_TABLE = "Reminders";
     private final String MUTES_TABLE = "Mutes";
     private final String SUB_VERIFICATIONS_TABLE = "SubVerifications";
     private final String TRANSCRIPTS_TABLE = "Transcripts";
+<<<<<<< Updated upstream
     private final String PLUGIN_UPDATES_TABLE = "PluginUpdates";
     private final String WARNINGS_TABLE = "Warnings";
+=======
+    private final String VERIFICATIONQ_TABLE = "VerificationQueue";
+
+    private final String VERIFICATION_TABLE = "Verification";
+    private final String VERIFICATION_PURCHASES = "PurchasedPlugins";
+     */
+
+    private final String VERIFICATION_TABLE = "Verification";
+    private final String PURCHASEDPLUGINS_TABLE= "PurchasedPlugins";
+    private final String SUBVERFIED_TABLE= "SubVerified";
+    private final String MEMBERS_TABLE= "Members";
+    private final String VERIFICATIONQ_TABLE= "VerificationQ";
+    private final String VERIFICATIONMARKETS_TABLE= "VerificationMarkets";
+    private final String PUNISHMENTS_TABLE= "Punishments";
+    private final String REMINDERS_TABLE= "Reminders";
+    private final String TRANSCRIPTS_TABLE= "Transcripts";
+    private final String RESOURCES_TABLE= "Resources";
+    private final String UPDATES_TABLE= "Updates";
+    private final String REVIEWS_TABLE= "Reviews";
+    private final String MARKETS_TABLE= "Markets";
+>>>>>>> Stashed changes
 
     private Storage(MySQLSettings mySQLSettings) {
         this.connected = false;
@@ -48,33 +75,182 @@ public class Storage {
     }
 
     public void createDefault() {
-        mysql.update("CREATE TABLE IF NOT EXISTS " + VERIFICATIONS_TABLE + " (userid varchar(10), discordid varchar(32));");
+        /* OLD DATABASE
+        mysql.update("CREATE TABLE IF NOT EXISTS " + VERIFICATIONS_TABLE_OLD + " (userid varchar(10), discordid varchar(32));");
         mysql.update("CREATE TABLE IF NOT EXISTS " + MUTES_TABLE + " (memberId varchar(32), reason longtext, end varchar(32), expired tinyint(1));");
         mysql.update("CREATE TABLE IF NOT EXISTS " + REMINDERS_TABLE + " (user_id varchar(32), channel_id varchar(32), time varchar(32), type tinyint(1), reminder longtext);");
         mysql.update("CREATE TABLE IF NOT EXISTS " + SUB_VERIFICATIONS_TABLE + " (discordId_verified varchar(32), discordId_subVerified varchar(32));");
         mysql.update("CREATE TABLE IF NOT EXISTS " + TRANSCRIPTS_TABLE + " (id varchar(36), value longtext) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;");
+<<<<<<< Updated upstream
         mysql.update("CREATE TABLE IF NOT EXISTS " + PLUGIN_UPDATES_TABLE + " (resourceId varchar(32), updateId varchar(32), PRIMARY KEY (resourceId) ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;");
         mysql.update("CREATE TABLE IF NOT EXISTS " + WARNINGS_TABLE + " (id varchar(32), memberId varchar(32), reporterId varchar(32), reason longtext, time varchar(32), PRIMARY KEY (id) ) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;");
+=======
+        mysql.update("CREATE TABLE IF NOT EXISTS " + VERIFICATIONQ_TABLE + " (discordid varchar(32), market varchar(10), email varchar(64), transactionid varchar(64)) DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;");
+
+        //Verification storage
+        mysql.update("CREATE TABLE `" + VERIFICATION_TABLE + "` (`DiscordID` VARCHAR(255) NOT NULL AUTO_INCREMENT, `SpgitoID` INT, `McMarketID` INT, `PolymartID` INT, `SongodaID` INT, `PayerID` VARCHAR(255) NOT NULL, PRIMARY KEY (`DiscordID`));");
+        mysql.update("CREATE TABLE `" + VERIFICATION_PURCHASES + "` ( `DiscordID` VARCHAR(255) NOT NULL, `Plugin` VARCHAR(255) NOT NULL, `TransactionID` VARCHAR(255) NOT NULL, `PurchaseData` VARCHAR(255) NOT NULL, `Reviewed` BOOLEAN NOT NULL DEFAULT false, `Market` VARCHAR(255) NOT NULL, PRIMARY KEY (`DiscordID`));");
+        mysql.update("ALTER TABLE `" + VERIFICATION_TABLE + "` ADD CONSTRAINT `Verification_fk0` FOREIGN KEY (`DiscordID`) REFERENCES `" + VERIFICATION_PURCHASES + "`(`DiscordID`);");
+        */
+
+
+        mysql.update("CREATE TABLE `"+ MEMBERS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `DiscordID` VARCHAR(255) NOT NULL, `Name` VARCHAR(255) NOT NULL, `Joined` VARCHAR(255) NOT NULL, `Staff` BOOLEAN NOT NULL, PRIMARY KEY (`id`));");
+
+        mysql.update("CREATE TABLE `"+ VERIFICATIONQ_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `MembersID` VARCHAR(255) NOT NULL, `Market` VARCHAR(255) NOT NULL, `Email` VARCHAR(255) NOT NULL, `TransactionId` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ VERIFICATION_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `MembersID` VARCHAR(255) NOT NULL, `PayerID` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ PURCHASEDPLUGINS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `VerificationID` VARCHAR(255) NOT NULL, `PluginID` VARCHAR(255) NOT NULL, `TransactionID` VARCHAR(255) NOT NULL, `PurchaseData` VARCHAR(255) NOT NULL, `Reviewed` BOOLEAN NOT NULL DEFAULT false, `Market` INT NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ VERIFICATIONMARKETS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `VerificationID` INT NOT NULL, `Market` INT NOT NULL, `UserID` INT NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ SUBVERFIED_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `VerificationID` INT NOT NULL, `SubMembersID` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`));");
+
+        mysql.update("CREATE TABLE `"+ PUNISHMENTS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `MemberID` INT NOT NULL, `Type` VARCHAR(255) NOT NULL, `Reason` TEXT NOT NULL, `Date` TIMESTAMP NOT NULL, `Expired` TIMESTAMP NOT NULL, `Punisher` INT NOT NULL, PRIMARY KEY (`id`));");
+
+        mysql.update("CREATE TABLE `"+ REMINDERS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `MemberID` INT NOT NULL, `ChannelID` VARCHAR(255) NOT NULL, `Time` TIMESTAMP NOT NULL, `Type` VARCHAR(255) NOT NULL, `Reminder` TEXT NOT NULL, PRIMARY KEY (`id`));");
+
+        mysql.update("CREATE TABLE `"+ TRANSCRIPTS_TABLE +"` (`id` INT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY (`id`));");
+
+        mysql.update("CREATE TABLE `"+ RESOURCES_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `Name` VARCHAR(255) NOT NULL, `SpigotID` INT NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ UPDATES_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `ResourceID` INT NOT NULL, `Version` VARCHAR(255) NOT NULL, `Date` TIMESTAMP NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ REVIEWS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `MemberID` INT NOT NULL, `PluginID` INT NOT NULL, `Date` TIMESTAMP NOT NULL, `ReviewID` INT NOT NULL, PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+ MARKETS_TABLE +"` (`id` INT NOT NULL AUTO_INCREMENT, `Name` VARCHAR(255) NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`));");
+
+        mysql.update("ALTER TABLE `"+ VERIFICATION_TABLE +"` ADD CONSTRAINT `Verification_fk0` FOREIGN KEY (`MembersID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ PURCHASEDPLUGINS_TABLE +"` ADD CONSTRAINT `PurchasedPlugins_fk0` FOREIGN KEY (`VerificationID`) REFERENCES `Verification`(`id`);");
+        mysql.update("ALTER TABLE `"+ PURCHASEDPLUGINS_TABLE +"` ADD CONSTRAINT `PurchasedPlugins_fk1` FOREIGN KEY (`PluginID`) REFERENCES `Resources`(`id`);");
+        mysql.update("ALTER TABLE `"+ PURCHASEDPLUGINS_TABLE +"` ADD CONSTRAINT `PurchasedPlugins_fk2` FOREIGN KEY (`Market`) REFERENCES `Markets`(`id`);");
+        mysql.update("ALTER TABLE `"+ SUBVERFIED_TABLE +"` ADD CONSTRAINT `SubVerified_fk0` FOREIGN KEY (`VerificationID`) REFERENCES `Verification`(`id`);");
+        mysql.update("ALTER TABLE `"+ SUBVERFIED_TABLE +"` ADD CONSTRAINT `SubVerified_fk1` FOREIGN KEY (`SubMembersID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ VERIFICATIONQ_TABLE +"` ADD CONSTRAINT `VerificationQ_fk0` FOREIGN KEY (`MembersID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ VERIFICATIONMARKETS_TABLE +"` ADD CONSTRAINT `VerificationMarkets_fk0` FOREIGN KEY (`VerificationID`) REFERENCES `Verification`(`id`);");
+        mysql.update("ALTER TABLE `"+ VERIFICATIONMARKETS_TABLE +"` ADD CONSTRAINT `VerificationMarkets_fk1` FOREIGN KEY (`Market`) REFERENCES `Markets`(`id`);");
+        mysql.update("ALTER TABLE `"+ PUNISHMENTS_TABLE +"` ADD CONSTRAINT `Punishments_fk0` FOREIGN KEY (`MemberID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ PUNISHMENTS_TABLE +"` ADD CONSTRAINT `Punishments_fk1` FOREIGN KEY (`Punisher`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ REMINDERS_TABLE +"` ADD CONSTRAINT `Reminders_fk0` FOREIGN KEY (`MemberID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ UPDATES_TABLE +"` ADD CONSTRAINT `Updates_fk0` FOREIGN KEY (`ResourceID`) REFERENCES `Resources`(`id`);");
+        mysql.update("ALTER TABLE `"+ REVIEWS_TABLE +"` ADD CONSTRAINT `Reviews_fk0` FOREIGN KEY (`MemberID`) REFERENCES `Members`(`id`);");
+        mysql.update("ALTER TABLE `"+ REVIEWS_TABLE +"` ADD CONSTRAINT `Reviews_fk1` FOREIGN KEY (`PluginID`) REFERENCES `Resources`(`id`);");
+
+>>>>>>> Stashed changes
 
         this.connected = true;
     }
 
+    //Verification Queue
+    public void createVerificationQ(String discordId, String market) {
+        mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (discordid, market, email, transactionid) VALUES ('" + discordId + "', '" + market + "', '1', '1');");
+    }
+
+    public void addEmailVerificationQ(String discordId, String email) {
+        mysql.update("UPDATE " + VERIFICATIONQ_TABLE + " SET `email`='" + email + "' WHERE `discordid`='" + discordId + "';");
+    }
+
+    public void addTransactionIdVerificationQ(String discordId, String transactionId) {
+        mysql.update("UPDATE " + VERIFICATIONQ_TABLE + " SET `transactionid`='" + transactionId + "' WHERE `discordid`='" + discordId + "';");
+    }
+
+    public void removeVerificationQ(String discordId) {
+        mysql.update("DELETE FROM " + VERIFICATIONQ_TABLE + " WHERE `discordid`='" + discordId + "';");
+    }
+
+    public String getSelectedVerificationQ(String id){
+        String selectedMarket = null;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `discordid`='" + id + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                selectedMarket = rs.getString("market");
+            }
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return selectedMarket;
+    }
+
+    public String getVerificationQEmail(String discordId){
+        String information = null;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `discordid`='" + discordId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                information = rs.getString("email");
+
+            }
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return information;
+    }
+
+    public String getVerificationQTransaction(String discordId){
+        String information = null;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `discordid`='" + discordId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                information = rs.getString("transactionid");
+
+            }
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return information;
+    }
+
+    public boolean isVerificationQ(String discordId) {
+        boolean isVerificationQ = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `discordid`='" + discordId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            isVerificationQ = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isVerificationQ;
+    }
+
     //Verification
     public void createVerification(String userId, String discordId) {
-        mysql.update("INSERT INTO " + VERIFICATIONS_TABLE + " (userid, discordid) VALUES ('" + userId + "', '" + discordId + "');");
+        mysql.update("INSERT INTO " + VERIFICATION_TABLE + " (userid, discordid) VALUES ('" + userId + "', '" + discordId + "');");
     }
 
     public void removeVerification(Verification verification) {
-        mysql.update("DELETE FROM " + VERIFICATIONS_TABLE + " WHERE `userid`=" + verification.getUserId());
+        mysql.update("DELETE FROM " + VERIFICATION_TABLE + " WHERE `userid`=" + verification.getUserId());
     }
 
     //Sub Verification
     public void addSubVerification(String discordId_verified, String discordId_subVerified) {
-        mysql.update("INSERT INTO " + SUB_VERIFICATIONS_TABLE + " (discordId_verified, discordId_subVerified) VALUES ('" + discordId_verified + "', '" + discordId_subVerified + "');");
+        mysql.update("INSERT INTO " + SUB_VERIFICATION_TABLE + " (discordId_verified, discordId_subVerified) VALUES ('" + discordId_verified + "', '" + discordId_subVerified + "');");
     }
 
     public void removeSubVerification(String discordId_verified) {
-        mysql.update("DELETE FROM " + SUB_VERIFICATIONS_TABLE + " WHERE `discordId_verified`=" + discordId_verified);
+        mysql.update("DELETE FROM " + SUB_VERIFICATION_TABLE + " WHERE `discordId_verified`=" + discordId_verified);
     }
 
     public boolean hasSubVerification(String discordId_verified) {

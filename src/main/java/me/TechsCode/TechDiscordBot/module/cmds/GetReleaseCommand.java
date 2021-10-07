@@ -1,4 +1,4 @@
-package me.TechsCode.TechDiscordBot.module.cmds;
+/*package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.github.GitHubUtil;
@@ -107,3 +107,4 @@ public class GetReleaseCommand extends CommandModule {
         }
     }
 }
+*/

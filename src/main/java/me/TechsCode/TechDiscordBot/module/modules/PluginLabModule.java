@@ -32,7 +32,11 @@ public class PluginLabModule extends Module {
     public HashMap<String, TextChannel> updatePlugins() {
         plugins = new HashMap<>();
 
+<<<<<<< Updated upstream
         Objects.requireNonNull(TechDiscordBot.getJDA().getCategoriesByName("\uD83E\uDDEA︱Plugin Lab", true).get(0)).getTextChannels().stream().filter(Objects::nonNull).filter(channel -> channel.getName().endsWith("-lab")).forEach(channel -> {
+=======
+        Objects.requireNonNull(TechDiscordBot.getJDA().getCategoryById("877248191861501975")).getTextChannels().stream().filter(Objects::nonNull).filter(channel -> channel.getName().endsWith("-lab")).forEach(channel -> {
+>>>>>>> Stashed changes
             String pluginName;
 
             if(channel.getTopic() != null) {

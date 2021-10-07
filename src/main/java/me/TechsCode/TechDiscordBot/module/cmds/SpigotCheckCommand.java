@@ -58,7 +58,8 @@ public class SpigotCheckCommand extends CommandModule {
         if(member == null && spigotId == null)
             member = m;
 
-        if (!TechDiscordBot.getBot().getSpigotStatus().isUsable()) {
+        //TODO Add new system
+        /*if (!TechDiscordBot.getBot().getSpigotStatus().isUsable()) {
             e.replyEmbeds(
                 new TechEmbedBuilder("API Not Usable")
                     .error()
@@ -66,7 +67,7 @@ public class SpigotCheckCommand extends CommandModule {
                     .build()
             ).queue();
             return;
-        }
+        }*/
 
         boolean canView = m.getRoles().stream().anyMatch(r -> r.getName().equals("Staff"));
 
@@ -88,7 +89,9 @@ public class SpigotCheckCommand extends CommandModule {
         if(member == null)
             member = bot.getMember(verification.getDiscordId());
 
-        PurchasesList purchases = TechDiscordBot.getSpigotAPI().getSpigotPurchases().userId(verification.getUserId());
+        //TODO Setup new system
+        //PurchasesList purchases = TechDiscordBot.getSpigotAPI().getSpigotPurchases().userId(verification.getUserId());
+        PurchasesList purchases = null;
 
         if(!canView) {
             e.replyEmbeds(
@@ -115,7 +118,10 @@ public class SpigotCheckCommand extends CommandModule {
             return;
 
         String date = purchase.getTime().getHumanTime();
-        boolean hasBoughtAll = TechDiscordBot.getSpigotAPI().getSpigotResources().premium().size() == purchases.size();
+        //TODO Setup new system
+        //boolean hasBoughtAll = TechDiscordBot.getSpigotAPI().getSpigotResources().premium().size() == purchases.size();
+        boolean hasBoughtAll = false;
+
         StringBuilder sb = new StringBuilder();
 
         for (Purchase p : purchases) {
@@ -129,7 +135,7 @@ public class SpigotCheckCommand extends CommandModule {
                 .thumbnail(purchase.getUser().getAvatar())
                 .text("Showing " + member.getAsMention() + "'s Spigot Information.")
                 .field("Username / ID", "[" + purchase.getUser().getUsername() + "." + purchase.getUser().getUserId() + "](https://www.spigotmc.org/members/" + purchase.getUser().getUsername().toLowerCase() + "." + purchase.getUser().getUserId() + ")", true)
-                .field("Purchases Amount", hasBoughtAll ? " **All** " + purchases.size() + " plugins purchased!" : purchases.size() + "**/**" + TechDiscordBot.getSpigotAPI().getSpigotResources().premium().size() + " purchased.", true)
+                .field("Purchases Amount", hasBoughtAll ? " **All** " + purchases.size() + " plugins purchased!" : purchases.size() + "**/**" + /*TODO Setup new system TechDiscordBot.getSpigotAPI().getSpigotResources().premium().size() +*/ " purchased.", true)
                 .field("Last Purchase", Plugin.fromId(purchase.getResource().getId()).getEmoji().getAsMention() + " " + (date != null ? date + ".": "Unknown\n*or cannot calculate*."), true)
                 .field("Purchases", purchasesString.substring(0, purchasesString.length() - 2) + ".", false)
                 .build()

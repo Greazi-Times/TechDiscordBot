@@ -89,9 +89,10 @@ public class WikiCommand extends CommandModule {
     }
 
     public void showYourPlugins(SlashCommandEvent e, Member member) {
-        boolean apiIsUsable = TechDiscordBot.getBot().getSpigotStatus().isUsable();
+        //TODO boolean apiIsUsable = TechDiscordBot.getBot().getSpigotStatus().isUsable();
+        boolean apiIsUsable = false;
 
-        List<Plugin> plugins = Plugin.allWithWiki();
+                List<Plugin> plugins = Plugin.allWithWiki();
         if(apiIsUsable) plugins = Plugin.fromUser(member).stream().filter(Plugin::hasWiki).collect(Collectors.toList());
 
         StringBuilder sb = new StringBuilder();

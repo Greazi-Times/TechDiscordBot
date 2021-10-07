@@ -7,11 +7,14 @@ import me.TechsCode.TechDiscordBot.objects.ChannelQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.reminders.ReminderManager;
 import me.TechsCode.TechDiscordBot.songoda.SongodaAPIClient;
-import me.TechsCode.TechDiscordBot.spigotmc.SpigotApi;
 import me.TechsCode.TechDiscordBot.spigotmc.data.APIStatus;
 import me.TechsCode.TechDiscordBot.util.Config;
 import me.TechsCode.TechDiscordBot.util.ConsoleColor;
+<<<<<<< Updated upstream
 import me.TechsCode.TechDiscordBot.util.PterodactylAPI;
+=======
+import me.TechsCode.TechDiscordBot.verification.PaypalAPI;
+>>>>>>> Stashed changes
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -37,7 +40,7 @@ public class TechDiscordBot {
     private static Guild guild;
     private static Member self;
 
-    private static SpigotApi spigotAPI;
+    private static PaypalAPI paypalAPI;
     private static SongodaAPIClient songodaAPIClient;
 //    private static List<SongodaPurchase> songodaPurchases;
 
@@ -84,12 +87,16 @@ public class TechDiscordBot {
             return;
         }
 
+<<<<<<< Updated upstream
         if(guilds.size() == 0) {
             log(ConsoleColor.RED + "The bot is not a member of any guild. Please join a guild!");
             return;
         }
 
         guild = jda.getGuildById("311178000026566658");
+=======
+        guild = guilds.size() != 0 ? jda.getGuildById("877248189424615525") : null;
+>>>>>>> Stashed changes
         self = guild != null ? guild.getSelfMember() : null;
 
         if(guild == null) {
@@ -99,7 +106,11 @@ public class TechDiscordBot {
 
         TechDiscordBot.githubToken = githubToken;
 
+<<<<<<< Updated upstream
         spigotAPI = new SpigotApi(spigotApiUrl, apiToken);
+=======
+        paypalAPI = new PaypalAPI("https://paypalapi.techscode.com/", apiToken);
+>>>>>>> Stashed changes
         songodaAPIClient = new SongodaAPIClient(songodaApiToken);
 
         log("Initializing MySQL Storage " + mySQLSettings.getHost() + ":" + mySQLSettings.getPort() + "!");
@@ -130,6 +141,7 @@ public class TechDiscordBot {
 
         log("");
 
+<<<<<<< Updated upstream
         log("Spigot:");
         if(!getSpigotStatus().isUsable()) {
             log("  > " + ConsoleColor.RED + "API is not usable!");
@@ -152,6 +164,8 @@ public class TechDiscordBot {
         }
         log("");
 
+=======
+>>>>>>> Stashed changes
         log("Songoda: ");
         if(getSongodaAPI().isLoaded()) {
             log("  > Purchases: " + getSongodaAPI().getSpigotPurchases().size());
@@ -196,8 +210,8 @@ public class TechDiscordBot {
         return storage;
     }
 
-    public static SpigotApi getSpigotAPI() {
-        return spigotAPI;
+    public static PaypalAPI getPaypalAPI() {
+        return paypalAPI;
     }
 
     public static PterodactylAPI getPterodactylAPI(){return pterodactylAPI;};
@@ -274,6 +288,7 @@ public class TechDiscordBot {
         return githubToken;
     }
 
+<<<<<<< Updated upstream
     public static APIStatus getSpigotStatus() {
         return APIStatus.getSpigotStatus(spigotAPI.getSpigotAPIManager());
     }
@@ -283,6 +298,9 @@ public class TechDiscordBot {
     }
 
     public static APIStatus getSongodaStatus() {
+=======
+    public APIStatus getSongodaStatus() {
+>>>>>>> Stashed changes
         return APIStatus.getStatus(getSongodaAPI());
     }
 }

@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation ('net.dv8tion:JDA:4.3.0_331') { exclude module: 'opus-java' }
 
+<<<<<<< Updated upstream
     implementation 'com.google.guava:guava:30.1.1-jre'
     implementation 'org.jsoup:jsoup:1.14.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -30,6 +31,19 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'org.kohsuke:github-api:1.132'
     implementation 'com.mattmalec:Pterodactyl4J:2.BETA_78'
+=======
+    implementation 'org.json:json:20180813'
+    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'mysql:mysql-connector-java:5.1.17'
+    implementation "com.googlecode.json-simple:json-simple:1.1.1"
+    implementation 'net.sourceforge.htmlunit:htmlunit:2.29'
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'org.kohsuke:github-api:1.115'
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation 'io.github.bonigarcia:webdrivermanager:4.2.2'
+    implementation 'com.paypal.sdk:checkout-sdk:1.0.2'
+>>>>>>> Stashed changes
 }
 
 buildscript {

@@ -19,6 +19,7 @@ public enum APIStatus {
         this.emojiName = emojiName;
     }
 
+<<<<<<< Updated upstream
 
     public String getStatus() {
         return status;
@@ -40,6 +41,8 @@ public enum APIStatus {
         return TechDiscordBot.getGuild().getEmotesByName(emojiName, true).get(0).getAsMention();
     }
 
+=======
+>>>>>>> Stashed changes
     public static APIStatus getSpigotStatus(SpigotAPIManager client) {
         APIStatus status;
 

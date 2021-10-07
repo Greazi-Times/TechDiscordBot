@@ -70,6 +70,7 @@ public class RestartCommand extends CommandModule {
         String service = Objects.requireNonNull(e.getOption("service")).getAsString();
 
         if(service.equalsIgnoreCase("Bot")) {
+<<<<<<< Updated upstream
             e.replyEmbeds(new TechEmbedBuilder("Restart Status Loading...")
                     .text("Restarting Bot...")
                     .thumbnail("https://i.ibb.co/9gth0SW/1496.gif")
@@ -107,10 +108,37 @@ public class RestartCommand extends CommandModule {
                     } else {
                         q.editOriginalEmbeds(new TechEmbedBuilder("API Restart Failed!")
                                 .text("The API has failed to restart!")
+=======
+            deleteMessage();
+                e.replyEmbeds(new TechEmbedBuilder("Restart Status Loading...")
+                        .text("Restarting Bot.....")
+                        .color(Color.ORANGE)
+                        .build()
+                ).queue(q ->{
+                    boolean success = Pterodactyl.doRestart();
+
+                    if (success) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        q.editOriginalEmbeds(new TechEmbedBuilder("Restarted!")
+                                .text("The Bot has been restarted!")
+                                .success()
+                                .build()).queue();
+
+                        Pterodactyl.doKill();
+                    }else{
+                        q.editOriginalEmbeds(new TechEmbedBuilder("Restart Status Failed!")
+                                .text("The Bot failed to restart!")
+>>>>>>> Stashed changes
                                 .error()
                                 .build()).queue();
                     }
                 });
+<<<<<<< Updated upstream
             }else{
                 e.replyEmbeds(new TechEmbedBuilder("Restart Failed")
                         .text("You have no permission to perform this command")
@@ -123,6 +151,8 @@ public class RestartCommand extends CommandModule {
                     .color(Color.ORANGE)
                     .build()
             ).queue();
+=======
+>>>>>>> Stashed changes
         }
     }
 

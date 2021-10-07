@@ -6,20 +6,15 @@ import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
-import me.TechsCode.TechDiscordBot.verification.Spigot;
-import me.TechsCode.TechDiscordBot.verification.VerificationUtil;
-import net.dv8tion.jda.api.Permission;
+import me.TechsCode.TechDiscordBot.verification.Verification;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
 
-import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class VerificationModule extends Module {
@@ -82,20 +77,13 @@ public class VerificationModule extends Module {
         TechEmbedBuilder errorMessage = new TechEmbedBuilder("Error (" + member.getUser().getName() + ")").error();
 
         if(e.getComponentId().equals("spigot")){
-            isVerifyUsable(e, channel, errorMessage);
-            if(VerificationUtil.isVerified(e, channel, errorMessage)) return;
-
-            deleteSelection();
-
-            channel.getManager().putPermissionOverride(member, Collections.singleton(Permission.MESSAGE_WRITE), Collections.singletonList(Permission.MESSAGE_TTS));
-            instruction = channel.sendMessage(Spigot.sendInstructions().build()).complete();
+            if(Verification.isVerified(e, channel, errorMessage)) return;
             selectedMarket = "spigot";
-
+            Verification.Verification(member, selectedMarket, channel);
         }
         if(e.getComponentId().equals("mc-market")){
-            deleteSelection();
             selectedMarket = "mc-market";
-            //TODO Add the mc-market verification trigger
+            Verification.Verification(member, selectedMarket, channel);
         }
         if(e.getComponentId().equals("songoda")){
             new TechEmbedBuilder("Songoda Verification").text("To verify your Songoda purchase you need to connect your discord account to your songoda account.\n\nNeed help with connecting?\n*You can connect your account [here](https://songoda.com/account/integrations)*").error().sendTemporary(channel, 15);;
@@ -103,51 +91,6 @@ public class VerificationModule extends Module {
         if(e.getComponentId().equals("polymart")){
             new TechEmbedBuilder("Polymart Verification").text("It is not possible to verify your Polymart purchase because we haven't uploaded them yet.").error().sendTemporary(channel, 15);
             selectedMarket = "polymart";
-        }
-    }
-
-    @SubscribeEvent
-    public void onMessasge(GuildMessageReceivedEvent e) {
-        Member member = e.getMember();
-        if (member == null) return;
-        if (e.getAuthor().isBot()) return;
-        if(e.getChannel() != channel) return;
-
-        TechEmbedBuilder errorMessage = new TechEmbedBuilder("Error (" + member.getUser().getName() + ")").error();
-        String username = e.getMessage().getContentDisplay();
-
-        e.getMessage().delete().submit();
-
-        if(selectedMarket == null) {
-            new TechEmbedBuilder("ERROR").text("It seems that you have fooled the system!\n\n*It seems you haven't selected a marketplace to verify your self. If you think this is a mistake contact a staff member!*").error().sendTemporary(channel, 10);
-            sendSelection();
-            return;
-        }
-
-        switch (selectedMarket) {
-            case "spigot":
-                instruction.delete().complete();
-                if (VerificationUtil.isVerifyingVerifiedUser(e, username, channel, errorMessage) || VerificationUtil.hasPurchased(username, channel, errorMessage)) {
-                    try{
-                        Thread.sleep(3000);
-                    } catch (InterruptedException interruptedException) {
-                        interruptedException.printStackTrace();
-                    }
-                    newSelection();
-                    break;
-                } else if (Spigot.verify(e)) {
-                    newSelection();
-                    break;
-                } else {
-                    newSelection();
-                    break;
-                }
-            case "mc-market":
-                newSelection();
-                break;
-            case "polymart":
-                newSelection();
-                break;
         }
     }
 
@@ -169,28 +112,19 @@ public class VerificationModule extends Module {
         });
     }
 
+<<<<<<< Updated upstream
 
     private void newSelection(){
         sendSelection();
         selectedMarket = null;
     }
 
+=======
+>>>>>>> Stashed changes
     public void deleteSelection() {
         if (lastSelectionEmbed != null){
             lastSelectionEmbed.delete().submit();
             lastSelectionEmbed = null;
-        }
-    }
-
-    private void isVerifyUsable(ButtonClickEvent e, TextChannel channel, TechEmbedBuilder errorMessage) {
-        if (!VerificationUtil.spigotApiUsable(e, channel, errorMessage)) {
-            try {
-                deleteSelection();
-                Thread.sleep(TimeUnit.MINUTES.toMillis(600000));
-                newSelection();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
