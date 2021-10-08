@@ -1,8 +1,6 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Resource;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Time;
 
 import java.util.Objects;
 
@@ -15,6 +13,13 @@ public class DbUpdate {
     public DbUpdate(int id, int resourceId, String version, long date) {
         this.id = id;
         this.resourceId = resourceId;
+        this.version = version;
+        this.date = date;
+    }
+
+    public DbUpdate(Resource resource, String version, long date) {
+        this.id = 0;
+        this.resourceId = resource.getId();
         this.version = version;
         this.date = date;
     }
@@ -33,6 +38,18 @@ public class DbUpdate {
 
     public long getDate() {
         return date;
+    }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveUpdate(this);
+    }
+
+    public Resource getResource(){
+        return TechDiscordBot.getStorage().retrieveResourceById(resourceId);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteUpdate(this);
     }
 
 }

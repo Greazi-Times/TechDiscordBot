@@ -112,15 +112,11 @@ public class VerificationModule extends Module {
         });
     }
 
-<<<<<<< Updated upstream
-
     private void newSelection(){
         sendSelection();
         selectedMarket = null;
     }
 
-=======
->>>>>>> Stashed changes
     public void deleteSelection() {
         if (lastSelectionEmbed != null){
             lastSelectionEmbed.delete().submit();

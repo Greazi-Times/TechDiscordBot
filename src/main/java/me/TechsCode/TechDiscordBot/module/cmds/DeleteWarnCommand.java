@@ -2,7 +2,6 @@ package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
-import me.TechsCode.TechDiscordBot.mysql.storage.Warning;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
@@ -61,20 +60,26 @@ public class DeleteWarnCommand extends CommandModule {
     public void onCommand(TextChannel channel, Member m, SlashCommandEvent e) {
         String id = Objects.requireNonNull(e.getOption("id")).getAsString();
 
-        Warning warning = TechDiscordBot.getStorage().retrieveWarningById(id);
-        if(warning != null){
-            MessageEmbed msg = new TechEmbedBuilder("Warning Deleted")
-                    .text("Warning for "+warning.getMember().getAsMention()+" with id "+warning.getId()+" has been successfully deleted.")
-                    .build();
-            e.replyEmbeds(msg).queue();
+        //TODO warning
+//        Warning warning = TechDiscordBot.getStorage().retrieveWarningById(id);
+//        if(warning != null){
+//            MessageEmbed msg = new TechEmbedBuilder("Warning Deleted")
+//                    .text("Warning for "+warning.getMember().getAsMention()+" with id "+warning.getId()+" has been successfully deleted.")
+//                    .build();
+//            e.replyEmbeds(msg).queue();
+//
+//            warning.delete();
+//        }else{
+//            MessageEmbed msg = new TechEmbedBuilder("Warning Not Found")
+//                    .text("Warning with id "+id+" not found.")
+//                    .build();
+//            e.replyEmbeds(msg).queue();
+//        }
 
-            warning.delete();
-        }else{
-            MessageEmbed msg = new TechEmbedBuilder("Warning Not Found")
-                    .text("Warning with id "+id+" not found.")
-                    .build();
-            e.replyEmbeds(msg).queue();
-        }
+        MessageEmbed msg = new TechEmbedBuilder("Warning Not Found")
+                .text("Warning with id "+id+" not found.")
+                .build();
+        e.replyEmbeds(msg).queue();
     }
 }
 

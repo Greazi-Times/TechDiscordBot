@@ -2,7 +2,6 @@ package me.TechsCode.TechDiscordBot.module.modules;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
-import me.TechsCode.TechDiscordBot.mysql.storage.Preorder;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -54,17 +53,17 @@ public class PreorderModule extends Module {
             if(!bot.getRoles(roleS).hasAny()) continue;
             String pluginName = roleS.replace(" Preorder", "");
 
-            List<Preorder> preorders = new ArrayList<>(TechDiscordBot.getStorage().getPreorders(pluginName, false));
-
-            for(Preorder preorder : preorders) {
-                Member member = bot.getMember(String.valueOf(preorder.getDiscordId()));
-                if(member == null) continue;
-
-                if(member.getRoles().stream().anyMatch(r -> r.getName().equals(roleS))) continue;
-
-                Role role = bot.getRoles(roleS).first();
-                TechDiscordBot.getGuild().addRoleToMember(member, role).queue();
-            }
+//            List<Preorder> preorders = new ArrayList<>(TechDiscordBot.getStorage().getPreorders(pluginName, false));
+//
+//            for(Preorder preorder : preorders) {
+//                Member member = bot.getMember(String.valueOf(preorder.getDiscordId()));
+//                if(member == null) continue;
+//
+//                if(member.getRoles().stream().anyMatch(r -> r.getName().equals(roleS))) continue;
+//
+//                Role role = bot.getRoles(roleS).first();
+//                TechDiscordBot.getGuild().addRoleToMember(member, role).queue();
+//            }
         }
     }
 

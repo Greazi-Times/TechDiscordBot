@@ -119,23 +119,24 @@ public class PaypalAPI {
 		e.getMessage().replyEmbeds(new TechEmbedBuilder("Why we need your email").text("Our new verification system uses paypal to retrieve purchases.\nWith this system we need your e-mail so we cen get your purchases.\n\n*Type* `cancel` *to cancel your verification*").build()).queue();
 	}
 	public static void privateCancel(PrivateMessageReceivedEvent e, String id){
-		TechDiscordBot.getStorage().removeVerificationQ(id);
+		//TechDiscordBot.getStorage().retrieveMemberByDiscordId()
 		e.getMessage().replyEmbeds(new TechEmbedBuilder("Verification Canceled").text("Your verification has been canceled.").error().build()).queue();
 	}
 	public static void privateEmail(PrivateMessageReceivedEvent e, String id, String message){
-		TechDiscordBot.getStorage().addEmailVerificationQ(id, message);
-		e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Now we need a transaction ID from one of your purchases.\n\n*Type* `transactionid` *to get a guide on how to get the ID*\n*Type* `cancel` *to cancel your verification*").build()).complete();
+		//TechDiscordBot.getStorage().addEmailVerificationQ(id, message);
+		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Now we need a transaction ID from one of your purchases.\n\n*Type* `transactionid` *to get a guide on how to get the ID*\n*Type* `cancel` *to cancel your verification*").build()).complete();
 	}
 	public static void privateId(PrivateMessageReceivedEvent e, String id, String message){
-		TechDiscordBot.getStorage().addTransactionIdVerificationQ(id, message);
-		e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Your purchase will now be verified.").success().build()).complete();
+		//TechDiscordBot.getStorage().addTransactionIdVerificationQ(id, message);
+		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Your purchase will now be verified.").success().build()).complete();
 		Verification.verify(e, id, message);
 	}
 
 	public static boolean givenEmail(String id){
-		String email = TechDiscordBot.getStorage().getVerificationQEmail(id);
-		TechDiscordBot.log(email);
-		return Objects.equals(email, "1");
+		//String email = TechDiscordBot.getStorage().getVerificationQEmail(id);
+		//TechDiscordBot.log(email);
+		//return Objects.equals(email, "1");
+		return false;
 	}
 
 }

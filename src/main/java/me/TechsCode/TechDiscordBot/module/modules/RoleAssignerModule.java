@@ -2,13 +2,11 @@ package me.TechsCode.TechDiscordBot.module.modules;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
-import me.TechsCode.TechDiscordBot.mysql.storage.Verification;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
-import me.TechsCode.TechDiscordBot.songoda.SongodaPurchase;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Resource;
 import me.TechsCode.TechDiscordBot.util.Plugin;
+import me.TechsCode.TechDiscordBot.verification.Verification;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -92,88 +90,89 @@ public class RoleAssignerModule extends Module {
     }
 
     public void loop() {
+        //TODO Role assigner
 
         Role verificationRole = VERIFICATION_ROLE.query().first();
         Role songodaVerificationRole = SONGODA_VERIFICATION_ROLE.query().first();
         Role reviewSquad = REVIEW_SQUAD_ROLE.query().first();
 
-        Set<Verification> verifications = TechDiscordBot.getStorage().retrieveVerifications();
-        Set<Role> possibleRoles = new HashSet<>();
-
-        possibleRoles.add(verificationRole);
-        possibleRoles.add(songodaVerificationRole);
-        possibleRoles.add(reviewSquad);
-        possibleRoles.addAll(RESOURCE_ROLES.query().all());
-
-        Resource[] resources = TechDiscordBot.getSpigotAPI().getSpigotResources().stream().filter(Resource::isPremium).toArray(Resource[]::new);
-
-        HashMap<String, List<String>> resourcePurchaserIds = new HashMap<>();
-        HashMap<String, List<String>> resourceReviewerIds = new HashMap<>();
-
-        Arrays.stream(resources).forEach(resource -> {
-            resourcePurchaserIds.put(resource.getId(), resource.getPurchases().stream().map(p -> p.getUser().getUserId()).collect(Collectors.toList()));
-            resourceReviewerIds.put(resource.getId(), resource.getReviews().stream().map(r -> r.getUser().getUserId()).collect(Collectors.toList()));
-        });
-
-        for(Member member : TechDiscordBot.getGuild().getMembers()) {
-            Verification verification = verifications.stream().filter(v -> v.getDiscordId().equals(member.getUser().getId())).findAny().orElse(null);
-            Set<Role> rolesToKeep = new HashSet<>();
-
-            if(verification != null) {
-                rolesToKeep.add(verificationRole);
-                int purchases = 0, reviews = 0;
-
-                for(Resource resource : resources) {
-                    Role role = bot.getRoles(resource.getName()).first();
-                    boolean purchased = resourcePurchaserIds.get(resource.getId()).contains(verification.getUserId());
-                    boolean reviewed = resourceReviewerIds.get(resource.getId()).contains(verification.getUserId());
-
-                    if(purchased) purchases++;
-                    if(reviewed) reviews++;
-                    if(purchased) rolesToKeep.add(role);
-                }
-
-                if(purchases != 0 && purchases == reviews) rolesToKeep.add(reviewSquad);
-            }
-
-            for (SongodaPurchase songodaPurchase : TechDiscordBot.getSongodaAPI().getSpigotPurchases().discord(member)) {
-                rolesToKeep.add(songodaVerificationRole);
-                rolesToKeep.add(bot.getRoles(songodaPurchase.getResource().getName()).first());
-            }
-
-            /*if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId())) {
-                if(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId()) != null && TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())) != null) {
-                    TechDiscordBot.getGuild().addRoleToMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
-                } else {
-                    TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
-                }
-            } else {
-                if(member.getRoles().contains(SUB_VERIFIED_ROLE.query().first())) {
-                    TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
-                }
-            }*/
-
-            Set<Role> rolesToRemove = new HashSet<>();
-
-            if(member.getRoles().stream().map(Role::getName).noneMatch(r -> r.equals("Keep Roles")))
-                rolesToRemove = possibleRoles.stream()
-                    .filter(role -> !rolesToKeep.contains(role))
-                    .filter(role -> member.getRoles().contains(role))
-                    .collect(Collectors.toSet());
-
-            Set<Role> rolesToAdd = rolesToKeep.stream()
-                    .filter(role -> !member.getRoles().contains(role))
-                    .collect(Collectors.toSet());
-
-            rolesToAdd.forEach(r -> {
-                TechDiscordBot.getGuild().addRoleToMember(member, r).complete();
-                TechDiscordBot.log("Role » Added " + r.getName() + " (" + member.getEffectiveName() + ")");
-            });
-
-            rolesToRemove.forEach(r -> {
-                TechDiscordBot.getGuild().removeRoleFromMember(member, r).complete();
-                TechDiscordBot.log("Role » Removed " + r.getName() + " (" + member.getEffectiveName() + ")");
-            });
-        }
+//        Set<Verification> verifications = TechDiscordBot.getStorage().retrieveVerifications();
+//        Set<Role> possibleRoles = new HashSet<>();
+//
+//        possibleRoles.add(verificationRole);
+//        possibleRoles.add(songodaVerificationRole);
+//        possibleRoles.add(reviewSquad);
+//        possibleRoles.addAll(RESOURCE_ROLES.query().all());
+//
+//        Resource[] resources = TechDiscordBot.getSpigotAPI().getSpigotResources().stream().filter(Resource::isPremium).toArray(Resource[]::new);
+//
+//        HashMap<String, List<String>> resourcePurchaserIds = new HashMap<>();
+//        HashMap<String, List<String>> resourceReviewerIds = new HashMap<>();
+//
+//        Arrays.stream(resources).forEach(resource -> {
+//            resourcePurchaserIds.put(resource.getId(), resource.getPurchases().stream().map(p -> p.getUser().getUserId()).collect(Collectors.toList()));
+//            resourceReviewerIds.put(resource.getId(), resource.getReviews().stream().map(r -> r.getUser().getUserId()).collect(Collectors.toList()));
+//        });
+//
+//        for(Member member : TechDiscordBot.getGuild().getMembers()) {
+//            Verification verification = verifications.stream().filter(v -> v.getDiscordId().equals(member.getUser().getId())).findAny().orElse(null);
+//            Set<Role> rolesToKeep = new HashSet<>();
+//
+//            if(verification != null) {
+//                rolesToKeep.add(verificationRole);
+//                int purchases = 0, reviews = 0;
+//
+//                for(Resource resource : resources) {
+//                    Role role = bot.getRoles(resource.getName()).first();
+//                    boolean purchased = resourcePurchaserIds.get(resource.getId()).contains(verification.getUserId());
+//                    boolean reviewed = resourceReviewerIds.get(resource.getId()).contains(verification.getUserId());
+//
+//                    if(purchased) purchases++;
+//                    if(reviewed) reviews++;
+//                    if(purchased) rolesToKeep.add(role);
+//                }
+//
+//                if(purchases != 0 && purchases == reviews) rolesToKeep.add(reviewSquad);
+//            }
+//
+//            for (SongodaPurchase songodaPurchase : TechDiscordBot.getSongodaAPI().getSpigotPurchases().discord(member)) {
+//                rolesToKeep.add(songodaVerificationRole);
+//                rolesToKeep.add(bot.getRoles(songodaPurchase.getResource().getName()).first());
+//            }
+//
+//            /*if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId())) {
+//                if(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId()) != null && TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())) != null) {
+//                    TechDiscordBot.getGuild().addRoleToMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
+//                } else {
+//                    TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
+//                }
+//            } else {
+//                if(member.getRoles().contains(SUB_VERIFIED_ROLE.query().first())) {
+//                    TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
+//                }
+//            }*/
+//
+//            Set<Role> rolesToRemove = new HashSet<>();
+//
+//            if(member.getRoles().stream().map(Role::getName).noneMatch(r -> r.equals("Keep Roles")))
+//                rolesToRemove = possibleRoles.stream()
+//                    .filter(role -> !rolesToKeep.contains(role))
+//                    .filter(role -> member.getRoles().contains(role))
+//                    .collect(Collectors.toSet());
+//
+//            Set<Role> rolesToAdd = rolesToKeep.stream()
+//                    .filter(role -> !member.getRoles().contains(role))
+//                    .collect(Collectors.toSet());
+//
+//            rolesToAdd.forEach(r -> {
+//                TechDiscordBot.getGuild().addRoleToMember(member, r).complete();
+//                TechDiscordBot.log("Role » Added " + r.getName() + " (" + member.getEffectiveName() + ")");
+//            });
+//
+//            rolesToRemove.forEach(r -> {
+//                TechDiscordBot.getGuild().removeRoleFromMember(member, r).complete();
+//                TechDiscordBot.log("Role » Removed " + r.getName() + " (" + member.getEffectiveName() + ")");
+//            });
+//        }
     }
 }

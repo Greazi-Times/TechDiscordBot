@@ -1,10 +1,9 @@
 package me.TechsCode.TechDiscordBot.util;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
-import me.TechsCode.TechDiscordBot.mysql.storage.Verification;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Resource;
-import me.TechsCode.TechDiscordBot.spigotmc.data.Update;
-import me.TechsCode.TechDiscordBot.spigotmc.data.lists.PurchasesList;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
+import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
+import me.TechsCode.TechDiscordBot.mysql.Models.Verfication;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
@@ -129,13 +128,11 @@ public enum Plugin {
         return null;
     }
 
-    public Update getLatestUpdate() {
-<<<<<<< Updated upstream
-        return TechDiscordBot.getSpigotAPI().getSpigotUpdates().resource(getResourceId()).stream().findFirst().orElse(null);
-=======
+    public DbUpdate getLatestUpdate() {
+        //TODO Plugin updates
+        //return TechDiscordBot.getSpigotAPI().getSpigotUpdates().resource(getResourceId()).stream().findFirst().orElse(null);
         //return TechDiscordBot.getSpigotAPI().getSpigotUpdates().resource(getResourceId()).get(TechDiscordBot.getSpigotAPI().getSpigotUpdates().resource(getResourceId()).size() - 1);
         return null;
->>>>>>> Stashed changes
     }
 
     public static List<Plugin> allWithWiki() {
@@ -196,19 +193,20 @@ public enum Plugin {
 
     public static List<Plugin> fromUser(Member member) {
         try {
-            Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithDiscord(member.getUser().getId());
+            Verfication verification = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId()).getVerification();
 
-            PurchasesList pc = null;
+            //TODO purchase list
             /*try {
                 pc = TechDiscordBot.getSpigotAPI().getSpigotPurchases().userId(verification.getUserId());
             } catch (NullPointerException ignored) {
                 TechDiscordBot.log(ConsoleColor.RED + "Could not find any SpigotMC plugins for " + member.getEffectiveName() + "#" + member.getUser().getDiscriminator());
             }*/
 
-            List<Plugin> plugins = new ArrayList<>();
-            if(pc != null) plugins = pc.stream().map(purchase -> fromId(purchase.getResource().getId())).collect(Collectors.toList());
+//            List<Plugin> plugins = new ArrayList<>();
+//            if(pc != null) plugins = pc.stream().map(purchase -> fromId(purchase.getResource().getId())).collect(Collectors.toList());
 
-            return plugins;
+//            return plugins;
+            return null;
         } catch (NullPointerException ex) {
             TechDiscordBot.log(ConsoleColor.RED + "Error:");
             ex.printStackTrace();

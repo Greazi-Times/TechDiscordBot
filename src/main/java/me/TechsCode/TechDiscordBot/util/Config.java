@@ -58,12 +58,8 @@ public class Config {
                 !getMySqlUsername().equals("") ||
                 !getMySqlPassword().equals("") ||
                 !getGithubToken().equals("") ||
-<<<<<<< Updated upstream
-                !getSpigotApiUrl().equals("");
-=======
                 !getPaypalClientID().equals("") ||
                 !getPaypalClientSecret().equals("");
->>>>>>> Stashed changes
     }
 
     public String getToken(){
@@ -106,7 +102,6 @@ public class Config {
         return root.get("pterodactylUrl").getAsString();
     }
 
-<<<<<<< Updated upstream
     public String getPteroClientToken(){
         return root.get("pterodactylClientToken").getAsString();
     }
@@ -115,13 +110,10 @@ public class Config {
         return root.get("pterodactylApiToken").getAsString();
     }
 
-    public String getSpigotApiUrl(){return root.get("spigotApiUrl").getAsString();}
-=======
     public String getPaypalClientID(){
         return root.get("PaypalClientID").getAsString();
     }
     public String getPaypalClientSecret(){
         return root.get("PaypalClientID").getAsString();
     }
->>>>>>> Stashed changes
 }

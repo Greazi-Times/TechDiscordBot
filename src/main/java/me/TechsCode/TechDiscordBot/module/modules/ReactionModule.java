@@ -17,11 +17,7 @@ public class ReactionModule extends Module {
 
     public Message reactionMessage;
 
-<<<<<<< Updated upstream
-    private final TextChannel ROLES_CHANNEL = bot.getChannels("\uD83D\uDCD6︱role-selector").get(0);
-=======
     private final TextChannel ROLES_CHANNEL = this.bot.getChannel("877248189982453836");
->>>>>>> Stashed changes
 
     public ReactionModule(TechDiscordBot bot) {
         super(bot);

@@ -1,5 +1,7 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
+import me.TechsCode.TechDiscordBot.TechDiscordBot;
+
 public class DbMarket {
 
     private final int id;
@@ -16,6 +18,14 @@ public class DbMarket {
 
     public String getName() {
         return name;
+    }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveMarket(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteMarket(this);
     }
 
 }

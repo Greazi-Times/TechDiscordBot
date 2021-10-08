@@ -2,7 +2,6 @@ package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
-import me.TechsCode.TechDiscordBot.mysql.storage.Warning;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
@@ -13,7 +12,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class CheckWarnsCommand extends CommandModule {
 
@@ -59,15 +57,15 @@ public class CheckWarnsCommand extends CommandModule {
     public void onCommand(TextChannel channel, Member m, SlashCommandEvent e) {
         User user = Objects.requireNonNull(e.getOption("user")).getAsUser();
 
-        Set<Warning> warnings = TechDiscordBot.getStorage().retrieveWarningsByUserID(user.getId());
-        
+//        Set<Warning> warnings = TechDiscordBot.getStorage().retrieveWarningsByUserID(user.getId());
+
         TechEmbedBuilder embed = new TechEmbedBuilder("User Warned");
 
-        embed.text("This user has "+warnings.size()+" warnings.");
+//        embed.text("This user has "+warnings.size()+" warnings.");
 
-        for (Warning warning : warnings) {
-            embed.addField(warning.getTimeFormatted(), "Reason: "+warning.getReason()+" | ID: "+warning.getId()+"\nIssuer: "+warning.getReporter().getAsMention(), false);
-        }
+//        for (Warning warning : warnings) {
+//            embed.addField(warning.getTimeFormatted(), "Reason: "+warning.getReason()+" | ID: "+warning.getId()+"\nIssuer: "+warning.getReporter().getAsMention(), false);
+//        }
         
         e.replyEmbeds(embed.build()).queue();
     }

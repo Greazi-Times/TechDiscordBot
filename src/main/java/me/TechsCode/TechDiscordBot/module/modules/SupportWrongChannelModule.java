@@ -2,12 +2,12 @@ package me.TechsCode.TechDiscordBot.module.modules;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
-import me.TechsCode.TechDiscordBot.mysql.storage.Verification;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import me.TechsCode.TechDiscordBot.util.Plugin;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
+import me.TechsCode.TechDiscordBot.verification.Verification;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -91,40 +91,41 @@ public class SupportWrongChannelModule extends Module {
                 .error();
 
         Message message;
-        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithDiscord(member);
-        if (verification != null) {
-            List<Plugin> pc = Arrays.stream(Plugin.values()).filter(p -> member.getRoles().stream().anyMatch(r -> r.getName().equals(p.getRoleName()))).collect(Collectors.toList());
+        //TODO support wrong channel
+//        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithDiscord(member);
+//        if (verification != null) {
+//            List<Plugin> pc = Arrays.stream(Plugin.values()).filter(p -> member.getRoles().stream().anyMatch(r -> r.getName().equals(p.getRoleName()))).collect(Collectors.toList());
+//
+//            if (pc.size() > 0) {
+//                StringBuilder sb = new StringBuilder();
+//                String plugins = Plugin.getEmotesByList(pc.stream().map(Plugin::getRoleName).collect(Collectors.toList()));
+//
+//                sb.append("Hello, ")
+//                        .append(member.getAsMention())
+//                        .append("!\n\n It looks like you have bought ")
+//                        .append(pc.size() == 1 ? "this plugin" : "these plugins")
+//                        .append(" already: ")
+//                        .append(plugins)
+//                        .append("\nHere are the corresponding channels:\n\n");
+//
+//                StringBuilder channels = new StringBuilder();
+//                pc.forEach(p -> channels.append("- ").append(TechDiscordBot.getJDA().getTextChannelById(p.getChannelId()).getAsMention()).append("\n"));
+//
+//                sb.append(channels.toString());
+//                sb.append("\nPlease use the corresponding plugin channel above to get support.\nThis channel is **not** a support channel.\n\n*If you are not trying to get help, you can delete this message by reacting to it!*");
+//
+//                message = new TechEmbedBuilder().text(sb.toString()).error().reply(sentMessage);
+//            } else {
+//                message = teb.reply(sentMessage);
+//            }
+//        } else {
+//            message = teb.reply(sentMessage);
+//        }
 
-            if (pc.size() > 0) {
-                StringBuilder sb = new StringBuilder();
-                String plugins = Plugin.getEmotesByList(pc.stream().map(Plugin::getRoleName).collect(Collectors.toList()));
-
-                sb.append("Hello, ")
-                        .append(member.getAsMention())
-                        .append("!\n\n It looks like you have bought ")
-                        .append(pc.size() == 1 ? "this plugin" : "these plugins")
-                        .append(" already: ")
-                        .append(plugins)
-                        .append("\nHere are the corresponding channels:\n\n");
-
-                StringBuilder channels = new StringBuilder();
-                pc.forEach(p -> channels.append("- ").append(TechDiscordBot.getJDA().getTextChannelById(p.getChannelId()).getAsMention()).append("\n"));
-
-                sb.append(channels.toString());
-                sb.append("\nPlease use the corresponding plugin channel above to get support.\nThis channel is **not** a support channel.\n\n*If you are not trying to get help, you can delete this message by reacting to it!*");
-
-                message = new TechEmbedBuilder().text(sb.toString()).error().reply(sentMessage);
-            } else {
-                message = teb.reply(sentMessage);
-            }
-        } else {
-            message = teb.reply(sentMessage);
-        }
-
-        if (message != null) {
-            message.addReaction("\u274C").queue();
-            messages.put(message.getId(), member.getId());
-        }
+//        if (message != null) {
+//            message.addReaction("\u274C").queue();
+//            messages.put(message.getId(), member.getId());
+//        }
     }
 
     @Override

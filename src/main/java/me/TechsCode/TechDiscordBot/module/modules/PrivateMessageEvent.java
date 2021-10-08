@@ -39,29 +39,30 @@ public class PrivateMessageEvent extends Module {
 		if(e.getAuthor().isBot()) return;
 		TechDiscordBot.log(Boolean.toString(PaypalAPI.givenEmail(id)));
 
-		if(TechDiscordBot.getStorage().isVerificationQ(id)){
-			if(array.length==1 && message.contains("why")){
-				PaypalAPI.privateWhy(e);
-			} else
-			if(array.length==1 && message.contains("cancel")){
-				PaypalAPI.privateCancel(e, id);
-			} else
-			if(PaypalAPI.givenEmail(id)){
-				if(array.length==1 && message.contains("@") && message.contains(".")){
-					PaypalAPI.privateEmail(e, id, message);
-				} else {
-					e.getMessage().replyEmbeds(new TechEmbedBuilder("ERROR").text("Your message does not contain a email address").error().build()).complete();
-				}
-			} else
-			if(array.length==1 && check(message)){
-				PaypalAPI.privateId(e, id, message);
-			} else {
-				e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Somethings is wrong please use `cancel` to cancel the verification and try again. If the new one fails as well please contact a staff member.").error().build()).complete();
-
-			}
-		}else{
-			e.getMessage().addReaction("👀").queue();
-		}
+		//TODO set up private msg event
+//		if(TechDiscordBot.getStorage().isVerificationQ(id)){
+//			if(array.length==1 && message.contains("why")){
+//				PaypalAPI.privateWhy(e);
+//			} else
+//			if(array.length==1 && message.contains("cancel")){
+//				PaypalAPI.privateCancel(e, id);
+//			} else
+//			if(PaypalAPI.givenEmail(id)){
+//				if(array.length==1 && message.contains("@") && message.contains(".")){
+//					PaypalAPI.privateEmail(e, id, message);
+//				} else {
+//					e.getMessage().replyEmbeds(new TechEmbedBuilder("ERROR").text("Your message does not contain a email address").error().build()).complete();
+//				}
+//			} else
+//			if(array.length==1 && check(message)){
+//				PaypalAPI.privateId(e, id, message);
+//			} else {
+//				e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Somethings is wrong please use `cancel` to cancel the verification and try again. If the new one fails as well please contact a staff member.").error().build()).complete();
+//
+//			}
+//		}else{
+//			e.getMessage().addReaction("👀").queue();
+//		}
 	}
 
 	private boolean check(String s) {

@@ -4,6 +4,7 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.logs.TicketLogs;
 import me.TechsCode.TechDiscordBot.logs.TranscriptLogs;
 import me.TechsCode.TechDiscordBot.module.Module;
+import me.TechsCode.TechDiscordBot.mysql.Models.Transcript;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
@@ -207,12 +208,13 @@ public class TicketModule extends Module {
                 .field("Issue", issue, false)
                 .queue(ticketChannel);
 
-        if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId())) {
-            new TechEmbedBuilder("Sub Verified User Support")
-                    .text("Original Plugin-holder: " + TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())).getAsMention())
-                    .color(Color.ORANGE)
-                    .queue(ticketChannel);
-        }
+        //TODO ticket module
+//        if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId())) {
+//            new TechEmbedBuilder("Sub Verified User Support")
+//                    .text("Original Plugin-holder: " + TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())).getAsMention())
+//                    .color(Color.ORANGE)
+//                    .queue(ticketChannel);
+//        }
 
         TicketLogs.log(
             new TechEmbedBuilder("New Ticket")
@@ -394,7 +396,7 @@ public class TicketModule extends Module {
                                             .build()
                             ).queue();
 
-                            TechDiscordBot.getStorage().saveTranscript(object);
+                            new Transcript(object).save();
                         });
                     });
                 } case "add":
@@ -451,7 +453,7 @@ public class TicketModule extends Module {
                             );
 
                             e.getTextChannel().delete().queueAfter(15, TimeUnit.SECONDS, s -> CLOSING_CHANNELS.remove(channelId));
-                            TechDiscordBot.getStorage().saveTranscript(object);
+                            new Transcript(object).save();
                         });
                         TicketLogs.log(
                                 new TechEmbedBuilder("Solved Ticket")
@@ -519,7 +521,7 @@ public class TicketModule extends Module {
                                 }
                             }
 
-                            TechDiscordBot.getStorage().saveTranscript(object);
+                            new Transcript(object).save();
                             e.getTextChannel().delete().queueAfter(15, TimeUnit.SECONDS, s -> CLOSING_CHANNELS.remove(channelId));
                         });
                     }

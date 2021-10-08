@@ -126,90 +126,91 @@ public class SubVerifyCommand extends CommandModule {
             return;
         }
 
-        if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId()) && !TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId()).equals(m.getId())) {
-            e.replyEmbeds(
-                    new TechEmbedBuilder("Sub Verification - Error")
-                    .error()
-                    .text("This user is already a " + SUB_VERIFIED_ROLE.query().first().getAsMention() + " user of " + TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())).getAsMention())
-                    .build()
-            ).queue();
-            return;
-        }
-
-        if(action.equalsIgnoreCase("add")) {
-            if(TechDiscordBot.getStorage().hasSubVerification(m.getId())) {
-                e.replyEmbeds(
-                        new TechEmbedBuilder("Sub Verification - Error")
-                        .error()
-                        .text("You need to remove your old sub verification first before you can add a new one.")
-                        .build()
-                ).queue();
-                return;
-            } if (member.getRoles().contains(SUB_VERIFIED_ROLE.query().first())) {
-                e.replyEmbeds(
-                        new TechEmbedBuilder("Sub Verification - Error")
-                                .error()
-                                .text("You can not add a already verified user as your subverified user.")
-                                .build()
-                ).queue();
-                return;
-            }
-
-            TechDiscordBot.getGuild().addRoleToMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
-            TechDiscordBot.getStorage().addSubVerification(m.getId(), member.getId());
-            e.replyEmbeds(
-                    new TechEmbedBuilder("Sub Verification - Added")
-                            .success()
-                            .text("Successfully **added** " + member.getAsMention() + " as " + m.getAsMention() + "'s sub verified user")
-                            .build()
-            ).queue();
-            ServerLogs.log(
-                    new TechEmbedBuilder("Subverification added")
-                            .success()
-                            .text("User: " + e.getMember().getAsMention() + " (" + e.getUser().getName() + "#" + e.getUser().getDiscriminator() + ", " + e.getUser().getId() + ") \n"+
-                                    "has added: " + m.getAsMention() + "as a subverified user")
-                            .thumbnail(e.getMember().getUser().getAvatarUrl())
-            );
-            return;
-        }
-
-        if(action.equalsIgnoreCase("remove")) {
-            if(TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()) == null) {
-             e.replyEmbeds(
-                     new TechEmbedBuilder("Sub Verification - Error")
-                     .error()
-                     .text("You don't have an sub verified user!")
-                     .build()
-             ).queue();
-             return;
-            }
-
-            if(TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()) != null && !TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()).equals(member.getId())) {
-                e.replyEmbeds(
-                        new TechEmbedBuilder("Sub Verification - Error")
-                        .error()
-                        .text(member.getAsMention() + " isn't your verified user!")
-                        .build()
-                ).queue();
-                return;
-            }
-
-            TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
-            TechDiscordBot.getStorage().removeSubVerification(m.getId());
-            e.replyEmbeds(
-                    new TechEmbedBuilder("Sub Verification - Removed")
-                            .color(Color.orange)
-                            .text("Successfully **removed** " + member.getAsMention() + " as " + m.getAsMention() + "'s sub verified user")
-                            .build()
-            ).queue();
-            ServerLogs.log(
-                    new TechEmbedBuilder("Subverification Removed")
-                            .error()
-                            .text("User: " + e.getMember().getAsMention() + " (" + e.getUser().getName() + "#" + e.getUser().getDiscriminator() + ", " + e.getUser().getId() + ") \n"+
-                                    "has added: " + m.getAsMention() + "as a subverified user")
-                            .thumbnail(e.getMember().getUser().getAvatarUrl())
-            );
-            return;
-        }
+        //TODO SubVerifiy Command
+//        if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId()) && !TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId()).equals(m.getId())) {
+//            e.replyEmbeds(
+//                    new TechEmbedBuilder("Sub Verification - Error")
+//                    .error()
+//                    .text("This user is already a " + SUB_VERIFIED_ROLE.query().first().getAsMention() + " user of " + TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())).getAsMention())
+//                    .build()
+//            ).queue();
+//            return;
+//        }
+//
+//        if(action.equalsIgnoreCase("add")) {
+//            if(TechDiscordBot.getStorage().hasSubVerification(m.getId())) {
+//                e.replyEmbeds(
+//                        new TechEmbedBuilder("Sub Verification - Error")
+//                        .error()
+//                        .text("You need to remove your old sub verification first before you can add a new one.")
+//                        .build()
+//                ).queue();
+//                return;
+//            } if (member.getRoles().contains(SUB_VERIFIED_ROLE.query().first())) {
+//                e.replyEmbeds(
+//                        new TechEmbedBuilder("Sub Verification - Error")
+//                                .error()
+//                                .text("You can not add a already verified user as your subverified user.")
+//                                .build()
+//                ).queue();
+//                return;
+//            }
+//
+//            TechDiscordBot.getGuild().addRoleToMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
+//            TechDiscordBot.getStorage().addSubVerification(m.getId(), member.getId());
+//            e.replyEmbeds(
+//                    new TechEmbedBuilder("Sub Verification - Added")
+//                            .success()
+//                            .text("Successfully **added** " + member.getAsMention() + " as " + m.getAsMention() + "'s sub verified user")
+//                            .build()
+//            ).queue();
+//            ServerLogs.log(
+//                    new TechEmbedBuilder("Subverification added")
+//                            .success()
+//                            .text("User: " + e.getMember().getAsMention() + " (" + e.getUser().getName() + "#" + e.getUser().getDiscriminator() + ", " + e.getUser().getId() + ") \n"+
+//                                    "has added: " + m.getAsMention() + "as a subverified user")
+//                            .thumbnail(e.getMember().getUser().getAvatarUrl())
+//            );
+//            return;
+//        }
+//
+//        if(action.equalsIgnoreCase("remove")) {
+//            if(TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()) == null) {
+//             e.replyEmbeds(
+//                     new TechEmbedBuilder("Sub Verification - Error")
+//                     .error()
+//                     .text("You don't have an sub verified user!")
+//                     .build()
+//             ).queue();
+//             return;
+//            }
+//
+//            if(TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()) != null && !TechDiscordBot.getStorage().getSubVerifiedIdFromVerifiedId(m.getId()).equals(member.getId())) {
+//                e.replyEmbeds(
+//                        new TechEmbedBuilder("Sub Verification - Error")
+//                        .error()
+//                        .text(member.getAsMention() + " isn't your verified user!")
+//                        .build()
+//                ).queue();
+//                return;
+//            }
+//
+//            TechDiscordBot.getGuild().removeRoleFromMember(member, SUB_VERIFIED_ROLE.query().first()).queue();
+//            TechDiscordBot.getStorage().removeSubVerification(m.getId());
+//            e.replyEmbeds(
+//                    new TechEmbedBuilder("Sub Verification - Removed")
+//                            .color(Color.orange)
+//                            .text("Successfully **removed** " + member.getAsMention() + " as " + m.getAsMention() + "'s sub verified user")
+//                            .build()
+//            ).queue();
+//            ServerLogs.log(
+//                    new TechEmbedBuilder("Subverification Removed")
+//                            .error()
+//                            .text("User: " + e.getMember().getAsMention() + " (" + e.getUser().getName() + "#" + e.getUser().getDiscriminator() + ", " + e.getUser().getId() + ") \n"+
+//                                    "has added: " + m.getAsMention() + "as a subverified user")
+//                            .thumbnail(e.getMember().getUser().getAvatarUrl())
+//            );
+//            return;
+//        }
     }
 }

@@ -2,10 +2,10 @@ package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
-import me.TechsCode.TechDiscordBot.mysql.storage.Verification;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
+import me.TechsCode.TechDiscordBot.verification.Verification;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -70,47 +70,49 @@ public class UnverifyCommand extends CommandModule {
     }
 
     public void processSpigotId(SlashCommandEvent e, String spigotId, TextChannel channel) {
-        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithSpigot(spigotId);
-
-        if(verification == null) {
-            e.replyEmbeds(
-                new TechEmbedBuilder("Unverify Command - Error")
-                    .error()
-                    .text("The Spigot ID '" + spigotId + "' is not verified!")
-                    .build()
-            ).setEphemeral(true).queue();
-        } else {
-            boolean isUserOnline = TechDiscordBot.getGuild().getMemberById(verification.getDiscordId()) != null;
-
-            e.replyEmbeds(
-                new TechEmbedBuilder("Unverify Command - Success")
-                    .success()
-                    .text("Successfully removed " + (isUserOnline ? TechDiscordBot.getGuild().getMemberById(verification.getDiscordId()).getAsMention() : verification.getDiscordId()) + "'s verification!")
-                    .build()
-            ).queue();
-            verification.delete();
-        }
+        //TODO processSpigotId
+//        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithSpigot(spigotId);
+//
+//        if(verification == null) {
+//            e.replyEmbeds(
+//                new TechEmbedBuilder("Unverify Command - Error")
+//                    .error()
+//                    .text("The Spigot ID '" + spigotId + "' is not verified!")
+//                    .build()
+//            ).setEphemeral(true).queue();
+//        } else {
+//            boolean isUserOnline = TechDiscordBot.getGuild().getMemberById(verification.getDiscordId()) != null;
+//
+//            e.replyEmbeds(
+//                new TechEmbedBuilder("Unverify Command - Success")
+//                    .success()
+//                    .text("Successfully removed " + (isUserOnline ? TechDiscordBot.getGuild().getMemberById(verification.getDiscordId()).getAsMention() : verification.getDiscordId()) + "'s verification!")
+//                    .build()
+//            ).queue();
+//            verification.delete();
+//        }
     }
 
     public void process(SlashCommandEvent e, String member, TextChannel channel) {
-        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithDiscord(member);
-
-        if(verification == null) {
-            e.replyEmbeds(
-                new TechEmbedBuilder("Unverify Command - Error")
-                    .error()
-                    .text(member + " is not verified!")
-                    .build()
-            ).setEphemeral(true).queue();
-        } else {
-            verification.delete();
-
-            e.replyEmbeds(
-                new TechEmbedBuilder("Unverify Command - Success")
-                    .success()
-                    .text("Successfully removed " + member + "'s verification!")
-                    .build()
-            ).queue();
-        }
+        //TODO process
+//        Verification verification = TechDiscordBot.getStorage().retrieveVerificationWithDiscord(member);
+//
+//        if(verification == null) {
+//            e.replyEmbeds(
+//                new TechEmbedBuilder("Unverify Command - Error")
+//                    .error()
+//                    .text(member + " is not verified!")
+//                    .build()
+//            ).setEphemeral(true).queue();
+//        } else {
+//            verification.delete();
+//
+//            e.replyEmbeds(
+//                new TechEmbedBuilder("Unverify Command - Success")
+//                    .success()
+//                    .text("Successfully removed " + member + "'s verification!")
+//                    .build()
+//            ).queue();
+//        }
     }
 }

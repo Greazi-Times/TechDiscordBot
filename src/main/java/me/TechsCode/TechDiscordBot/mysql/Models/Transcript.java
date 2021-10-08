@@ -1,5 +1,8 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
+import com.google.gson.JsonObject;
+import me.TechsCode.TechDiscordBot.TechDiscordBot;
+
 public class Transcript {
 
     private final int id;
@@ -10,12 +13,25 @@ public class Transcript {
         this.value = value;
     }
 
+    public Transcript(JsonObject transcript) {
+        this.id = transcript.get("id").getAsInt();
+        this.value = transcript.toString();
+    }
+
     public int getId() {
         return id;
     }
 
     public String getValue() {
         return value;
+    }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveTranscript(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteTranscript(this);
     }
 
 }

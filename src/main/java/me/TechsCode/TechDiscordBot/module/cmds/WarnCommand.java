@@ -2,7 +2,6 @@ package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
-import me.TechsCode.TechDiscordBot.mysql.storage.Warning;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
@@ -82,15 +81,16 @@ public class WarnCommand extends CommandModule {
             return;
         }
 
-        Warning warning = new Warning(user.getId(), m.getId(), reason, System.currentTimeMillis());
-        warning.save();
+        //TODO REDO WARNINGS
+//        Warning warning = new Warning(user.getId(), m.getId(), reason, System.currentTimeMillis());
+//        warning.save();
 
-        msg = new TechEmbedBuilder("User Warnings")
-                   .addField("User:", warning.getMember().getAsMention(), false)
-                   .addField("Reporter", warning.getReporter().getAsMention(), false)
-                   .addField("Reason", warning.getReason(), false)
-                   .build();
-        e.replyEmbeds(msg).queue();
+//        msg = new TechEmbedBuilder("User Warnings")
+//                   .addField("User:", warning.getMember().getAsMention(), false)
+//                   .addField("Reporter", warning.getReporter().getAsMention(), false)
+//                   .addField("Reason", warning.getReason(), false)
+//                   .build();
+//        e.replyEmbeds(msg).queue();
 
     }
 }

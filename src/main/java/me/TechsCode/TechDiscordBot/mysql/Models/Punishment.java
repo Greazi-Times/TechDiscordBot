@@ -1,5 +1,8 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
+import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.MySQL;
+
 public class Punishment {
 
     private final int id, memberId, punisherId;
@@ -16,6 +19,16 @@ public class Punishment {
         this.expired = Expired;
     }
 
+    public Punishment(DbMember member, DbMember punisher, String Type, String Reason, long Date, long Expired) {
+        this.id = 0;
+        this.memberId = member.getId();
+        this.punisherId = punisher.getId();
+        this.type = Type;
+        this.reason = Reason;
+        this.date = Date;
+        this.expired = Expired;
+    }
+
     public int getId() {
         return id;
     }
@@ -24,8 +37,16 @@ public class Punishment {
         return memberId;
     }
 
+    public DbMember getMember(){
+        return TechDiscordBot.getStorage().retrieveMemberById(memberId);
+    }
+
     public int getPunisherId() {
         return punisherId;
+    }
+
+    public DbMember getPunisher(){
+        return TechDiscordBot.getStorage().retrieveMemberById(punisherId);
     }
 
     public String getType() {
@@ -42,5 +63,13 @@ public class Punishment {
 
     public long getExpired() {
         return expired;
+    }
+
+    public void save(){
+        TechDiscordBot.getStorage().savePunishment(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deletePunishment(this);
     }
 }

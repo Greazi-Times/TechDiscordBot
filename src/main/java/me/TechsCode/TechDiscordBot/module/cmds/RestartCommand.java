@@ -54,9 +54,8 @@ public class RestartCommand extends CommandModule {
     @Override
     public OptionData[] getOptions() {
         return new OptionData[] {
-                new OptionData(OptionType.STRING, "service", "The service to restart (API or Bot)", true)
+                new OptionData(OptionType.STRING, "service", "The service to restart", true)
                         .addChoice("Bot", "Bot")
-                        .addChoice("API", "API")
         };
     }
 
@@ -70,7 +69,6 @@ public class RestartCommand extends CommandModule {
         String service = Objects.requireNonNull(e.getOption("service")).getAsString();
 
         if(service.equalsIgnoreCase("Bot")) {
-<<<<<<< Updated upstream
             e.replyEmbeds(new TechEmbedBuilder("Restart Status Loading...")
                     .text("Restarting Bot...")
                     .thumbnail("https://i.ibb.co/9gth0SW/1496.gif")
@@ -92,67 +90,12 @@ public class RestartCommand extends CommandModule {
                         .success()
                         .build()).queue();
             });
-        }else if(service.equalsIgnoreCase("API")) {
-            if(ADMIN_ROLES.query().stream().anyMatch(r -> member.getRoles().contains(r))) {
-                e.replyEmbeds(new TechEmbedBuilder("API Restart Status Loading...")
-                        .text("Restarting API...")
-                        .thumbnail("https://i.ibb.co/9gth0SW/1496.gif")
-                        .color(Color.ORANGE)
-                        .build()
-                ).queue(q -> {
-                    if (TechDiscordBot.getSpigotAPI().restartAPI()) {
-                        q.editOriginalEmbeds(new TechEmbedBuilder("API Restarted!")
-                                .text("The API has been restarted!")
-                                .success()
-                                .build()).queue();
-                    } else {
-                        q.editOriginalEmbeds(new TechEmbedBuilder("API Restart Failed!")
-                                .text("The API has failed to restart!")
-=======
-            deleteMessage();
-                e.replyEmbeds(new TechEmbedBuilder("Restart Status Loading...")
-                        .text("Restarting Bot.....")
-                        .color(Color.ORANGE)
-                        .build()
-                ).queue(q ->{
-                    boolean success = Pterodactyl.doRestart();
-
-                    if (success) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-
-                        q.editOriginalEmbeds(new TechEmbedBuilder("Restarted!")
-                                .text("The Bot has been restarted!")
-                                .success()
-                                .build()).queue();
-
-                        Pterodactyl.doKill();
-                    }else{
-                        q.editOriginalEmbeds(new TechEmbedBuilder("Restart Status Failed!")
-                                .text("The Bot failed to restart!")
->>>>>>> Stashed changes
-                                .error()
-                                .build()).queue();
-                    }
-                });
-<<<<<<< Updated upstream
-            }else{
-                e.replyEmbeds(new TechEmbedBuilder("Restart Failed")
-                        .text("You have no permission to perform this command")
-                        .error()
-                        .build()).queue();
-            }
         }else{
             e.replyEmbeds(new TechEmbedBuilder("Restart Invalid Service")
                     .text("Invalid Service Choice!")
                     .color(Color.ORANGE)
                     .build()
             ).queue();
-=======
->>>>>>> Stashed changes
         }
     }
 
