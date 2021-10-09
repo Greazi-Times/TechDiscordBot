@@ -1,6 +1,7 @@
 package me.TechsCode.TechDiscordBot.mysql.storage;
 
 import me.TechsCode.TechDiscordBot.mysql.Models.*;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.*;
 import me.TechsCode.TechDiscordBot.mysql.MySQL;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import org.jetbrains.annotations.Contract;
@@ -11,9 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Storage {
 
@@ -56,19 +55,19 @@ public class Storage {
 
     public void createDefault() {
         //Create tables
-        mysql.update("CREATE TABLE `"+MARKETS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT , `name` varchar(100) NOT NULL, PRIMARY KEY (`id`));");
-        mysql.update("CREATE TABLE `"+MEMBERS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `discordID` varchar(100) NOT NULL, `name` varchar(100) NOT NULL, `joined` timestamp NOT NULL, `staff` boolean NOT NULL , PRIMARY KEY (`id`));");
+        mysql.update("CREATE TABLE `"+MARKETS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT , `name` varchar(100) NOT NULL, PRIMARY KEY (`id`)), UNIQUE KEY `UQ_name` (`name`);");
+        mysql.update("CREATE TABLE `"+MEMBERS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `discordID` varchar(100) NOT NULL, `name` varchar(100) NOT NULL, `joined` timestamp NOT NULL, `staff` boolean NOT NULL , PRIMARY KEY (`id`)), UNIQUE KEY `UQ_discordId` (`discordId`);");
         mysql.update("CREATE TABLE `"+PUNISHMENTS_TABLE+"`(`type` varchar(100) NOT NULL, `memberId` int NOT NULL, `reason` text NOT NULL, `date` timestamp NOT NULL, `expired` timestamp NOT NULL, `punisherId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`),KEY `fkIdx_119` (`memberId`), CONSTRAINT `FK_117` FOREIGN KEY `fkIdx_119` (`memberId`) REFERENCES `Members` (`id`),KEY `fkIdx_123` (`punisherId`), CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_123` (`punisherId`) REFERENCES `Members` (`id`));");
         mysql.update("CREATE TABLE `"+PURCHASEDPLUGINS_TABLE+"`(`marketId` int NOT NULL, `transactionID` varchar(255) NOT NULL, `purchaseData` varchar(255) NOT NULL, `reviewed` boolean NOT NULL DEFAULT false, `verificationID` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_107` (`marketId`), CONSTRAINT `FK_105` FOREIGN KEY `fkIdx_107` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_110` (`verificationID`), CONSTRAINT `FK_108` FOREIGN KEY `fkIdx_110` (`verificationID`) REFERENCES `Verification` (`id`),KEY `fkIdx_116` (`resourceId`),CONSTRAINT `FK_114` FOREIGN KEY `fkIdx_116` (`resourceId`) REFERENCES `Resources` (`id`));");
         mysql.update("CREATE TABLE `"+REMINDERS_TABLE+"`(`channelID` varchar(100) NOT NULL, `time` timestamp NOT NULL, `type` varchar(100) NOT NULL, `reminder` text NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_113` (`memberId`), CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_113` (`memberId`) REFERENCES `Members` (`id`));");
-        mysql.update("CREATE TABLE `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, PRIMARY KEY (`id`));");
-        mysql.update("CREATE TABLE `"+REVIEWS_TABLE+"`(`memberId` int NOT NULL, `date` timestamp NOT NULL, `reviewID` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_132` (`memberId`), CONSTRAINT `FK_130` FOREIGN KEY `fkIdx_132` (`memberId`) REFERENCES `Members` (`id`), KEY `fkIdx_135` (`resourceId`), CONSTRAINT `FK_133` FOREIGN KEY `fkIdx_135` (`resourceId`) REFERENCES `Resources` (`id`));");
+        mysql.update("CREATE TABLE `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, PRIMARY KEY (`id`)), UNIQUE KEY `UQ_spigotId` (`spigotId`);");
+        mysql.update("CREATE TABLE `"+REVIEWS_TABLE+"`(`memberId` int NOT NULL, `date` timestamp NOT NULL, `reviewId` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_132` (`memberId`), CONSTRAINT `FK_130` FOREIGN KEY `fkIdx_132` (`memberId`) REFERENCES `Members` (`id`), KEY `fkIdx_135` (`resourceId`), CONSTRAINT `FK_133` FOREIGN KEY `fkIdx_135` (`resourceId`) REFERENCES `Resources` (`id`)), , UNIQUE KEY `UQ_reviewId` (`reviewId`);");
         mysql.update("CREATE TABLE `"+SUBVERIFIED_TABLE+"`(`subMembersId` int NOT NULL, `verificationId` int NOT NULL, `id` int NOT NULL AUTO_INCREMEN, PRIMARY KEY (`id`), KEY `fkIdx_126` (`subMembersId`), CONSTRAINT `FK_124` FOREIGN KEY `fkIdx_126` (`subMembersId`) REFERENCES `Members` (`id`),KEY `fkIdx_129` (`verificationId`), CONSTRAINT `FK_127` FOREIGN KEY `fkIdx_129` (`verificationId`) REFERENCES `Verification` (`id`));");
         mysql.update("CREATE TABLE `"+TRANSCRIPTS_TABLE+"`(`id` int NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));");
-        mysql.update("CREATE TABLE `"+UPDATES_TABLE+"`(`resourceId` int NOT NULL, `version` varchar(100) NOT NULL, `date` timestamp NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_138` (`resourceId`), CONSTRAINT `FK_136` FOREIGN KEY `fkIdx_138` (`resourceId`) REFERENCES `Resources` (`id`));");
-        mysql.update("CREATE TABLE `"+VERIFICATIONS_TABLE+"`(`memberId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `payerID` varchar(100) NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_89` (`memberId`), CONSTRAINT `FK_87` FOREIGN KEY `fkIdx_89` (`memberId`) REFERENCES `Members` (`id`));");
+        mysql.update("CREATE TABLE `"+UPDATES_TABLE+"`(`resourceId` int NOT NULL, `name` varchar(100) NOT NULL, `date` timestamp NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_138` (`resourceId`), CONSTRAINT `FK_136` FOREIGN KEY `fkIdx_138` (`resourceId`) REFERENCES `Resources` (`id`)), UNIQUE KEY `UQ_resourceId` (`resourceId`);");
+        mysql.update("CREATE TABLE `"+VERIFICATIONS_TABLE+"`(`memberId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `payerID` varchar(100) NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_89` (`memberId`), CONSTRAINT `FK_87` FOREIGN KEY `fkIdx_89` (`memberId`) REFERENCES `Members` (`id`)), UNIQUE KEY `UQ_memberId` (`memberId`);");
         mysql.update("CREATE TABLE `"+VERIFICATIONMARKETS_TABLE+"`(`marketId` int NOT NULL, `verficationId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `userID` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_100` (`marketId`), CONSTRAINT `FK_98` FOREIGN KEY `fkIdx_100` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_103` (`verficationId`), CONSTRAINT `FK_101` FOREIGN KEY `fkIdx_103` (`verficationId`) REFERENCES `Verification` (`id`));");
-        mysql.update("CREATE TABLE `"+VERIFICATIONQ_TABLE+"`(`memberId` int NOT NULL, `email` varchar(255) NOT NULL, `transactionId` varchar(255) NOT NULL, `marketId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_141` (`marketId`), CONSTRAINT `FK_139` FOREIGN KEY `fkIdx_141` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_96` (`memberId`), CONSTRAINT `FK_94` FOREIGN KEY `fkIdx_96` (`memberId`) REFERENCES `Members` (`id`));");
+        mysql.update("CREATE TABLE `"+VERIFICATIONQ_TABLE+"`(`memberId` int NOT NULL, `email` varchar(255) NOT NULL, `transactionId` varchar(255) NOT NULL, `marketId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_141` (`marketId`), CONSTRAINT `FK_139` FOREIGN KEY `fkIdx_141` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_96` (`memberId`), CONSTRAINT `FK_94` FOREIGN KEY `fkIdx_96` (`memberId`) REFERENCES `Members` (`id`)), UNIQUE KEY `UQ_memberId` (`memberId`);");
 
         this.connected = true;
     }
@@ -76,8 +75,8 @@ public class Storage {
     //-----------------------------
     //---------REMINDERS-----------
     //-----------------------------
-    public Set<Reminder> retrieveReminders() {
-        Set<Reminder> ret = new HashSet<>();
+    public ReminderList retrieveReminders() {
+        ReminderList reminderList = new ReminderList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -85,7 +84,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Reminder(rs.getInt("id"), rs.getInt("memberId"), rs.getString("channelId"), new ReminderType(0), rs.getString("reminder"), rs.getLong("time")));
+                reminderList.add(new Reminder(rs.getInt("id"), rs.getInt("memberId"), rs.getString("channelId"), rs.getInt("type"), rs.getString("reminder"), rs.getLong("time")));
 
             rs.close();
             connection.close();
@@ -93,11 +92,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return reminderList;
     }
 
-    public Set<Reminder> retrieveMemberReminders(DbMember member) {
-        Set<Reminder> ret = new HashSet<>();
+    public ReminderList retrieveMemberReminders(DbMember member) {
+        ReminderList reminderList = new ReminderList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -105,7 +104,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Reminder(rs.getInt("id"), rs.getInt("memberId"), rs.getString("channelId"), new ReminderType(0), rs.getString("reminder"), rs.getLong("time")));
+                reminderList.add(new Reminder(rs.getInt("id"), rs.getInt("memberId"), rs.getString("channelId"), rs.getInt("type"), rs.getString("reminder"), rs.getLong("time")));
 
             rs.close();
             connection.close();
@@ -113,7 +112,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return reminderList;
     }
 
     public void saveReminder(@NotNull Reminder reminder) {
@@ -150,8 +149,8 @@ public class Storage {
     //-----------------------------
     //----------MARKETS------------
     //-----------------------------
-    public Set<DbMarket> retrieveMarkets() {
-        Set<DbMarket> ret = new HashSet<>();
+    public MarketList retrieveMarkets() {
+        MarketList marketList = new MarketList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -159,7 +158,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new DbMarket(rs.getInt("id"), rs.getString("name")));
+                marketList.add(new DbMarket(rs.getInt("id"), rs.getString("name")));
 
             rs.close();
             connection.close();
@@ -167,7 +166,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return marketList;
     }
 
     public DbMarket retrieveMarketByName(String name) {
@@ -206,6 +205,25 @@ public class Storage {
         return null;
     }
 
+    public boolean marketExists(String name) {
+        boolean marketExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `name`='" + name + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            marketExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return marketExists;
+    }
+
     public void saveMarket(@NotNull DbMarket market) {
         mysql.update("INSERT INTO " + MARKETS_TABLE + " (id, name) VALUES (NULL, '"+market.getName()+"') ON DUPLICATE KEY UPDATE name='"+market.getName()+"';");
     }
@@ -225,8 +243,8 @@ public class Storage {
     //-----------------------------
     //----------MEMBERS------------
     //-----------------------------
-    public Set<DbMember> retrieveMembers() {
-        Set<DbMember> ret = new HashSet<>();
+    public MemberList retrieveMembers() {
+        MemberList memberList = new MemberList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -234,7 +252,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff")));
+                memberList.add(new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff")));
 
             rs.close();
             connection.close();
@@ -242,7 +260,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return memberList;
     }
 
     public DbMember retrieveMemberByDiscordId(String discordId) {
@@ -281,6 +299,25 @@ public class Storage {
         return null;
     }
 
+    public boolean memberExists(String discordId) {
+        boolean memberExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MEMBERS_TABLE + " WHERE `discordId`='" + discordId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            memberExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return memberExists;
+    }
+
     public void saveMember(@NotNull DbMember dbMember) {
         mysql.update("INSERT INTO " + MEMBERS_TABLE + " (id, discordID, name, joined, staff) VALUES (NULL, '" + dbMember.getDiscordId() + "', '" + dbMember.getName() + "', '" + dbMember.getJoined() + "', '" + dbMember.isStaff() + "') ON DUPLICATE KEY UPDATE discordID='" + dbMember.getDiscordId() + "', name='" + dbMember.getName() + "', joined='" + dbMember.getJoined() + "', staff='" + dbMember.isStaff() + "';");
     }
@@ -300,8 +337,8 @@ public class Storage {
     //-----------------------------
     //----------REVIEWS------------
     //-----------------------------
-    public Set<Review> retrieveReviews() {
-        Set<Review> ret = new HashSet<>();
+    public ReviewList retrieveReviews() {
+        ReviewList reviewList = new ReviewList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -309,7 +346,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Review(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("resourceId"), rs.getLong("date")));
+                reviewList.add(new Review(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("reviewId"), rs.getInt("resourceId"), rs.getLong("date")));
 
             rs.close();
             connection.close();
@@ -317,11 +354,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return reviewList;
     }
 
-    public Set<Review> retrieveMemberReviews(@NotNull DbMember member) {
-        Set<Review> ret = new HashSet<>();
+    public ReviewList retrieveMemberReviews(@NotNull DbMember member) {
+        ReviewList reviewList = new ReviewList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -329,7 +366,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Review(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("resourceId"), rs.getLong("date")));
+                reviewList.add(new Review(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("reviewId"), rs.getInt("resourceId"), rs.getLong("date")));
 
             rs.close();
             connection.close();
@@ -337,7 +374,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return reviewList;
     }
 
     public void saveReview(@NotNull Review review) {
@@ -356,8 +393,8 @@ public class Storage {
     //----------UPDATES------------
     //-----------------------------
 
-    public Set<DbUpdate> retrieveResourceUpdates(@NotNull Resource resource) {
-        Set<DbUpdate> ret = new HashSet<>();
+    public UpdateList retrieveResourceUpdates(@NotNull Resource resource) {
+        UpdateList updateList = new UpdateList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -365,7 +402,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new DbUpdate(rs.getInt("id"), rs.getInt("resourceId"), rs.getString("version"), rs.getLong("date")));
+                updateList.add(new DbUpdate(rs.getInt("id"), rs.getInt("resourceId"), rs.getString("version"), rs.getLong("date"), rs.getLong("updateId")));
 
             rs.close();
             connection.close();
@@ -373,11 +410,30 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return updateList;
+    }
+
+    public boolean updateExists(String updateId) {
+        boolean updateExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + UPDATES_TABLE + " WHERE `updateId`='" + updateId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            updateExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return updateExists;
     }
 
     public void saveUpdate(@NotNull DbUpdate update) {
-        mysql.update("INSERT INTO " + UPDATES_TABLE + " (id, resourceId, version, date) VALUES (NULL, '" + update.getResourceId() + "', '" + update.getVersion() + "', '" + update.getDate() + "') ON DUPLICATE KEY UPDATE resourceId='" + update.getResourceId() + "', version='" + update.getVersion() + "', date='" + update.getDate() + "';");
+        mysql.update("INSERT INTO " + UPDATES_TABLE + " (id, resourceId, name, date) VALUES (NULL, '" + update.getResourceId() + "', '" + update.getName() + "', '" + update.getDate() + "') ON DUPLICATE KEY UPDATE resourceId='" + update.getResourceId() + "', name='" + update.getName() + "', date='" + update.getDate() + "';");
     }
 
     public void deleteUpdate(@NotNull DbUpdate update) {
@@ -392,8 +448,8 @@ public class Storage {
     //---------RESOURCES-----------
     //-----------------------------
 
-    public Set<Resource> retrieveResources() {
-        Set<Resource> ret = new HashSet<>();
+    public ResourcesList retrieveResources() {
+        ResourcesList resourcesList = new ResourcesList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -401,7 +457,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId")));
+                resourcesList.add(new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId")));
 
             rs.close();
             connection.close();
@@ -409,7 +465,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return resourcesList;
     }
 
     public Resource retrieveResourceById(int resourceId) {
@@ -430,6 +486,44 @@ public class Storage {
         return null;
     }
 
+    public boolean resourceExists(Resource resource) {
+        boolean resourceExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE `id`='" + resource.getId() + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            resourceExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resourceExists;
+    }
+
+    public boolean resourceExists(int spigotId) {
+        boolean resourceExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE `spigotId`='" + spigotId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            resourceExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resourceExists;
+    }
+
     public void saveResource(@NotNull Resource resource) {
         mysql.update("INSERT INTO " + RESOURCES_TABLE + " (id, name, spigotId) VALUES (NULL, '" + resource.getName() + "', '" + resource.getSpigotId() + "') ON DUPLICATE KEY UPDATE name='" + resource.getName() + "', spigotId='" + resource.getSpigotId() + "';");
     }
@@ -442,8 +536,8 @@ public class Storage {
     //-----------------------------
     //--------PUNISHMENTS----------
     //-----------------------------
-    public Set<Punishment> retrievePunishments() {
-        Set<Punishment> ret = new HashSet<>();
+    public PunishmentList retrievePunishments() {
+        PunishmentList punishmentList = new PunishmentList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -451,7 +545,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Punishment(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("punisherId"), rs.getString("type"), rs.getString("reason"), rs.getLong("date"), rs.getLong("expired")));
+                punishmentList.add(new Punishment(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("punisherId"), rs.getString("type"), rs.getString("reason"), rs.getLong("date"), rs.getLong("expired")));
 
             rs.close();
             connection.close();
@@ -459,11 +553,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return punishmentList;
     }
 
-    public Set<Punishment> retrieveMemberPunishments(@NotNull DbMember member) {
-        Set<Punishment> ret = new HashSet<>();
+    public PunishmentList retrieveMemberPunishments(@NotNull DbMember member) {
+        PunishmentList punishmentList = new PunishmentList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -471,7 +565,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new Punishment(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("punisherId"), rs.getString("type"), rs.getString("reason"), rs.getLong("date"), rs.getLong("expired")));
+                punishmentList.add(new Punishment(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("punisherId"), rs.getString("type"), rs.getString("reason"), rs.getLong("date"), rs.getLong("expired")));
 
             rs.close();
             connection.close();
@@ -479,7 +573,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return punishmentList;
     }
 
     public void savePunishment(@NotNull Punishment punishment) {
@@ -494,8 +588,8 @@ public class Storage {
     //-----------------------------
     //----VERIFICATION_MARKETS-----
     //-----------------------------
-    public Set<VerficationMarket> retrieveVerficationMarkets(@NotNull Verfication verfication) {
-        Set<VerficationMarket> ret = new HashSet<>();
+    public VerficationMarketList retrieveVerficationMarkets(@NotNull DbVerfication verfication) {
+        VerficationMarketList verficationMarketList = new VerficationMarketList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -503,7 +597,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new VerficationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("verficationId"), rs.getInt("userId")));
+                verficationMarketList.add(new VerficationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("verficationId"), rs.getInt("userId")));
 
             rs.close();
             connection.close();
@@ -511,7 +605,27 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return verficationMarketList;
+    }
+
+    public VerficationMarketList retrieveVerficationMarket(@NotNull int userId) {
+        VerficationMarketList verficationMarketList = new VerficationMarketList();
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONMARKETS_TABLE + " WHERE userId='"+userId+"';");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                verficationMarketList.add(new VerficationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("verficationId"), rs.getInt("userId")));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verficationMarketList;
     }
 
     public void saveVerficationMarket(@NotNull VerficationMarket verficationMarket) {
@@ -526,6 +640,25 @@ public class Storage {
     //-----------------------------
     //-------VERIFICATION_Q--------
     //-----------------------------
+    public VerficationQList retrieveVerficationQ() {
+        VerficationQList verficationQList = new VerficationQList();
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + ";");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                verficationQList.add(new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId")));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verficationQList;
+    }
+
     public VerficationQ retrieveMemberVerficationQ(@NotNull DbMember member) {
         try {
             Connection connection = mysql.getConnection();
@@ -544,6 +677,62 @@ public class Storage {
         return null;
     }
 
+    public VerficationQ retrieveVerficationQById(@NotNull int verificationQId) {
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE id='"+verificationQId+"';");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                return new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public boolean verficationQExists(DbMember member) {
+        boolean verficationQExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `memberId`='" + member.getId() + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verficationQExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verficationQExists;
+    }
+
+    public boolean verficationQExists(int transactionId) {
+        boolean verficationQExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE `transactionId`='" + transactionId + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verficationQExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verficationQExists;
+    }
+
     public void saveVerficationQ(@NotNull VerficationQ verficationQ) {
         mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (id, memberId, marketId, email, transactionId) VALUES (NULL, '" + verficationQ.getMemberId() + "', '" + verficationQ.getMarketId() + "', '" + verficationQ.getEmail() + "', '" + verficationQ.getTransactionId() + "') ON DUPLICATE KEY UPDATE memberId='" + verficationQ.getMemberId() + "', marketId='" + verficationQ.getMarketId() + "', email='" + verficationQ.getEmail() + "', transactionId='" + verficationQ.getTransactionId() + "';");
     }
@@ -556,8 +745,8 @@ public class Storage {
     //-----------------------------
     //------SUB_VERIFICATION-------
     //-----------------------------
-    public Set<SubVerfication> retrieveSubVerfications(@NotNull Verfication verfication) {
-        Set<SubVerfication> ret = new HashSet<>();
+    public SubVerificationList retrieveSubVerfications(@NotNull DbVerfication verfication) {
+        SubVerificationList subVerificationList = new SubVerificationList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -565,7 +754,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new SubVerfication(rs.getInt("id"), rs.getInt("subMemberId"), rs.getInt("verficationId")));
+                subVerificationList.add(new SubVerfication(rs.getInt("id"), rs.getInt("subMemberId"), rs.getInt("verficationId")));
 
             rs.close();
             connection.close();
@@ -573,11 +762,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return subVerificationList;
     }
 
-    public Set<SubVerfication> retrieveMemberSubVerfications(@NotNull DbMember member) {
-        Set<SubVerfication> ret = new HashSet<>();
+    public SubVerificationList retrieveMemberSubVerfications(@NotNull DbMember member) {
+        SubVerificationList subVerificationList = new SubVerificationList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -585,7 +774,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new SubVerfication(rs.getInt("id"), rs.getInt("subMemberId"), rs.getInt("verficationId")));
+                subVerificationList.add(new SubVerfication(rs.getInt("id"), rs.getInt("subMemberId"), rs.getInt("verficationId")));
 
             rs.close();
             connection.close();
@@ -593,11 +782,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return subVerificationList;
     }
 
     public void saveSubVerfication(@NotNull SubVerfication subVerfication) {
-        mysql.update("INSERT INTO " + SUBVERIFIED_TABLE + " (id, subMemberId, verficationId) VALUES (NULL, '" + subVerfication.getSubMembersId() + "', '" + subVerfication.getVerificationId() + "') ON DUPLICATE KEY UPDATE subMemberId='" + subVerfication.getSubMembersId() + "', verficationId='" + subVerfication.getVerificationId() + "';");
+        mysql.update("INSERT INTO " + SUBVERIFIED_TABLE + " (id, subMemberId, verficationId) VALUES (NULL, '" + subVerfication.getSubMemberId() + "', '" + subVerfication.getVerificationId() + "') ON DUPLICATE KEY UPDATE subMemberId='" + subVerfication.getSubMemberId() + "', verficationId='" + subVerfication.getVerificationId() + "';");
     }
 
     public void deleteSubVerfication(@NotNull SubVerfication subVerfication) {
@@ -608,14 +797,33 @@ public class Storage {
     //-----------------------------
     //--------VERIFICATION---------
     //-----------------------------
-    public Verfication retrieveMemberVerfication(@NotNull DbMember member) {
+    public VerficationList retrieveVerfications() {
+        VerficationList verfications = new VerficationList();
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + ";");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                verfications.add(new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId")));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verfications;
+    }
+
+    public DbVerfication retrieveMemberVerfication(@NotNull DbMember member) {
         try {
             Connection connection = mysql.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE memberId='"+member.getId()+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                return new Verfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
+                return new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
 
             rs.close();
             connection.close();
@@ -625,14 +833,15 @@ public class Storage {
 
         return null;
     }
-    public Verfication retrieveVerficationById(@NotNull int verificationId) {
+
+    public DbVerfication retrieveVerficationById(@NotNull int verificationId) {
         try {
             Connection connection = mysql.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE id='"+verificationId+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                return new Verfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
+                return new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
 
             rs.close();
             connection.close();
@@ -643,11 +852,30 @@ public class Storage {
         return null;
     }
 
-    public void saveVerfication(@NotNull Verfication verfication) {
+    public boolean verficationExists(DbMember member) {
+        boolean verficationExistsMemberId = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE `memberId`='" + member.getId() + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verficationExistsMemberId = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verficationExistsMemberId;
+    }
+
+    public void saveVerfication(@NotNull DbVerfication verfication) {
         mysql.update("INSERT INTO " + VERIFICATIONS_TABLE + " (id, memberId, payerId) VALUES (NULL, '" + verfication.getMemberId() + "', '" + verfication.getPayerId() + "') ON DUPLICATE KEY UPDATE memberId='" + verfication.getMemberId() + "', payerId='" + verfication.getPayerId() + "';");
     }
 
-    public void deleteVerfication(@NotNull Verfication verfication) {
+    public void deleteVerfication(@NotNull DbVerfication verfication) {
         mysql.update("DELETE FROM " + VERIFICATIONS_TABLE + " WHERE id='" + verfication.getId() + "';");
     }
 
@@ -655,8 +883,8 @@ public class Storage {
     //-----------------------------
     //------PURCHASED_PLUGINS------
     //-----------------------------
-    public Set<VerficationPlugin> retrieveVerficationPlugins(@NotNull Verfication verfication) {
-        Set<VerficationPlugin> ret = new HashSet<>();
+    public VerficationPluginList retrieveVerficationPlugins(@NotNull DbVerfication verfication) {
+        VerficationPluginList verficationPluginList = new VerficationPluginList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -664,7 +892,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                ret.add(new VerficationPlugin(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("verificationId"), rs.getInt("resourceId"), rs.getString("transactionId"), rs.getString("purchaseData"), rs.getBoolean("reviewed")));
+                verficationPluginList.add(new VerficationPlugin(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("verificationId"), rs.getInt("resourceId"), rs.getString("transactionId"), rs.getString("purchaseData"), rs.getBoolean("reviewed")));
 
             rs.close();
             connection.close();
@@ -672,7 +900,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return ret;
+        return verficationPluginList;
     }
 
     public void saveVerficationPlugin(@NotNull VerficationPlugin verficationPlugin) {

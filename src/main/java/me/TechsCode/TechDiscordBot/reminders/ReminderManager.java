@@ -60,7 +60,7 @@ public class ReminderManager {
             //reminder = reminder.subList(argResponse.getAmountOfArgs(), reminder.size());
             if(reminder.size() == 0) return null;
 
-            Reminder r = new Reminder(TechDiscordBot.getStorage().retrieveMemberByDiscordId(user.getId()), channel.getId(), new ReminderType(isDM), String.join(" ", reminder), argResponse.getTime());
+            Reminder r = new Reminder(TechDiscordBot.getStorage().retrieveMemberByDiscordId(user.getId()), channel.getId(), isDM ? ReminderType.DMs : ReminderType.CHANNEL, String.join(" ", reminder), argResponse.getTime());
             this.reminders.add(r);
 
             TechDiscordBot.getStorage().saveReminder(r);

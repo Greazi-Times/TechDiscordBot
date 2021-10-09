@@ -1,6 +1,7 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.UpdateList;
 
 import java.util.Set;
 
@@ -12,6 +13,12 @@ public class Resource {
 
     public Resource(int id, String Name, int SpigotId) {
         this.id = id;
+        this.name = Name;
+        this.spigotId = SpigotId;
+    }
+
+    public Resource(String Name, int SpigotId) {
+        this.id = 0;
         this.name = Name;
         this.spigotId = SpigotId;
     }
@@ -36,12 +43,12 @@ public class Resource {
         TechDiscordBot.getStorage().deleteResource(this);
     }
 
-    public Set<DbUpdate> getUpdates(){
+    public UpdateList getUpdates(){
         return TechDiscordBot.getStorage().retrieveResourceUpdates(this);
     }
 
-    public void addUpdate(String version, long date){
-        TechDiscordBot.getStorage().saveUpdate(new DbUpdate(this, version, date));
+    public void addUpdate(String version, long date, long updateId){
+        TechDiscordBot.getStorage().saveUpdate(new DbUpdate(this, version, date, updateId));
     }
 
 }

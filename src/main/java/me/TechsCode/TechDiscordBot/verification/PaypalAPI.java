@@ -126,7 +126,7 @@ public class PaypalAPI {
 		//TechDiscordBot.getStorage().addEmailVerificationQ(id, message);
 		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Now we need a transaction ID from one of your purchases.\n\n*Type* `transactionid` *to get a guide on how to get the ID*\n*Type* `cancel` *to cancel your verification*").build()).complete();
 	}
-	public static void privateId(PrivateMessageReceivedEvent e, String id, String message){
+	public static void privateId(PrivateMessageReceivedEvent e, int id, String message){
 		//TechDiscordBot.getStorage().addTransactionIdVerificationQ(id, message);
 		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Your purchase will now be verified.").success().build()).complete();
 		Verification.verify(e, id, message);

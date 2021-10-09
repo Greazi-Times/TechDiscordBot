@@ -18,7 +18,7 @@ public class VerficationPlugin {
         this.reviewed = reviewed;
     }
 
-    public VerficationPlugin(DbMarket market, Verfication verification, Resource resource, String transactionId, String purchaseData, boolean reviewed) {
+    public VerficationPlugin(DbMarket market, DbVerfication verification, Resource resource, String transactionId, String purchaseData, boolean reviewed) {
         this.id = 0;
         this.marketId = market.getId();
         this.verificationId = verification.getId();
@@ -44,7 +44,7 @@ public class VerficationPlugin {
         return verificationId;
     }
 
-    public Verfication getVerification(){
+    public DbVerfication getVerification(){
         return TechDiscordBot.getStorage().retrieveVerficationById(verificationId);
     }
 

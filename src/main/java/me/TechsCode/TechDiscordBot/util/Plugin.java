@@ -3,7 +3,7 @@ package me.TechsCode.TechDiscordBot.util;
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
 import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
-import me.TechsCode.TechDiscordBot.mysql.Models.Verfication;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbVerfication;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
@@ -193,7 +193,7 @@ public enum Plugin {
 
     public static List<Plugin> fromUser(Member member) {
         try {
-            Verfication verification = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId()).getVerification();
+            DbVerfication verification = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId()).getVerification();
 
             //TODO purchase list
             /*try {

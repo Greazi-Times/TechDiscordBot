@@ -50,4 +50,14 @@ public class VerficationQ {
     public String getTransactionId() {
         return transactionId;
     }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveVerficationQ(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteVerficationQ(this);
+    }
+
+
 }

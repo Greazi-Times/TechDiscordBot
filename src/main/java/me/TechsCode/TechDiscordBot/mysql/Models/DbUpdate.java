@@ -2,26 +2,26 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-import java.util.Objects;
-
 public class DbUpdate {
 
     private final int id, resourceId;
-    private final String version;
-    private final long date;
+    private final String name;
+    private final long date, updateId;
 
-    public DbUpdate(int id, int resourceId, String version, long date) {
+    public DbUpdate(int id, int resourceId, String name, long date, long updateId) {
         this.id = id;
         this.resourceId = resourceId;
-        this.version = version;
+        this.name = name;
         this.date = date;
+        this.updateId = updateId;
     }
 
-    public DbUpdate(Resource resource, String version, long date) {
+    public DbUpdate(Resource resource, String name, long date, long updateId) {
         this.id = 0;
         this.resourceId = resource.getId();
-        this.version = version;
+        this.name = name;
         this.date = date;
+        this.updateId = updateId;
     }
 
     public int getId() {
@@ -32,8 +32,12 @@ public class DbUpdate {
         return resourceId;
     }
 
-    public String getVersion() {
-        return version;
+    public String getName() {
+        return name;
+    }
+
+    public long getUpdateId() {
+        return updateId;
     }
 
     public long getDate() {

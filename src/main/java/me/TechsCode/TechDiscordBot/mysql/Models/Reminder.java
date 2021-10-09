@@ -11,11 +11,20 @@ public class Reminder {
     private final ReminderType type;
     private final long time;
 
-    public Reminder(int id, int MemberId, String ChannelId, ReminderType Type, String Reminder, long Time) {
+    public Reminder(int id, int MemberId, String ChannelId, int Type, String Reminder, long Time) {
         this.id = id;
         this.memberId = MemberId;
         this.channelId = ChannelId;
-        this.type = Type;
+        this.type = Type == 0 ? ReminderType.CHANNEL : ReminderType.DMs;
+        this.reminder = Reminder;
+        this.time = Time;
+    }
+
+    public Reminder(DbMember member, String ChannelId, int Type, String Reminder, long Time) {
+        this.id = 0;
+        this.memberId = member.getId();
+        this.channelId = ChannelId;
+        this.type = Type == 0 ? ReminderType.CHANNEL : ReminderType.DMs;
         this.reminder = Reminder;
         this.time = Time;
     }
@@ -76,9 +85,9 @@ public class Reminder {
             ReminderType type = this.type;
             TextChannel channel = TechDiscordBot.getJDA().getTextChannelById(channelId);
 
-            if(channel == null) type = new ReminderType(ReminderTypes.DMs);
+            if(channel == null) type = ReminderType.DMs;
 
-            if(type.getType() == ReminderTypes.DMs) {
+            if(type == ReminderType.DMs) {
                 try {
                     user.openPrivateChannel().queue(msg -> msg.sendMessage("**Reminder**: " + reminder).queue());
                 } catch(Exception ex) {

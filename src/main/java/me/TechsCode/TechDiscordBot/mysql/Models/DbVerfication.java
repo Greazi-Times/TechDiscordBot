@@ -2,18 +2,18 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-public class Verfication {
+public class DbVerfication {
 
     private final int id, memberId;
     private final String payerId;
 
-    public Verfication(int id, int MemberId, String PayerId) {
+    public DbVerfication(int id, int MemberId, String PayerId) {
         this.id = id;
         this.memberId = MemberId;
         this.payerId = PayerId;
     }
 
-    public Verfication(DbMember member, String PayerId) {
+    public DbVerfication(DbMember member, String PayerId) {
         this.id = 0;
         this.memberId = member.getId();
         this.payerId = PayerId;
@@ -33,5 +33,13 @@ public class Verfication {
 
     public String getPayerId() {
         return payerId;
+    }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveVerfication(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteVerfication(this);
     }
 }

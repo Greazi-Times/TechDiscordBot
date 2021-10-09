@@ -1,9 +1,11 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.PunishmentList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.ReminderList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.ReviewList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.SubVerificationList;
 import net.dv8tion.jda.api.entities.Member;
-
-import java.util.Set;
 
 public class DbMember {
     private final int id;
@@ -51,11 +53,11 @@ public class DbMember {
         TechDiscordBot.getStorage().deleteMember(this);
     }
 
-    public Set<Review> getReviews(){
+    public ReviewList getReviews(){
         return TechDiscordBot.getStorage().retrieveMemberReviews(this);
     }
 
-    public Set<Punishment> getPunishments(){
+    public PunishmentList getPunishments(){
         return TechDiscordBot.getStorage().retrieveMemberPunishments(this);
     }
 
@@ -63,15 +65,15 @@ public class DbMember {
         return TechDiscordBot.getStorage().retrieveMemberVerficationQ(this);
     }
 
-    public Verfication getVerification(){
+    public DbVerfication getVerification(){
         return TechDiscordBot.getStorage().retrieveMemberVerfication(this);
     }
 
-    public Set<Reminder> getReminders(){
+    public ReminderList getReminders(){
         return TechDiscordBot.getStorage().retrieveMemberReminders(this);
     }
 
-    public Set<SubVerfication> getSubVerifications(){
+    public SubVerificationList getSubVerifications(){
         return TechDiscordBot.getStorage().retrieveMemberSubVerfications(this);
     }
 }

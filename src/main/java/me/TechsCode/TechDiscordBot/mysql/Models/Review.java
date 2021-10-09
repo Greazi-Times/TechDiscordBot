@@ -4,20 +4,22 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
 public class Review {
 
-    private final int id, memberId, resourceId;
+    private final int id, memberId, reviewID, resourceId;
     private final long date;
 
-    public Review(int id, int memberId, int resourceId, long date) {
+    public Review(int id, int memberId, int reviewID, int resourceId, long date) {
         this.id = id;
         this.memberId = memberId;
+        this.reviewID = reviewID;
         this.resourceId = resourceId;
         this.date = date;
     }
 
-    public Review(DbMember member, Resource resource, long date) {
+    public Review(DbMember member, Resource resource, int reviewID, long date) {
         this.id = 0;
         this.memberId = member.getId();
         this.resourceId = resource.getId();
+        this.reviewID = reviewID;
         this.date = date;
     }
 

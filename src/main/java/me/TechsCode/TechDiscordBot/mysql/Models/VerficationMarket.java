@@ -13,7 +13,7 @@ public class VerficationMarket {
         this.userId = userId;
     }
 
-    public VerficationMarket(DbMarket market, Verfication verfication, int userId) {
+    public VerficationMarket(DbMarket market, DbVerfication verfication, int userId) {
         this.id = 0;
         this.marketId = market.getId();
         this.verificationId = verfication.getId();
@@ -36,7 +36,7 @@ public class VerficationMarket {
         return verificationId;
     }
 
-    public Verfication getVerification(){
+    public DbVerfication getVerification(){
         return TechDiscordBot.getStorage().retrieveVerficationById(verificationId);
     }
 

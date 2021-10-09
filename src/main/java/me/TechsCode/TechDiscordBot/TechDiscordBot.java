@@ -6,6 +6,7 @@ import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.ChannelQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.reminders.ReminderManager;
+import me.TechsCode.TechDiscordBot.spiget.SpigetAPI;
 import me.TechsCode.TechDiscordBot.util.Config;
 import me.TechsCode.TechDiscordBot.util.ConsoleColor;
 import me.TechsCode.TechDiscordBot.util.PterodactylAPI;
@@ -36,6 +37,7 @@ public class TechDiscordBot {
     private static Member self;
 
     private static PaypalAPI paypalAPI;
+    private static SpigetAPI spigetAPI;
 //    private static SongodaAPIClient songodaAPIClient;
 //    private static List<SongodaPurchase> songodaPurchases;
 
@@ -99,6 +101,7 @@ public class TechDiscordBot {
         TechDiscordBot.githubToken = githubToken;
 
         paypalAPI = new PaypalAPI("https://paypalapi.techscode.com/", apiToken);
+        spigetAPI = new SpigetAPI();
 //        songodaAPIClient = new SongodaAPIClient(songodaApiToken);
 
         log("Initializing MySQL Storage " + mySQLSettings.getHost() + ":" + mySQLSettings.getPort() + "!");
@@ -252,4 +255,7 @@ public class TechDiscordBot {
         return githubToken;
     }
 
+    public static SpigetAPI getSpigetAPI() {
+        return spigetAPI;
+    }
 }

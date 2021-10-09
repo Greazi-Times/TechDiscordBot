@@ -2,6 +2,7 @@ package me.TechsCode.TechDiscordBot.module.modules;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
@@ -79,11 +80,13 @@ public class VerificationModule extends Module {
         if(e.getComponentId().equals("spigot")){
             if(Verification.isVerified(e, channel, errorMessage)) return;
             selectedMarket = "spigot";
-            Verification.Verification(member, selectedMarket, channel);
+            DbMarket market = TechDiscordBot.getStorage().retrieveMarketByName("spigot");
+            Verification.Verification(member, market, channel);
         }
         if(e.getComponentId().equals("mc-market")){
             selectedMarket = "mc-market";
-            Verification.Verification(member, selectedMarket, channel);
+            DbMarket market = TechDiscordBot.getStorage().retrieveMarketByName("mc-market");
+            Verification.Verification(member, market, channel);
         }
         if(e.getComponentId().equals("songoda")){
             new TechEmbedBuilder("Songoda Verification").text("To verify your Songoda purchase you need to connect your discord account to your songoda account.\n\nNeed help with connecting?\n*You can connect your account [here](https://songoda.com/account/integrations)*").error().sendTemporary(channel, 15);;
