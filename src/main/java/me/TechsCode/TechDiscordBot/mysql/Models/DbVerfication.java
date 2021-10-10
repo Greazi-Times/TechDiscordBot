@@ -1,6 +1,7 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerficationMarketList;
 
 public class DbVerfication {
 
@@ -33,6 +34,10 @@ public class DbVerfication {
 
     public String getPayerId() {
         return payerId;
+    }
+
+    public VerficationMarketList getMarkets(){
+        return TechDiscordBot.getStorage().retrieveVerficationMarkets(this);
     }
 
     public void save(){
