@@ -26,8 +26,8 @@ public class UpdateList extends ArrayList<DbUpdate> {
         return stream().filter(update -> update.getResourceId() == resourceId).collect(Collectors.toCollection(UpdateList::new));
     }
 
-    public UpdateList title(String title){
-        return stream().filter(update -> update.getTitle().equalsIgnoreCase(title)).collect(Collectors.toCollection(UpdateList::new));
+    public UpdateList name(String name){
+        return stream().filter(update -> update.getName().equalsIgnoreCase(name)).collect(Collectors.toCollection(UpdateList::new));
     }
 
 }
