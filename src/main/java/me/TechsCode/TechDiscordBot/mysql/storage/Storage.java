@@ -174,7 +174,7 @@ public class Storage {
         DbMarket dbMarket = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `name`='"+name+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `name`='"+name+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -193,7 +193,7 @@ public class Storage {
         DbMarket dbMarket = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `id`='"+id+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `id`='"+id+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -268,13 +268,13 @@ public class Storage {
 
     public DbMember retrieveMemberByDiscordId(String discordId) {
         DbMember dbMember = null;
+        TechDiscordBot.log(discordId);
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `" + MEMBERS_TABLE + "` WHERE `discordId`='"+discordId+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `" + MEMBERS_TABLE + "` WHERE `discordId`='"+discordId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
-            while(rs.next())
-                TechDiscordBot.log(rs.getString("name"));
+            if(rs.first())
                 dbMember = new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff"));
 
             rs.close();
@@ -290,7 +290,7 @@ public class Storage {
         DbMember dbMember = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MEMBERS_TABLE + " WHERE `id`='"+id+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MEMBERS_TABLE + " WHERE `id`='"+id+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -478,7 +478,7 @@ public class Storage {
         Resource resource = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE id='"+resourceId+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE id='"+resourceId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -591,7 +591,6 @@ public class Storage {
         mysql.update("DELETE FROM " + RESOURCES_TABLE + " WHERE id='" + punishment.getId() + "';");
     }
 
-
     //-----------------------------
     //----VERIFICATION_MARKETS-----
     //-----------------------------
@@ -670,7 +669,7 @@ public class Storage {
         VerficationQ verficationQ = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE memberId='"+member.getId()+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE memberId='"+member.getId()+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -689,7 +688,7 @@ public class Storage {
         VerficationQ verficationQ = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE id='"+verificationQId+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE id='"+verificationQId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -829,7 +828,7 @@ public class Storage {
         DbVerfication verfication = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE memberId='"+member.getId()+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE memberId='"+member.getId()+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
@@ -848,7 +847,7 @@ public class Storage {
         DbVerfication verfication = null;
         try {
             Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE id='"+verificationId+"';");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE id='"+verificationId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())

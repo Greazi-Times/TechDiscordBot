@@ -1,6 +1,7 @@
 package me.TechsCode.TechDiscordBot;
 
 import me.TechsCode.TechDiscordBot.module.ModulesManager;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.ChannelQuery;
@@ -102,6 +103,7 @@ public class TechDiscordBot {
 
         paypalAPI = new PaypalAPI("https://paypalapi.techscode.com/", apiToken);
         spigetAPI = new SpigetAPI();
+
 //        songodaAPIClient = new SongodaAPIClient(songodaApiToken);
 
         log("Initializing MySQL Storage " + mySQLSettings.getHost() + ":" + mySQLSettings.getPort() + "!");
@@ -145,8 +147,8 @@ public class TechDiscordBot {
         log("Guild:");
         log("  > Members: " + getGuild().getMembers().size());
         log("  > Verified Members: TODO"); //TODO Verified Members
-        log("  > Review Squad Members: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().equals("Review Squad"))).count());
-        log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
+        //log("  > Review Squad Members: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().equals("Review Squad"))).count());
+        //log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
 
         log("");
 
