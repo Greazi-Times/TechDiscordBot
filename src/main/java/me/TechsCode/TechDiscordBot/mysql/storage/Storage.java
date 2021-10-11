@@ -176,8 +176,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `name`='"+name+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            dbMarket = new DbMarket(rs.getInt("id"), rs.getString("name"));
+            if (rs.first())
+                dbMarket = new DbMarket(rs.getInt("id"), rs.getString("name"));
 
             rs.close();
             connection.close();
@@ -195,8 +195,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MARKETS_TABLE + " WHERE `id`='"+id+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            dbMarket = new DbMarket(rs.getInt("id"), rs.getString("name"));
+            if (rs.first())
+                dbMarket = new DbMarket(rs.getInt("id"), rs.getString("name"));
 
             rs.close();
             connection.close();
@@ -272,8 +272,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MEMBERS_TABLE + " WHERE `discordId`='"+discordId+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            dbMember = new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff"));
+            if (rs.first())
+                dbMember = new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff"));
 
             rs.close();
             connection.close();
@@ -291,8 +291,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + MEMBERS_TABLE + " WHERE `id`='"+id+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            dbMember = new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff"));
+            if (rs.first())
+                dbMember = new DbMember(rs.getInt("id"), rs.getString("discordId"), rs.getString("name"), rs.getLong("joined"), rs.getBoolean("staff"));
 
             rs.close();
             connection.close();
@@ -479,8 +479,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE id='"+resourceId+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"));
+            if (rs.first())
+                resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"));
 
             rs.close();
             connection.close();
@@ -671,8 +671,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE memberId='"+member.getId()+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            verficationQ = new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
+            if (rs.first())
+                verficationQ = new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
 
             rs.close();
             connection.close();
@@ -690,8 +690,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE id='"+verificationQId+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            verficationQ = new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
+            if (rs.first())
+                verficationQ = new VerficationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
 
             rs.close();
             connection.close();
@@ -830,8 +830,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE memberId='"+member.getId()+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            verfication = new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
+            if (rs.first())
+                verfication = new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
 
             rs.close();
             connection.close();
@@ -849,8 +849,8 @@ public class Storage {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE id='"+verificationId+"';");
             ResultSet rs = preparedStatement.executeQuery();
 
-            rs.first();
-            verfication = new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
+            if (rs.first())
+                verfication = new DbVerfication(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
 
             rs.close();
             connection.close();
