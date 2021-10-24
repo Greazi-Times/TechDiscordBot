@@ -62,7 +62,7 @@ public class Storage {
         mysql.update("CREATE TABLE IF NOT EXISTS `"+PUNISHMENTS_TABLE+"`(`type` varchar(100) NOT NULL, `memberId` int NOT NULL, `reason` text NOT NULL, `date` timestamp NOT NULL, `expired` timestamp NOT NULL, `punisherId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`),KEY `fkIdx_119` (`memberId`), CONSTRAINT `FK_117` FOREIGN KEY `fkIdx_119` (`memberId`) REFERENCES `Members` (`id`),KEY `fkIdx_123` (`punisherId`), CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_123` (`punisherId`) REFERENCES `Members` (`id`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+PURCHASEDPLUGINS_TABLE+"`(`marketId` int NOT NULL, `transactionID` varchar(255) NOT NULL, `purchaseData` varchar(255) NOT NULL, `reviewed` boolean NOT NULL DEFAULT false, `verificationID` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_107` (`marketId`), CONSTRAINT `FK_105` FOREIGN KEY `fkIdx_107` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_110` (`verificationID`), CONSTRAINT `FK_108` FOREIGN KEY `fkIdx_110` (`verificationID`) REFERENCES `Verification` (`id`),KEY `fkIdx_116` (`resourceId`),CONSTRAINT `FK_114` FOREIGN KEY `fkIdx_116` (`resourceId`) REFERENCES `Resources` (`id`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+REMINDERS_TABLE+"`(`channelID` varchar(100) NOT NULL, `time` timestamp NOT NULL, `type` varchar(100) NOT NULL, `reminder` text NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_113` (`memberId`), CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_113` (`memberId`) REFERENCES `Members` (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `UQ_spigotId` (`spigotId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, `discordRoleId` BIGINT NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `UQ_spigotId` (`spigotId`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+REVIEWS_TABLE+"`(`memberId` int NOT NULL, `date` timestamp NOT NULL, `reviewId` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_132` (`memberId`), CONSTRAINT `FK_130` FOREIGN KEY `fkIdx_132` (`memberId`) REFERENCES `Members` (`id`), KEY `fkIdx_135` (`resourceId`), CONSTRAINT `FK_133` FOREIGN KEY `fkIdx_135` (`resourceId`) REFERENCES `Resources` (`id`), UNIQUE KEY `UQ_reviewId` (`reviewId`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+SUBVERIFIED_TABLE+"`(`subMembersId` int NOT NULL, `verificationId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_126` (`subMembersId`), CONSTRAINT `FK_124` FOREIGN KEY `fkIdx_126` (`subMembersId`) REFERENCES `Members` (`id`),KEY `fkIdx_129` (`verificationId`), CONSTRAINT `FK_127` FOREIGN KEY `fkIdx_129` (`verificationId`) REFERENCES `Verification` (`id`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+TRANSCRIPTS_TABLE+"`(`id` int NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));");
@@ -268,10 +268,10 @@ public class Storage {
 
     public DbMember retrieveMemberByDiscordId(String discordId) {
         DbMember dbMember = null;
-        TechDiscordBot.log(discordId);
         try {
             Connection connection = mysql.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `" + MEMBERS_TABLE + "` WHERE `discordId`='"+discordId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
             ResultSet rs = preparedStatement.executeQuery();
 
             if(rs.first())
