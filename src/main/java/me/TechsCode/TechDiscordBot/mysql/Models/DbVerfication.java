@@ -33,13 +33,14 @@ public class DbVerfication {
         return TechDiscordBot.getStorage().retrieveMemberById(memberId);
     }
 
+    public VerficationMarketList getMarkets(){
+        return TechDiscordBot.getStorage().retrieveVerficationMarkets(this);
+    }
+
     public String getPayerId() {
         return payerId;
     }
 
-    public VerficationMarketList getMarkets(){
-        return TechDiscordBot.getStorage().retrieveVerficationMarkets(this);
-    }
 
     public VerficationPluginList getPlugins() {
         return TechDiscordBot.getStorage().retrieveVerficationPlugins(this);
