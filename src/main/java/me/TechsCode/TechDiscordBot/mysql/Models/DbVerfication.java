@@ -2,6 +2,7 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerficationMarketList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerficationPluginList;
 
 public class DbVerfication {
 
@@ -38,6 +39,20 @@ public class DbVerfication {
 
     public VerficationMarketList getMarkets(){
         return TechDiscordBot.getStorage().retrieveVerficationMarkets(this);
+    }
+
+    public VerficationPluginList getPlugins() {
+        return TechDiscordBot.getStorage().retrieveVerficationPlugins(this);
+    }
+
+    public void addMarket(DbMarket dbMarket){
+        VerficationMarket verficationMarket = new VerficationMarket(dbMarket, this, memberId);
+        verficationMarket.save();
+    }
+
+    public void addPlugin(DbMarket dbMarket, Resource resource, String transaction, String purchaseData, boolean reviewed){
+        VerficationPlugin verficationPlugin = new VerficationPlugin(dbMarket, this, resource, transaction, purchaseData, reviewed);
+        verficationPlugin.save();
     }
 
     public void save(){

@@ -43,4 +43,13 @@ public class VerficationMarket {
     public int getUserId() {
         return userId;
     }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveVerficationMarket(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteVerficationMarket(this);
+    }
+
 }

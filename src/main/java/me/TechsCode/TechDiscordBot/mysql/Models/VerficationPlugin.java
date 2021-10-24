@@ -67,4 +67,13 @@ public class VerficationPlugin {
     public boolean isReviewed() {
         return reviewed;
     }
+
+    public void save(){
+        TechDiscordBot.getStorage().saveVerficationPlugin(this);
+    }
+
+    public void delete(){
+        TechDiscordBot.getStorage().deleteVerficationPlugin(this);
+    }
+
 }

@@ -74,6 +74,12 @@ public class DbMember {
         return TechDiscordBot.getStorage().retrieveMemberVerfication(this);
     }
 
+    public DbVerfication newVerification(String PayerId){
+        DbVerfication dbVerfication = new DbVerfication(this, PayerId);
+        dbVerfication.save();
+        return dbVerfication;
+    }
+
     public ReminderList getReminders(){
         return TechDiscordBot.getStorage().retrieveMemberReminders(this);
     }
