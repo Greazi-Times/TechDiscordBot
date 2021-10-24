@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class VerificationLogs {
 
-    private static final long CHANNEL_ID = 873361956361359361L;
+    private static final long CHANNEL_ID = 877248194109636651L;
 
     public static boolean log(String msg) {
         return sendChannel("Log", msg, null);
