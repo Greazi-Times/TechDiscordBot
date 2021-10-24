@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.hooks.SubscribeEvent;
 
 import java.awt.*;
 
-public class StaffEmbedModule extends Module {
+public class  StaffEmbedModule extends Module {
 
     private final DefinedQuery<Role> STAFF_ROLE = new DefinedQuery<Role>() {
         @Override
