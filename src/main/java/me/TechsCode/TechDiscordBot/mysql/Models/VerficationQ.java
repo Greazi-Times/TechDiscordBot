@@ -5,7 +5,8 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 public class VerficationQ {
 
     private final int id, memberId, marketId;
-    private final String email, transactionId;
+    private String email;
+    private String transactionId;
 
     public VerficationQ(int id, int memberId, int marketId, String email, String transactionId) {
         this.id = id;
@@ -49,6 +50,14 @@ public class VerficationQ {
 
     public String getTransactionId() {
         return transactionId;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public void setTransactionId(String transactionId){
+        this.transactionId = transactionId;
     }
 
     public void save(){
