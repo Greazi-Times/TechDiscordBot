@@ -22,6 +22,14 @@ public class DbMember {
         this.staff = Staff;
     }
 
+    public DbMember(String DiscordID, String Name, long Joined, boolean Staff) {
+        this.id = 0;
+        this.discordID = DiscordID;
+        this.name = Name;
+        this.joined = Joined;
+        this.staff = Staff;
+    }
+
     public int getId() {
         return id;
     }
@@ -86,5 +94,9 @@ public class DbMember {
 
     public SubVerificationList getSubVerifications(){
         return TechDiscordBot.getStorage().retrieveMemberSubVerfications(this);
+    }
+
+    public boolean isInVerificationQ(){
+        return TechDiscordBot.getStorage().verficationQExists(this);
     }
 }
