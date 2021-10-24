@@ -13,7 +13,6 @@ import me.TechsCode.TechDiscordBot.util.Config;
 import me.TechsCode.TechDiscordBot.util.ConsoleColor;
 import me.TechsCode.TechDiscordBot.util.PterodactylAPI;
 import me.TechsCode.TechDiscordBot.verification.PaypalAPI;
-import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -30,7 +29,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TechDiscordBot {
 
