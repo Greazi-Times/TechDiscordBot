@@ -5,6 +5,7 @@ import me.TechsCode.TechDiscordBot.mysql.Models.Lists.PunishmentList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.ReminderList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.ReviewList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.SubVerificationList;
+import me.TechsCode.TechDiscordBot.objects.RoleManager;
 import net.dv8tion.jda.api.entities.Member;
 
 public class DbMember {
@@ -43,6 +44,10 @@ public class DbMember {
 
     public boolean isStaff() {
         return staff;
+    }
+
+    public RoleManager getRoleManager(){
+        return new RoleManager(this);
     }
 
     public void save(){
