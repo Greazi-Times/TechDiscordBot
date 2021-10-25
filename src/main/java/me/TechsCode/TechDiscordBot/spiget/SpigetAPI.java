@@ -7,14 +7,10 @@ import com.google.gson.JsonObject;
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
-import me.TechsCode.TechDiscordBot.mysql.Models.Lists.MemberList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.ResourcesList;
-import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerficationMarketList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationMarketList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
 import me.TechsCode.TechDiscordBot.mysql.Models.Review;
-import me.TechsCode.TechDiscordBot.mysql.MySQL;
-import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
-import me.TechsCode.TechDiscordBot.verification.data.Transaction;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -88,7 +84,7 @@ public class SpigetAPI {
         JsonArray arr = obj.getAsJsonArray();
         for (JsonElement jsonElement : arr) {
             JsonObject resource = jsonElement.getAsJsonObject();
-            new Resource(resource.get("name").getAsString(), resource.get("id").getAsInt()).save();
+            new Resource(resource.get("Name").getAsString(), resource.get("Id").getAsInt()).save();
         }
     }
 
@@ -111,9 +107,9 @@ public class SpigetAPI {
             JsonArray arr = obj.getAsJsonArray();
             for (JsonElement jsonElement : arr) {
                 JsonObject update = jsonElement.getAsJsonObject();
-                VerficationMarketList verficationMarkets = TechDiscordBot.getStorage().retrieveVerficationMarket(update.get("author").getAsJsonObject().get("id").getAsInt());
-                if(!verficationMarkets.stream().findFirst().isPresent()) return;
-                DbMember member = verficationMarkets.stream().findFirst().get().getVerification().getMember();
+                VerificationMarketList verificationMarkets = TechDiscordBot.getStorage().retrieveVerificationMarket(update.get("author").getAsJsonObject().get("id").getAsInt());
+                if(!verificationMarkets.stream().findFirst().isPresent()) return;
+                DbMember member = verificationMarkets.stream().findFirst().get().getVerification().getMember();
                 new Review(member, resource, update.get("id").getAsInt(), update.get("date").getAsLong()).save();
             }
         });

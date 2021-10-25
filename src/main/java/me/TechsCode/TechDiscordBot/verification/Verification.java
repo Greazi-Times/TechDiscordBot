@@ -4,10 +4,9 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.logs.VerificationLogs;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbVerfication;
-import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerficationMarketList;
-import me.TechsCode.TechDiscordBot.mysql.Models.VerficationQ;
-import me.TechsCode.TechDiscordBot.util.RoleAssigner;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationMarketList;
+import me.TechsCode.TechDiscordBot.mysql.Models.VerificationQ;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,6 +17,7 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Verification {
 
@@ -33,7 +33,7 @@ public class Verification {
 			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("Hello there,\nYou have previously verified yourself and your roles will be automatically updated as a result.\n\nThis update may take 15 to 20 minutes to complete.").sendTemporary(channel, 10);
 			return;
 		}
-		if(TechDiscordBot.getStorage().verficationQExists(member)) {
+		if(TechDiscordBot.getStorage().VerificationQExists(member)) {
 			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("You have already started a verification process please finish it first!").sendTemporary(channel, 10);
 			return;
 		}
@@ -42,7 +42,7 @@ public class Verification {
 			user.openPrivateChannel().complete()
 				.sendMessageEmbeds(new TechEmbedBuilder(market.getName() + " Verification").text("Welcome to the verification system.\nTo verify you have bought one or more of our plugins, we will need some information from you.\n\n"+
 						"**What is your paypal e-mail?**\n\n*Type* `why` *to get know why we need your e-mail*\n*Type* `cancel` *to cancel your verification*").build()).queue();
-			new VerficationQ(member, market, "", "").save();
+			new VerificationQ(member, market, "", "").save();
 		} catch (ErrorResponseException ignored) {
 			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("The verification process could not be started!\n\nYou have disabled your DM's please enable them to verify your purchase!").sendTemporary(channel, 10);
 		}
@@ -52,10 +52,10 @@ public class Verification {
 		String member = e.getUser().getId();
 
 		DbMember dbMember = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member);
-		DbVerfication existingVerification = dbMember.getVerification();
+		DbVerification existingVerification = dbMember.getVerification();
 		if(existingVerification == null) return false;
 
-		VerficationMarketList markets = existingVerification.getMarkets();
+		VerificationMarketList markets = existingVerification.getMarkets();
 		DbMarket qMarket = dbMember.getVerificationQ().getMarket();
 
 		return markets.market(qMarket).stream().findFirst().isPresent();
@@ -63,25 +63,34 @@ public class Verification {
 
 	public static void verify(PrivateMessageReceivedEvent e, DbMember member, Message message){
 		String marketList;
-		VerficationQ verficationQ = member.getVerificationQ();
+		VerificationQ verificationQ = member.getVerificationQ();
+		DbVerification dbVerification = member.getVerification();
 
-		if(verficationQ == null) return;
-		String email = verficationQ.getEmail();
-		String transactionId = verficationQ.getTransactionId();
-		String market = verficationQ.getMarket().getName();
+		if(verificationQ == null) return;
+		String email = verificationQ.getEmail();
+		String transactionId = verificationQ.getTransactionId();
+		String market = verificationQ.getMarket().getName();
 
 		TransactionsList check = TechDiscordBot.getPaypalAPI().verifySearchTransaction(email, transactionId, market);
-		if(check.isEmpty()){e.getMessage().replyEmbeds(new TechEmbedBuilder("No purchases found").text("The details you have given in do not exist in our system.\n\nIf you think this is a problem than please contact a @Senior-Support member inside <#311178000026566658>!").error().build()).queue(); verficationQ.delete(); return;}
+		if(check.isEmpty()){e.getMessage().replyEmbeds(new TechEmbedBuilder("No purchases found").text("The details you have given in do not exist in our system.\n\nIf you think this is a problem than please contact a @Senior-Support member inside <#311178000026566658>!").error().build()).queue(); verificationQ.delete(); return;}
 
 		TransactionsList transactions = TechDiscordBot.getPaypalAPI().emailSearchTransaction(email, market);
 		marketList = transactions.stream().map(transaction -> transaction.getPlugin().getName()).collect(Collectors.joining(", "));
 
-		message.editMessageEmbeds(new TechEmbedBuilder("Verfication Success").text("Plugins that have been found on your account:\n`" + marketList + "`").build()).queue();
+		String payerId = "";
+		Stream<String> payerIdCheck = transactions.stream().map(transaction -> transaction.getPayerInfo().getId());
+		if(payerIdCheck.findFirst().isPresent()){
+			payerId = payerIdCheck.findFirst().get();
+		}
 
-		VerificationLogs.log(new TechEmbedBuilder(e.getAuthor().getName() + "'s Verification Completed").success().text(e.getAuthor().getName() + " has successfully verified their SpigotMC Account!"));
+		message.editMessageEmbeds(new TechEmbedBuilder("Verification Success").text("Plugins that have been found on your account:\n`" + marketList + "`").build()).queue();
 
-		verficationQ.delete();
+		VerificationLogs.log(new TechEmbedBuilder(e.getAuthor().getName() + "'s Verification Completed").success().text(e.getAuthor().getName() + " has successfully verified their SpigotMC Account!").thumbnail(e.getAuthor().getAvatarUrl()));
+
+		verificationQ.delete();
 		RoleAssigner.addRoles(marketList, market, member);
+
+
 	}
 
 	public static void privateWhy(PrivateMessageReceivedEvent e){

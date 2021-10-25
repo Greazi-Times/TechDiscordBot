@@ -10,49 +10,50 @@ import java.util.List;
 import java.util.Set;
 
 public class RoleManager {
-    private final Member member;
-    private final Set<Role> memberRoles;
 
-    public RoleManager(DbMember dbMember){
-        this.member = dbMember.getDiscordMember();
-        this.memberRoles = new HashSet<>(member.getRoles());
-    }
+	private final Member member;
+	private final Set<Role> memberRoles;
 
-    public RoleManager(Member member){
-        this.member = member;
-        this.memberRoles = new HashSet<>(member.getRoles());
-    }
+	public RoleManager(DbMember dbMember){
+		this.member = dbMember.getDiscordMember();
+		this.memberRoles = new HashSet<>(member.getRoles());
+	}
 
-    public void addRole(Role role){
-        memberRoles.add(role);
-    }
+	public RoleManager(Member member){
+		this.member = member;
+		this.memberRoles = new HashSet<>(member.getRoles());
+	}
 
-    public void addRoles(List<Role> roles){
-        memberRoles.addAll(roles);
-    }
+	public void addRole(Role role){
+		memberRoles.add(role);
+	}
 
-    public void removeRole(Role role){
-        memberRoles.remove(role);
-    }
+	public void addRoles(List<Role> roles){
+		memberRoles.addAll(roles);
+	}
 
-    public void removeRoles(List<Role> roles){
-        roles.forEach(memberRoles::remove);
-    }
+	public void removeRole(Role role){
+		memberRoles.remove(role);
+	}
 
-    public boolean hasRole(Role role){
-        return memberRoles.contains(role);
-    }
+	public void removeRoles(List<Role> roles){
+		roles.forEach(memberRoles::remove);
+	}
 
-    public boolean hasAllRoles(List<Role> roles){
-        return memberRoles.containsAll(roles);
-    }
+	public boolean hasRole(Role role){
+		return memberRoles.contains(role);
+	}
 
-    public boolean hasAnyRoles(List<Role> roles){
-        return roles.stream().anyMatch(memberRoles::contains);
-    }
+	public boolean hasAllRoles(List<Role> roles){
+		return memberRoles.containsAll(roles);
+	}
 
-    public void save(){
-        TechDiscordBot.getGuild().modifyMemberRoles(member, memberRoles).queue();
-    }
+	public boolean hasAnyRoles(List<Role> roles){
+		return roles.stream().anyMatch(memberRoles::contains);
+	}
+
+	public void save(){
+		TechDiscordBot.getGuild().modifyMemberRoles(member, memberRoles).queue();
+	}
 
 }

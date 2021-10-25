@@ -2,13 +2,13 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-public class VerficationPlugin {
+public class VerificationPlugin {
 
     private final int id, marketId, verificationId, resourceId;
     private final String transactionId, purchaseData;
     private final boolean reviewed;
 
-    public VerficationPlugin(int id, int marketId, int verificationId, int resourceId, String transactionId, String purchaseData, boolean reviewed) {
+    public VerificationPlugin(int id, int marketId, int verificationId, int resourceId, String transactionId, String purchaseData, boolean reviewed) {
         this.id = id;
         this.marketId = marketId;
         this.verificationId = verificationId;
@@ -18,7 +18,7 @@ public class VerficationPlugin {
         this.reviewed = reviewed;
     }
 
-    public VerficationPlugin(DbMarket market, DbVerfication verification, Resource resource, String transactionId, String purchaseData, boolean reviewed) {
+    public VerificationPlugin(DbMarket market, DbVerification verification, Resource resource, String transactionId, String purchaseData, boolean reviewed) {
         this.id = 0;
         this.marketId = market.getId();
         this.verificationId = verification.getId();
@@ -44,8 +44,8 @@ public class VerficationPlugin {
         return verificationId;
     }
 
-    public DbVerfication getVerification(){
-        return TechDiscordBot.getStorage().retrieveVerficationById(verificationId);
+    public DbVerification getVerification(){
+        return TechDiscordBot.getStorage().retrieveVerificationById(verificationId);
     }
 
     public int getResourceId() {
@@ -69,11 +69,11 @@ public class VerficationPlugin {
     }
 
     public void save(){
-        TechDiscordBot.getStorage().saveVerficationPlugin(this);
+        TechDiscordBot.getStorage().saveVerificationPlugin(this);
     }
 
     public void delete(){
-        TechDiscordBot.getStorage().deleteVerficationPlugin(this);
+        TechDiscordBot.getStorage().deleteVerificationPlugin(this);
     }
 
 }

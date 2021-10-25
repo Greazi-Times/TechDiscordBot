@@ -2,17 +2,17 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-public class SubVerfication {
+public class SubVerification {
 
     private final int id, subMemberId, verificationId;
 
-    public SubVerfication(int id, int subMemberId, int verificationId) {
+    public SubVerification(int id, int subMemberId, int verificationId) {
         this.id = id;
         this.subMemberId = subMemberId;
         this.verificationId = verificationId;
     }
 
-    public SubVerfication(DbMember subMember, DbVerfication verification) {
+    public SubVerification(DbMember subMember, DbVerification verification) {
         this.id = 0;
         this.subMemberId = subMember.getId();
         this.verificationId = verification.getId();
@@ -30,11 +30,11 @@ public class SubVerfication {
         return TechDiscordBot.getStorage().retrieveMemberById(subMemberId);
     }
 
-    public int getVerificationId() {
+    public int VerifId() {
         return verificationId;
     }
 
-    public DbVerfication getVerification(){
-        return TechDiscordBot.getStorage().retrieveVerficationById(verificationId);
+    public DbVerification getVerification(){
+        return TechDiscordBot.getStorage().retrieveVerificationById(verificationId);
     }
 }
