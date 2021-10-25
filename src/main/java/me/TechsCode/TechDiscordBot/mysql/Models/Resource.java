@@ -1,6 +1,7 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.UpdateList;
 import net.dv8tion.jda.api.entities.Role;
 

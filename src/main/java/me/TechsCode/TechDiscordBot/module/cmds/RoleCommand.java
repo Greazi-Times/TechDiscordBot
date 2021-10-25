@@ -5,6 +5,7 @@ import me.TechsCode.TechDiscordBot.logs.RoleLogs;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
+import me.TechsCode.TechDiscordBot.util.Roles;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -22,74 +23,24 @@ public class RoleCommand extends CommandModule {
     private final DefinedQuery<Role> STAFF_ROLES = new DefinedQuery<Role>() {
         @Override
         protected Query<Role> newQuery() {
-            return bot.getRoles("Senior Supporter", "Assistant", "Developer", "\uD83D\uDCBB Coding Wizard");
+            return bot.getRoles(Roles.SENIOR_SUPPORT().getName(), Roles.ASSISTANT().getName(), Roles.DEVELOPER().getName(), Roles.CODING_WIZARD().getName());
         }
     };
 
     private final ArrayList<String> SENIOR_SUPPORTER_ROLES = new ArrayList<String>() {{
-        add("Ultra Permissions");
-        add("Ultra Customizer");
-        add("Ultra Punishments");
-        add("Ultra Regions");
-        add("Insane Shops");
-        add("Ultra Economy");
-        add("Ultra Scoreboards");
-        add("Keep Roles");
-        add("SpigotMC");
-        add("MC-Market");
-        add("Songoda");
-        add("Polymart");
-        add("Songoda Verified");
-        add("Verified");
-        add("Review Squad");
+        add(Roles.KEEPROLES().getName());
+        add(Roles.VERIFIED().getName());
+        add(Roles.REVIEW_SQUAD().getName());
     }};
 
     private final ArrayList<String> ASSISTANT_ROLES = new ArrayList<String>() {{
-        add("Ultra Permissions");
-        add("Ultra Customizer");
-        add("Ultra Punishments");
-        add("Ultra Regions");
-        add("Insane Shops");
-        add("Ultra Economy");
-        add("Ultra Scoreboards");
-        add("Keep Roles");
-        add("SpigotMC");
-        add("MC-Market");
-        add("Songoda");
-        add("Polymart");
-        add("Verified");
-        add("Songoda Verified");
-        add("Review Squad");
-        add("Junior Supporter");
-        add("Supporter");
-        add("Senior Supporter");
-        add("Retired");
-        add("Wiki Editor");
-        add("Staff");
+        addAll(SENIOR_SUPPORTER_ROLES);
+        addAll(Roles.STAFF_ROLES_MINOR);
+        add(Roles.WIKI_EDITOR().getName());
     }};
 
     private final ArrayList<String> DEVELOPER_ROLES = new ArrayList<String>() {{
-        add("Ultra Permissions");
-        add("Ultra Customizer");
-        add("Ultra Punishments");
-        add("Ultra Regions");
-        add("Insane Shops");
-        add("Ultra Economy");
-        add("Ultra Scoreboards");
-        add("Keep Roles");
-        add("SpigotMC");
-        add("MC-Market");
-        add("Songoda");
-        add("Polymart");
-        add("Verified");
-        add("Songoda Verified");
-        add("Review Squad");
-        add("Junior Supporter");
-        add("Supporter");
-        add("Senior Supporter");
-        add("Retired");
-        add("Wiki Editor");
-        add("Staff");
+        addAll(ASSISTANT_ROLES);
         add("Assistant");
         add("Team Manager");
     }};

@@ -74,18 +74,24 @@ public class DbMember {
         return TechDiscordBot.getStorage().retrieveMemberPunishments(this);
     }
 
-    public VerficationQ getVerificationQ(){
-        return TechDiscordBot.getStorage().retrieveMemberVerficationQ(this);
+    public DbVerification newVerification(String PayerId){
+        DbVerification dbVerification = new DbVerification(this, PayerId);
+        dbVerification.save();
+        return dbVerification;
     }
 
-    public DbVerfication getVerification(){
-        return TechDiscordBot.getStorage().retrieveMemberVerfication(this);
+    public VerificationQ getVerificationQ(){
+        return TechDiscordBot.getStorage().retrieveMemberVerificationQ(this);
     }
 
-    public DbVerfication newVerification(String PayerId){
-        DbVerfication dbVerfication = new DbVerfication(this, PayerId);
-        dbVerfication.save();
-        return dbVerfication;
+    public DbVerification getVerification(){
+        return TechDiscordBot.getStorage().retrieveMemberVerification(this);
+    }
+
+    public DbVerification newVerification(String PayerId){
+        DbVerification dbVerification = new DbVerification(this, PayerId);
+        dbVerification.save();
+        return dbVerification;
     }
 
     public ReminderList getReminders(){
@@ -93,10 +99,10 @@ public class DbMember {
     }
 
     public SubVerificationList getSubVerifications(){
-        return TechDiscordBot.getStorage().retrieveMemberSubVerfications(this);
+        return TechDiscordBot.getStorage().retrieveMemberSubVerifications(this);
     }
 
     public boolean isInVerificationQ(){
-        return TechDiscordBot.getStorage().verficationQExists(this);
+        return TechDiscordBot.getStorage().VerificationQExists(this);
     }
 }

@@ -3,7 +3,7 @@ package me.TechsCode.TechDiscordBot.module.modules;
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
-import me.TechsCode.TechDiscordBot.mysql.Models.VerficationQ;
+import me.TechsCode.TechDiscordBot.mysql.Models.VerificationQ;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.Verification;
@@ -42,7 +42,8 @@ public class PrivateMessageEvent extends Module {
 
 		if (e.getAuthor().isBot()) return;
 		DbMember member = TechDiscordBot.getStorage().retrieveMemberByDiscordId(id);
-		VerficationQ verificationQ = member.getVerificationQ();
+
+		VerificationQ verificationQ = member.getVerificationQ();
 
 		if (member.isInVerificationQ()) {
 			if (array.length == 1 && message.contains("why")) {

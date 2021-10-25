@@ -94,6 +94,9 @@ public class VerificationModule extends Module {
             selectedMarket = "polymart";
         }
         DbMarket market = TechDiscordBot.getStorage().retrieveMarketByName(selectedMarket);
+
+        e.replyEmbeds(new TechEmbedBuilder("Verification").text("A DM with instructions has been send to you.").build()).setEphemeral(true).queue();
+
         Verification.Verification(member, market, channel);
     }
 

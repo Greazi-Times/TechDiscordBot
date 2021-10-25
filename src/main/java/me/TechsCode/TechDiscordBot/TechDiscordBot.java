@@ -1,8 +1,6 @@
 package me.TechsCode.TechDiscordBot;
 
 import me.TechsCode.TechDiscordBot.module.ModulesManager;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbVerfication;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.ChannelQuery;

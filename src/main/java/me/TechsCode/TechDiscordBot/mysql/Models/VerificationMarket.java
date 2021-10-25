@@ -2,21 +2,21 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-public class VerficationMarket {
+public class VerificationMarket {
 
     private final int id, marketId, verificationId, userId;
 
-    public VerficationMarket(int id, int marketId, int verficationId, int userId) {
+    public VerificationMarket(int id, int marketId, int VerificationId, int userId) {
         this.id = id;
         this.marketId = marketId;
-        this.verificationId = verficationId;
+        this.verificationId = VerificationId;
         this.userId = userId;
     }
 
-    public VerficationMarket(DbMarket market, DbVerfication verfication, int userId) {
+    public VerificationMarket(DbMarket market, DbVerification Verification, int userId) {
         this.id = 0;
         this.marketId = market.getId();
-        this.verificationId = verfication.getId();
+        this.verificationId = Verification.getId();
         this.userId = userId;
     }
 
@@ -36,8 +36,8 @@ public class VerficationMarket {
         return verificationId;
     }
 
-    public DbVerfication getVerification(){
-        return TechDiscordBot.getStorage().retrieveVerficationById(verificationId);
+    public DbVerification getVerification(){
+        return TechDiscordBot.getStorage().retrieveVerificationById(verificationId);
     }
 
     public int getUserId() {
@@ -45,11 +45,10 @@ public class VerficationMarket {
     }
 
     public void save(){
-        TechDiscordBot.getStorage().saveVerficationMarket(this);
+        TechDiscordBot.getStorage().saveVerificationMarket(this);
     }
 
     public void delete(){
-        TechDiscordBot.getStorage().deleteVerficationMarket(this);
+        TechDiscordBot.getStorage().deleteVerificationMarket(this);
     }
-
 }

@@ -2,13 +2,13 @@ package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
-public class VerficationQ {
+public class VerificationQ {
 
     private final int id, memberId, marketId;
     private String email;
     private String transactionId;
 
-    public VerficationQ(int id, int memberId, int marketId, String email, String transactionId) {
+    public VerificationQ(int id, int memberId, int marketId, String email, String transactionId) {
         this.id = id;
         this.memberId = memberId;
         this.marketId = marketId;
@@ -16,7 +16,7 @@ public class VerficationQ {
         this.transactionId = transactionId;
     }
 
-    public VerficationQ(DbMember member, DbMarket market, String email, String transactionId) {
+    public VerificationQ(DbMember member, DbMarket market, String email, String transactionId) {
         this.id = 0;
         this.memberId = member.getId();
         this.marketId = market.getId();
@@ -61,11 +61,11 @@ public class VerficationQ {
     }
 
     public void save(){
-        TechDiscordBot.getStorage().saveVerficationQ(this);
+        TechDiscordBot.getStorage().saveVerificationQ(this);
     }
 
     public void delete(){
-        TechDiscordBot.getStorage().deleteVerficationQ(this);
+        TechDiscordBot.getStorage().deleteVerificationQ(this);
     }
 
 

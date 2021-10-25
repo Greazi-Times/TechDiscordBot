@@ -8,6 +8,7 @@ import java.util.Objects;
 
 public class VerificationLogs {
 
+    //TODO change back to the main discord
     private static final long CHANNEL_ID = 877248194109636651L;
 
     public static boolean log(String msg) {

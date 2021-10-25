@@ -16,6 +16,7 @@ public class Query<T> {
         this.objects = objects;
     }
 
+    @SafeVarargs
     public Query(Query<T> ... queries) {
         this.objects = Arrays.stream(queries).flatMap(q -> q.objects.stream()).collect(Collectors.toList());
     }
