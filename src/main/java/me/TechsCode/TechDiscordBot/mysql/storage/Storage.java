@@ -921,4 +921,26 @@ public class Storage {
         mysql.update("DELETE FROM " + PURCHASEDPLUGINS_TABLE + " WHERE id='" + verficationPlugin.getId() + "';");
     }
 
+    //-----------------------------
+    //-----OLD_VERIFICATIONS-------
+    //-----------------------------
+    public HashMap<Integer, String> retrieveOldVerfications() {
+        HashMap<Integer, String> verfications = new HashMap<>();
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `VerificationsOld`;");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                verfications.put(rs.getInt("userid"), rs.getString("discordid"));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verfications;
+    }
+
 }

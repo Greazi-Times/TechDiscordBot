@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
 import me.TechsCode.TechDiscordBot.verification.data.Transaction;
@@ -116,72 +115,28 @@ public class PaypalAPI {
 		return transactions;
 	}
 
-	public TransactionsList verifySearchTransaction(String email, String transactionid, String market) {
-		JsonObject obj = makeRequest("search", "&payerEmail=" + email + "&transactionId=" + transactionid + "&market=" + market);
-		TransactionsList transactions = new TransactionsList();
-
-		if (obj.has("status")) {
-			if (obj.get("status").getAsString().equals("error")) {
-				TechDiscordBot.log(obj.get("msg").getAsString());
-				return transactions;
-			}
-		}
-		if (!obj.has("data")) {
-			return transactions;
-		}
-
-		JsonArray arr = obj.get("data").getAsJsonArray();
-		for (JsonElement jsonElement : arr) {
-			JsonObject comment = jsonElement.getAsJsonObject();
-			transactions.add(new Transaction(comment));
-		}
-
-		return transactions;
+	public static void privateWhy(PrivateMessageReceivedEvent e){
+		e.getMessage().replyEmbeds(new TechEmbedBuilder("Why we need your email").text("Our new verification system uses paypal to retrieve purchases.\nWith this system we need your e-mail so we cen get your purchases.\n\n*Type* `cancel` *to cancel your verification*").build()).queue();
+	}
+	public static void privateCancel(PrivateMessageReceivedEvent e, String id){
+		//TechDiscordBot.getStorage().retrieveMemberByDiscordId()
+		e.getMessage().replyEmbeds(new TechEmbedBuilder("Verification Canceled").text("Your verification has been canceled.").error().build()).queue();
+	}
+	public static void privateEmail(PrivateMessageReceivedEvent e, String id, String message){
+		//TechDiscordBot.getStorage().addEmailVerificationQ(id, message);
+		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Now we need a transaction ID from one of your purchases.\n\n*Type* `transactionid` *to get a guide on how to get the ID*\n*Type* `cancel` *to cancel your verification*").build()).complete();
+	}
+	public static void privateId(PrivateMessageReceivedEvent e, int id, String message){
+		//TechDiscordBot.getStorage().addTransactionIdVerificationQ(id, message);
+		//e.getMessage().replyEmbeds(new TechEmbedBuilder(TechDiscordBot.getStorage().getSelectedVerificationQ(id) + " Verification").text("Your purchase will now be verified.").success().build()).complete();
+		Verification.verify(e, id, message);
 	}
 
-	public TransactionsList emailSearchTransaction(String email, String market) {
-		JsonObject obj = makeRequest("search", "&payerEmail=" + email + "&market=" + market);
-		TransactionsList transactions = new TransactionsList();
-
-		if (obj.has("status")) {
-			if (obj.get("status").getAsString().equals("error")) {
-				TechDiscordBot.log(obj.get("msg").getAsString());
-				return transactions;
-			}
-		}
-		if (!obj.has("data")) {
-			return transactions;
-		}
-
-		JsonArray arr = obj.get("data").getAsJsonArray();
-		for (JsonElement jsonElement : arr) {
-			JsonObject comment = jsonElement.getAsJsonObject();
-			transactions.add(new Transaction(comment));
-		}
-
-		return transactions;
+	public static boolean givenEmail(String id){
+		//String email = TechDiscordBot.getStorage().getVerificationQEmail(id);
+		//TechDiscordBot.log(email);
+		//return Objects.equals(email, "1");
+		return false;
 	}
 
-	public TransactionsList checkTransaction(String market, String userId) {
-		JsonObject obj = makeRequest("search", "&market=" + market + "&userId=" + userId);
-		TransactionsList transactions = new TransactionsList();
-
-		if (obj.has("status")) {
-			if (obj.get("status").getAsString().equals("error")) {
-				TechDiscordBot.log(obj.get("msg").getAsString());
-				return transactions;
-			}
-		}
-		if (!obj.has("data")) {
-			return transactions;
-		}
-
-		JsonArray arr = obj.get("data").getAsJsonArray();
-		for (JsonElement jsonElement : arr) {
-			JsonObject comment = jsonElement.getAsJsonObject();
-			transactions.add(new Transaction(comment));
-		}
-
-		return transactions;
-	}
 }
