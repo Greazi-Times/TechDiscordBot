@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
 import me.TechsCode.TechDiscordBot.verification.data.Transaction;
@@ -207,4 +208,26 @@ public class PaypalAPI {
 		return transactions;
 	}
 
+	public TransactionsList checkTransaction(String market, String userId) {
+		JsonObject obj = makeRequest("search", "&market=" + market + "&userId=" + userId);
+		TransactionsList transactions = new TransactionsList();
+
+		if (obj.has("status")) {
+			if (obj.get("status").getAsString().equals("error")) {
+				TechDiscordBot.log(obj.get("msg").getAsString());
+				return transactions;
+			}
+		}
+		if (!obj.has("data")) {
+			return transactions;
+		}
+
+		JsonArray arr = obj.get("data").getAsJsonArray();
+		for (JsonElement jsonElement : arr) {
+			JsonObject comment = jsonElement.getAsJsonObject();
+			transactions.add(new Transaction(comment));
+		}
+
+		return transactions;
+	}
 }

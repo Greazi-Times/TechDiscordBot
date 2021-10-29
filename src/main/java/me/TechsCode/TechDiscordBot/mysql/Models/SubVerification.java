@@ -31,7 +31,7 @@ public class SubVerification {
         return TechDiscordBot.getStorage().retrieveMemberById(subMemberId);
     }
 
-    public int VerifId() {
+    public int getVerificationId() {
         return verificationId;
     }
 

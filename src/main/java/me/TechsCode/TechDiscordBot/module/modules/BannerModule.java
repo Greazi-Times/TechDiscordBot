@@ -20,6 +20,7 @@ public class BannerModule extends Module {
 
     @Override
     public void onEnable() {
+        if(TechDiscordBot.getGuild().getBoostTier().equals("TIER_2") || TechDiscordBot.getGuild().getBoostTier().equals("TIER_3"))
         new Thread(() -> {
             while(true) {
                 updateBanner();

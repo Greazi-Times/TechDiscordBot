@@ -82,7 +82,7 @@ public class DbMember {
     public DbVerification getVerification(){
         return TechDiscordBot.getStorage().retrieveMemberVerification(this);
     }
-
+    
     public ReminderList getReminders(){
         return TechDiscordBot.getStorage().retrieveMemberReminders(this);
     }
