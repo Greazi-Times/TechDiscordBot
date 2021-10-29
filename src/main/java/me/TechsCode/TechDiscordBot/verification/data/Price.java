@@ -3,8 +3,8 @@ package me.TechsCode.TechDiscordBot.verification.data;
 import com.google.gson.JsonObject;
 
 public class Price extends JsonSerializable {
-    public String currency;
-    public float amount;
+    private String currency;
+    private float amount;
 
     public Price(String currency, float amount){
         this.currency = currency;

@@ -225,7 +225,7 @@ public class TechDiscordBot {
 //                }
 //
 //                if(!getStorage().verificationPluginExists(dbVerification, dbMarket, resource)){
-//                    dbVerification.addPlugin(dbMarket, resource, transaction.getId(), transaction.getPayerInfo().getState().toString(), false);
+//                    dbVerification.addPlugin(dbMarket, resource, transaction.getId(), transaction.getPayerInfo().getState().toString(), transaction.getPrice().getAmount(), transaction.getInitiation_date(), false);
 //                    log("added plugin: "+resource.getName());
 //                }
 //
