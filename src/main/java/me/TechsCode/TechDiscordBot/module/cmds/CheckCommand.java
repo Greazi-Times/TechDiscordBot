@@ -79,7 +79,7 @@ public class CheckCommand extends CommandModule {
                     .text("Showing the information that came up from your search:")
                     .field("User ID: "+marketid,"["+marketid+"](https://www.spigotmc.org/members/"+marketid+")", true)
                     .field("Purchase Amount", "" /*TODO Add the methode that checks the purchased amount*/, true)
-                    .field("Laste Purchase", ""/*TODO Add the methode that shows the last purchase*/, true)
+                    .field("Last Purchase", ""/*TODO Add the methode that shows the last purchase*/, true)
                     .field("Purchases", ""/*TODO Add the methode that get all the purchases*/, true)
                     .success().build()).setEphemeral(true).queue();
         }
