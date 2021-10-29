@@ -78,7 +78,8 @@ public class SpigetAPI {
         }
     }
 
-    public void fetchResources(String authorId) {
+
+    /*public void fetchResources(String authorId) {
         JsonObject obj = makeRequest("authors/"+authorId+"/resources");
 
         JsonArray arr = obj.getAsJsonArray();
@@ -86,7 +87,7 @@ public class SpigetAPI {
             JsonObject resource = jsonElement.getAsJsonObject();
             new Resource(resource.get("Name").getAsString(), resource.get("Id").getAsInt()).save();
         }
-    }
+    }*/
 
     public void fetchUpdates(String authorId) {
         ResourcesList resources = TechDiscordBot.getStorage().retrieveResources();
