@@ -9,25 +9,31 @@ public class VerificationPlugin {
     private int verificationId;
     private int resourceId;
     private String transactionId, purchaseData;
+    private float price;
+    public long date;
     private boolean reviewed;
 
-    public VerificationPlugin(int id, int marketId, int verificationId, int resourceId, String transactionId, String purchaseData, boolean reviewed) {
+    public VerificationPlugin(int id, int marketId, int verificationId, int resourceId, String transactionId, String purchaseData, float price, long date, boolean reviewed) {
         this.id = id;
         this.marketId = marketId;
         this.verificationId = verificationId;
         this.resourceId = resourceId;
         this.transactionId = transactionId;
         this.purchaseData = purchaseData;
+        this.price = price;
+        this.date = date;
         this.reviewed = reviewed;
     }
 
-    public VerificationPlugin(DbMarket market, DbVerification verification, Resource resource, String transactionId, String purchaseData, boolean reviewed) {
+    public VerificationPlugin(DbMarket market, DbVerification verification, Resource resource, String transactionId, String purchaseData, float price, long date, boolean reviewed) {
         this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().PURCHASEDPLUGINS_TABLE);
         this.marketId = market.getId();
         this.verificationId = verification.getId();
         this.resourceId = resource.getId();
         this.transactionId = transactionId;
         this.purchaseData = purchaseData;
+        this.price = price;
+        this.date = date;
         this.reviewed = reviewed;
     }
 
@@ -67,6 +73,10 @@ public class VerificationPlugin {
         return purchaseData;
     }
 
+    public float getPrice() {
+        return price;
+    }
+
     public boolean isReviewed() {
         return reviewed;
     }
@@ -93,6 +103,10 @@ public class VerificationPlugin {
 
     public void setPurchaseData(String purchaseData){
         this.purchaseData = purchaseData;
+    }
+
+    public void setPrice(float price){
+        this.price = price;
     }
 
     public void setReviewed(boolean reviewed){

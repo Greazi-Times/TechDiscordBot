@@ -52,8 +52,8 @@ public class DbVerification {
         VerificationMarket.save();
     }
 
-    public void addPlugin(DbMarket dbMarket, Resource resource, String transactionId, String purchaseData, boolean reviewed){
-        VerificationPlugin VerificationPlugin = new VerificationPlugin(dbMarket, this, resource, transactionId, purchaseData, reviewed);
+    public void addPlugin(DbMarket dbMarket, Resource resource, String transactionId, String purchaseData, float price, long date, boolean reviewed){
+        VerificationPlugin VerificationPlugin = new VerificationPlugin(dbMarket, this, resource, transactionId, purchaseData, price, date, reviewed);
         VerificationPlugin.save();
     }
 
