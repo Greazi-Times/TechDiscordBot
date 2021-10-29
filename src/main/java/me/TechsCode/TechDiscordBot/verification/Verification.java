@@ -2,13 +2,13 @@ package me.TechsCode.TechDiscordBot.verification;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.logs.VerificationLogs;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.*;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.MarketList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationMarketList;
-import me.TechsCode.TechDiscordBot.mysql.Models.VerificationQ;
+import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
+import me.TechsCode.TechDiscordBot.verification.data.MarketPlace;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -23,17 +23,19 @@ public class Verification {
 
 
 	public static void Verification(Member m, DbMarket market, TextChannel channel){
+		Storage storage = TechDiscordBot.getStorage();
+
 		User user = m.getUser();
 		String discordId = m.getId();
 
-		DbMember member = TechDiscordBot.getStorage().retrieveMemberByDiscordId(discordId);
+		DbMember member = storage.retrieveMemberByDiscordId(discordId);
 
 		if(isVerified(m)) {
-			TechDiscordBot.getStorage().retrieveMemberByDiscordId(discordId).getVerificationQ().delete();
+			storage.retrieveMemberByDiscordId(discordId).getVerificationQ().delete();
 			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("Hello there,\nYou have previously verified yourself and your roles will be automatically updated as a result.\n\nThis update may take 15 to 20 minutes to complete.").sendTemporary(channel, 10);
 			return;
 		}
-		if(TechDiscordBot.getStorage().VerificationQExists(member)) {
+		if(storage.VerificationQExists(member)) {
 			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("You have already started a verification process please finish it first!").sendTemporary(channel, 10);
 			return;
 		}
@@ -63,6 +65,10 @@ public class Verification {
 
 	public static void verify(PrivateMessageReceivedEvent e, DbMember member, Message message){
 		String marketList;
+		String payerId;
+
+		Storage storage = TechDiscordBot.getStorage();
+
 		VerificationQ verificationQ = member.getVerificationQ();
 		DbVerification dbVerification = member.getVerification();
 
@@ -77,12 +83,6 @@ public class Verification {
 		TransactionsList transactions = TechDiscordBot.getPaypalAPI().emailSearchTransaction(email, market);
 		marketList = transactions.stream().map(transaction -> transaction.getPlugin().getName()).collect(Collectors.joining(", "));
 
-		String payerId = "";
-		Stream<String> payerIdCheck = transactions.stream().map(transaction -> transaction.getPayerInfo().getId());
-		if(payerIdCheck.findFirst().isPresent()){
-			payerId = payerIdCheck.findFirst().get();
-		}
-
 		message.editMessageEmbeds(new TechEmbedBuilder("Verification Success").text("Plugins that have been found on your account:\n`" + marketList + "`").build()).queue();
 
 		VerificationLogs.log(new TechEmbedBuilder(e.getAuthor().getName() + "'s Verification Completed").success().text(e.getAuthor().getName() + " has successfully verified their SpigotMC Account!").thumbnail(e.getAuthor().getAvatarUrl()));
@@ -90,7 +90,21 @@ public class Verification {
 		verificationQ.delete();
 		RoleAssigner.addRoles(marketList, market, member);
 
+		Stream<String> payerIdCheck = transactions.stream().map(transaction -> transaction.getPayerInfo().getId());
+		if(payerIdCheck.findFirst().isPresent()){
+			payerId = payerIdCheck.findFirst().get();
+			new DbVerification(member, payerId);
+		}
 
+		DbMarket marketId = storage.retrieveMarketByName(market);
+		DbVerification verification = storage.retrieveMemberVerification(member);
+		transactions.forEach(transaction -> {
+			Resource resource = storage.retrieveResourceByName(transaction.getPlugin().getName());
+			verification.addPlugin(marketId, resource, transaction.getId(), transaction.getPayerInfo().toString(), transaction.getPrice().getAmount(), transaction.getInitiation_date(), false);
+		});
+
+		String marketUserId = transactions.stream().findFirst().get().getMarketplace().getUserId();
+		verification.addMarket(marketId, Integer.parseInt(marketUserId));
 	}
 
 	public static void privateWhy(PrivateMessageReceivedEvent e){
