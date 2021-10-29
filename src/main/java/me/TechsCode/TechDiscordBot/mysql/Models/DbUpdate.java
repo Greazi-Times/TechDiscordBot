@@ -17,7 +17,7 @@ public class DbUpdate {
     }
 
     public DbUpdate(Resource resource, String name, long date, long updateId) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().UPDATES_TABLE);
         this.resourceId = resource.getId();
         this.name = name;
         this.date = date;

@@ -33,7 +33,7 @@ public class SubVerificationList extends ArrayList<SubVerification> {
     }
 
     public SubVerificationList verificationId(int verificationId){
-        return stream().filter(subVerification -> subVerification.getVerificationId() == verificationId).collect(Collectors.toCollection(SubVerificationList::new));
+        return stream().filter(subVerification -> subVerification.getVerification().getId() == verificationId).collect(Collectors.toCollection(SubVerificationList::new));
     }
 
     public SubVerificationList verification(DbVerification Verification){

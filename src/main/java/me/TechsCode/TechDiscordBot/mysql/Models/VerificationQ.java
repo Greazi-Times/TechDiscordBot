@@ -17,7 +17,7 @@ public class VerificationQ {
     }
 
     public VerificationQ(DbMember member, DbMarket market, String email, String transactionId) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().VERIFICATIONQ_TABLE);
         this.memberId = member.getId();
         this.marketId = market.getId();
         this.email = email;

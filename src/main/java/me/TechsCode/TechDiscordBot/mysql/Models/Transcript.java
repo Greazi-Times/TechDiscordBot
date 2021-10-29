@@ -13,6 +13,11 @@ public class Transcript {
         this.value = value;
     }
 
+    public Transcript(String value) {
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().TRANSCRIPTS_TABLE);
+        this.value = value;
+    }
+
     public Transcript(JsonObject transcript) {
         this.id = transcript.get("id").getAsInt();
         this.value = transcript.toString();

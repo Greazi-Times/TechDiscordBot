@@ -6,8 +6,9 @@ import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationPluginList;
 
 public class DbVerification {
 
-    private final int id, memberId;
-    private final String payerId;
+    private final int id;
+    private int memberId;
+    private String payerId;
 
     public DbVerification(int id, int MemberId, String PayerId) {
         this.id = id;
@@ -16,7 +17,7 @@ public class DbVerification {
     }
 
     public DbVerification(DbMember member, String PayerId) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().VERIFICATIONS_TABLE);
         this.memberId = member.getId();
         this.payerId = PayerId;
     }
@@ -41,19 +42,27 @@ public class DbVerification {
         return payerId;
     }
 
-
     public VerificationPluginList getPlugins() {
         return TechDiscordBot.getStorage().retrieveVerificationPlugins(this);
     }
 
-    public void addMarket(DbMarket dbMarket){
-        VerificationMarket VerificationMarket = new VerificationMarket(dbMarket, this, memberId);
+    public void addMarket(DbMarket dbMarket, int userId){
+        TechDiscordBot.log("verifi Id: "+this.id);
+        VerificationMarket VerificationMarket = new VerificationMarket(dbMarket, this, userId);
         VerificationMarket.save();
     }
 
-    public void addPlugin(DbMarket dbMarket, Resource resource, String transaction, String purchaseData, boolean reviewed){
-        VerificationPlugin VerificationPlugin = new VerificationPlugin(dbMarket, this, resource, transaction, purchaseData, reviewed);
+    public void addPlugin(DbMarket dbMarket, Resource resource, String transactionId, String purchaseData, boolean reviewed){
+        VerificationPlugin VerificationPlugin = new VerificationPlugin(dbMarket, this, resource, transactionId, purchaseData, reviewed);
         VerificationPlugin.save();
+    }
+
+    public void setMember(DbMember dbMember){
+        this.memberId = dbMember.getId();
+    }
+
+    public void setPayerId(String payerId){
+        this.payerId = payerId;
     }
 
     public void save(){

@@ -1,9 +1,8 @@
 package me.TechsCode.TechDiscordBot.mysql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import org.apache.commons.collections4.Get;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,26 +20,25 @@ public class MySQL {
         return new MySQL(mySQLSettings);
     }
 
-    public String update(String query) {
+    public void update(String query) {
         try {
             Connection connection = getConnection();
-            PreparedStatement p = connection.prepareStatement(query);
+            PreparedStatement p = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
             p.execute();
-            connection.close();
             p.close();
 
-            return "Success";
+            connection.close();
         } catch(SQLException ex) {
             ex.printStackTrace();
             errorMessages.add(ex.getMessage());
-            return ex.getMessage();
         }
     }
 
-    public String update(String query, Object... objs) {
+    public void update(String query, Object... objs) {
         try {
             Connection connection = getConnection();
-            PreparedStatement p = connection.prepareStatement(query);
+            PreparedStatement p = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
             for(Object obj : objs) {
@@ -56,14 +54,12 @@ public class MySQL {
             }
 
             p.execute();
-            connection.close();
             p.close();
 
-            return "Success";
+            connection.close();
         } catch(SQLException ex) {
             ex.printStackTrace();
             errorMessages.add(ex.getMessage());
-            return ex.getMessage();
         }
     }
 

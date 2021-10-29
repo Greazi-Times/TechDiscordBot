@@ -4,8 +4,11 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
 public class Review {
 
-    private final int id, memberId, reviewID, resourceId;
-    private final long date;
+    private final int id;
+    private int memberId;
+    private int reviewID;
+    private int resourceId;
+    private long date;
 
     public Review(int id, int memberId, int reviewID, int resourceId, long date) {
         this.id = id;
@@ -16,7 +19,7 @@ public class Review {
     }
 
     public Review(DbMember member, Resource resource, int reviewID, long date) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().REVIEWS_TABLE);
         this.memberId = member.getId();
         this.resourceId = resource.getId();
         this.reviewID = reviewID;
@@ -45,6 +48,22 @@ public class Review {
 
     public Resource getResource(){
         return TechDiscordBot.getStorage().retrieveResourceById(resourceId);
+    }
+
+    public void setMemberId(DbMember member){
+        this.memberId = member.getId();
+    }
+
+    public void setResourceId(Resource resource){
+        this.resourceId = resource.getId();
+    }
+
+    public void setReviewID(int reviewID){
+        this.reviewID = reviewID;
+    }
+
+    public void setDate(long date){
+        this.date = date;
     }
 
     public void save(){

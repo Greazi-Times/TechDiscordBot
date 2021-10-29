@@ -1,6 +1,11 @@
 package me.TechsCode.TechDiscordBot;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import me.TechsCode.TechDiscordBot.module.ModulesManager;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.ChannelQuery;
@@ -10,8 +15,10 @@ import me.TechsCode.TechDiscordBot.spiget.SpigetAPI;
 import me.TechsCode.TechDiscordBot.util.Config;
 import me.TechsCode.TechDiscordBot.util.ConsoleColor;
 import me.TechsCode.TechDiscordBot.util.PterodactylAPI;
+import me.TechsCode.TechDiscordBot.util.Roles;
 import me.TechsCode.TechDiscordBot.verification.PaypalAPI;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
+import me.TechsCode.TechDiscordBot.verification.data.Transaction;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -24,7 +31,9 @@ import okhttp3.OkHttpClient;
 
 import javax.security.auth.login.LoginException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -91,8 +100,11 @@ public class TechDiscordBot {
             return;
         }
 
-        guild = jda.getGuildById("311178000026566658");
-        guild = guilds.size() != 0 ? jda.getGuildById("877248189424615525") : null;
+        guild = jda.getGuildById("311178000026566658"); //Get main guild
+        if (guild == null){
+            guild = jda.getGuildById("877248189424615525"); //Get test guild if main not exists
+        }
+
         self = guild != null ? guild.getSelfMember() : null;
 
         if(guild == null) {
@@ -133,6 +145,8 @@ public class TechDiscordBot {
 
         log("Successfully loaded the bot and logged into " + guild.getName() + " as " + self.getEffectiveName() + "!");
 
+        getSpigetAPI().fetchResources("29620");
+
         log("");
 
         //TODO Songoda
@@ -148,10 +162,75 @@ public class TechDiscordBot {
         log("Guild:");
         log("  > Members: " + getGuild().getMembers().size());
         log("  > Verified Members: TODO"); //TODO Verified Members
-        //log("  > Review Squad Members: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().equals("Review Squad"))).count());
-        //log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
+        log("  > Review Squad Members: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().equals("Review Squad"))).count());
+        log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
 
         log("");
+
+        HashMap<Integer, String> oldVerifications = getStorage().retrieveOldVerfications();
+
+//        for (Map.Entry<Integer, String> me : oldVerifications.entrySet()) {
+//            String discordId = me.getValue();
+//            Integer spigotId = me.getKey();
+//
+//            TransactionsList transactions = getPaypalAPI().searchTransaction(String.valueOf(spigotId));
+//            if (transactions.isEmpty()) {
+//                TechDiscordBot.log("no transactions");
+//                continue;
+//            }
+//
+//            Member discordMember = getGuild().getMemberById(discordId);
+//            if (discordMember == null) {
+//                TechDiscordBot.log("member not found");
+//                continue;
+//            }
+//
+//            DbMember dbMember;
+//            if(getStorage().memberExists(discordId)){
+//                dbMember = getStorage().retrieveMemberByDiscordId(discordId);
+//            }else{
+//                dbMember = new DbMember(discordId, discordMember.getUser().getName(), discordMember.getTimeJoined().toEpochSecond(), discordMember.getRoles().contains(Roles.STAFF()));
+//                dbMember.save();
+//            }
+//
+//            Transaction firstTransaction = transactions.get(0);
+//            if (firstTransaction == null) continue;
+//
+//            String payerId = firstTransaction.getPayerInfo().getId();
+//
+//            DbVerification dbVerification;
+//            if(getStorage().verificationExists(dbMember)){
+//                dbVerification = getStorage().retrieveMemberVerification(dbMember);
+//            }else{
+//                dbVerification = new DbVerification(dbMember, payerId);
+//                dbVerification.save();
+//            }
+//
+//            transactions.forEach((transaction) -> {
+//                DbMarket dbMarket = getStorage().retrieveMarketByName(transaction.getMarketplace().getMarket());
+//                if (dbMarket == null) {
+//                    TechDiscordBot.log("Market with name "+transaction.getMarketplace().getMarket()+" not found");
+//                    return;
+//                }
+//
+//                Resource resource = getStorage().retrieveResourceByName(transaction.getPlugin().getName());
+//                if (resource == null) {
+//                    TechDiscordBot.log("Resource with name "+transaction.getPlugin().getName()+" not found");
+//                    return;
+//                }
+//
+//                if(!getStorage().verificationMarketExists(dbVerification, dbMarket)){
+//                    dbVerification.addMarket(dbMarket, Integer.parseInt(transaction.getMarketplace().getUserId()));
+//                    log("added market: "+dbMarket.getName());
+//                }
+//
+//                if(!getStorage().verificationPluginExists(dbVerification, dbMarket, resource)){
+//                    dbVerification.addPlugin(dbMarket, resource, transaction.getId(), transaction.getPayerInfo().getState().toString(), false);
+//                    log("added plugin: "+resource.getName());
+//                }
+//
+//            });
+//        }
 
         getModulesManager().logLoad();
 

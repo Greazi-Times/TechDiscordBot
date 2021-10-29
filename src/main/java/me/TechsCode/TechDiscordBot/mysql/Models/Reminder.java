@@ -6,10 +6,11 @@ import net.dv8tion.jda.api.entities.User;
 
 public class Reminder {
 
-    private final int id, memberId;
-    private final String channelId, reminder;
-    private final ReminderType type;
-    private final long time;
+    private final int id;
+    private int memberId;
+    private String channelId, reminder;
+    private ReminderType type;
+    private long time;
 
     public Reminder(int id, int MemberId, String ChannelId, int Type, String Reminder, long Time) {
         this.id = id;
@@ -21,7 +22,7 @@ public class Reminder {
     }
 
     public Reminder(DbMember member, String ChannelId, int Type, String Reminder, long Time) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().REMINDERS_TABLE);
         this.memberId = member.getId();
         this.channelId = ChannelId;
         this.type = Type == 0 ? ReminderType.CHANNEL : ReminderType.DMs;
@@ -30,7 +31,7 @@ public class Reminder {
     }
 
     public Reminder(DbMember member, String ChannelId, ReminderType Type, String Reminder, long Time) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().REMINDERS_TABLE);
         this.memberId = member.getId();
         this.channelId = ChannelId;
         this.type = Type;
@@ -68,6 +69,26 @@ public class Reminder {
 
     public long getTime() {
         return time;
+    }
+
+    public void setMemberId(DbMember member){
+        this.memberId = member.getId();
+    }
+
+    public void setChannelId(String ChannelId){
+        this.channelId = ChannelId;
+    }
+
+    public void setType(ReminderType Type){
+        this.type = Type;
+    }
+
+    public void setReminder(String Reminder){
+        this.reminder = Reminder;
+    }
+
+    public void setTime(long Time){
+        this.time = Time;
     }
 
     public void save(){

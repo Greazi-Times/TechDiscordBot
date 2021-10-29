@@ -12,6 +12,11 @@ public class DbMarket {
         this.name = Name;
     }
 
+    public DbMarket(String Name) {
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().MARKETS_TABLE);
+        this.name = Name;
+    }
+
     public int getId() {
         return id;
     }

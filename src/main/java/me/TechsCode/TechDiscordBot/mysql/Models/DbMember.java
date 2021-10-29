@@ -9,6 +9,7 @@ import me.TechsCode.TechDiscordBot.objects.RoleManager;
 import net.dv8tion.jda.api.entities.Member;
 
 public class DbMember {
+
     private final int id;
     private final String discordID, name;
     private final long joined;
@@ -23,7 +24,7 @@ public class DbMember {
     }
 
     public DbMember(String DiscordID, String Name, long Joined, boolean Staff) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().MEMBERS_TABLE);
         this.discordID = DiscordID;
         this.name = Name;
         this.joined = Joined;
@@ -74,24 +75,12 @@ public class DbMember {
         return TechDiscordBot.getStorage().retrieveMemberPunishments(this);
     }
 
-    public DbVerification newVerification(String PayerId){
-        DbVerification dbVerification = new DbVerification(this, PayerId);
-        dbVerification.save();
-        return dbVerification;
-    }
-
     public VerificationQ getVerificationQ(){
         return TechDiscordBot.getStorage().retrieveMemberVerificationQ(this);
     }
 
     public DbVerification getVerification(){
         return TechDiscordBot.getStorage().retrieveMemberVerification(this);
-    }
-
-    public DbVerification newVerification(String PayerId){
-        DbVerification dbVerification = new DbVerification(this, PayerId);
-        dbVerification.save();
-        return dbVerification;
     }
 
     public ReminderList getReminders(){

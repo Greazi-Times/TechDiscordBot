@@ -4,7 +4,8 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 
 public class VerificationMarket {
 
-    private final int id, marketId, verificationId, userId;
+    private final int id;
+    private int marketId, verificationId, userId;
 
     public VerificationMarket(int id, int marketId, int VerificationId, int userId) {
         this.id = id;
@@ -14,7 +15,7 @@ public class VerificationMarket {
     }
 
     public VerificationMarket(DbMarket market, DbVerification Verification, int userId) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().VERIFICATIONMARKETS_TABLE);
         this.marketId = market.getId();
         this.verificationId = Verification.getId();
         this.userId = userId;
@@ -42,6 +43,18 @@ public class VerificationMarket {
 
     public int getUserId() {
         return userId;
+    }
+
+    public void setMarketId(DbMarket market){
+        this.marketId = market.getId();
+    }
+
+    public void setVerificationId(DbVerification Verification){
+        this.verificationId = Verification.getId();
+    }
+
+    public void setUserId(int userId){
+        this.userId = userId;
     }
 
     public void save(){

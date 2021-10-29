@@ -1,18 +1,15 @@
 package me.TechsCode.TechDiscordBot.mysql.Models;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.UpdateList;
 import net.dv8tion.jda.api.entities.Role;
-
-import java.util.Set;
 
 public class Resource {
 
     private final int id;
-    private final String name;
-    private final int spigotId;
-    private final long discordRoleId;
+    private int spigotId;
+    private String name;
+    private long discordRoleId;
 
     public Resource(int id, String Name, int SpigotId, long discordRoleId) {
         this.id = id;
@@ -22,7 +19,7 @@ public class Resource {
     }
 
     public Resource(String Name, int SpigotId, long discordRoleId) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().RESOURCES_TABLE);
         this.name = Name;
         this.spigotId = SpigotId;
         this.discordRoleId= discordRoleId;
@@ -46,6 +43,18 @@ public class Resource {
 
     public Role getDiscordRole(){
         return TechDiscordBot.getJDA().getRoleById(discordRoleId);
+    }
+
+    public void setName(String Name){
+        this.name = Name;
+    }
+
+    public void setSpigotId(int SpigotId){
+        this.spigotId = SpigotId;
+    }
+
+    public void setDiscordRoleId(long discordRoleId){
+        this.discordRoleId = discordRoleId;
     }
 
     public void save(){

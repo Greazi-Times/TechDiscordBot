@@ -1,5 +1,6 @@
 package me.TechsCode.TechDiscordBot.mysql.storage;
 
+import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.*;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.*;
 import me.TechsCode.TechDiscordBot.mysql.MySQL;
@@ -13,25 +14,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Storage {
 
     private final MySQL mysql;
     private boolean connected;
 
-    private final String VERIFICATIONS_TABLE = "Verification";
-    private final String PURCHASEDPLUGINS_TABLE = "PurchasedPlugins";
-    private final String SUBVERIFIED_TABLE = "SubVerified";
-    private final String MEMBERS_TABLE = "Members";
-    private final String VERIFICATIONQ_TABLE = "VerificationQ";
-    private final String VERIFICATIONMARKETS_TABLE = "VerificationMarkets";
-    private final String PUNISHMENTS_TABLE = "Punishments";
-    private final String REMINDERS_TABLE = "Reminders";
-    private final String TRANSCRIPTS_TABLE = "Transcripts";
-    private final String RESOURCES_TABLE = "Resources";
-    private final String UPDATES_TABLE = "Updates";
-    private final String REVIEWS_TABLE = "Reviews";
-    private final String MARKETS_TABLE = "Markets";
+    public final String VERIFICATIONS_TABLE = "Verification";
+    public final String PURCHASEDPLUGINS_TABLE = "PurchasedPlugins";
+    public final String SUBVERIFIED_TABLE = "SubVerified";
+    public final String MEMBERS_TABLE = "Members";
+    public final String VERIFICATIONQ_TABLE = "VerificationQ";
+    public final String VERIFICATIONMARKETS_TABLE = "VerificationMarkets";
+    public final String PUNISHMENTS_TABLE = "Punishments";
+    public final String REMINDERS_TABLE = "Reminders";
+    public final String TRANSCRIPTS_TABLE = "Transcripts";
+    public final String RESOURCES_TABLE = "Resources";
+    public final String UPDATES_TABLE = "Updates";
+    public final String REVIEWS_TABLE = "Reviews";
+    public final String MARKETS_TABLE = "Markets";
 
     private Storage(MySQLSettings mySQLSettings) {
         this.connected = false;
@@ -57,19 +59,47 @@ public class Storage {
         //Create tables
         mysql.update("CREATE TABLE IF NOT EXISTS `"+MARKETS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT , `name` varchar(100) NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `UQ_name` (`name`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+MEMBERS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `discordID` varchar(100) NOT NULL, `name` varchar(100) NOT NULL, `joined` bigint(20) NOT NULL, `staff` boolean NOT NULL , PRIMARY KEY (`id`), UNIQUE KEY `UQ_discordId` (`discordId`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONS_TABLE+"`(`memberId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `payerID` varchar(100) NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_89` (`memberId`), CONSTRAINT `FK_87` FOREIGN KEY `fkIdx_89` (`memberId`) REFERENCES `Members` (`id`), UNIQUE KEY `UQ_memberId` (`memberId`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+PUNISHMENTS_TABLE+"`(`type` varchar(100) NOT NULL, `memberId` int NOT NULL, `reason` text NOT NULL, `date` timestamp NOT NULL, `expired` timestamp NOT NULL, `punisherId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`),KEY `fkIdx_119` (`memberId`), CONSTRAINT `FK_117` FOREIGN KEY `fkIdx_119` (`memberId`) REFERENCES `Members` (`id`),KEY `fkIdx_123` (`punisherId`), CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_123` (`punisherId`) REFERENCES `Members` (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+PURCHASEDPLUGINS_TABLE+"`(`marketId` int NOT NULL, `transactionID` varchar(255) NOT NULL, `purchaseData` varchar(255) NOT NULL, `reviewed` boolean NOT NULL DEFAULT false, `verificationID` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_107` (`marketId`), CONSTRAINT `FK_105` FOREIGN KEY `fkIdx_107` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_110` (`verificationID`), CONSTRAINT `FK_108` FOREIGN KEY `fkIdx_110` (`verificationID`) REFERENCES `Verification` (`id`),KEY `fkIdx_116` (`resourceId`),CONSTRAINT `FK_114` FOREIGN KEY `fkIdx_116` (`resourceId`) REFERENCES `Resources` (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+REMINDERS_TABLE+"`(`channelID` varchar(100) NOT NULL, `time` timestamp NOT NULL, `type` varchar(100) NOT NULL, `reminder` text NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_113` (`memberId`), CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_113` (`memberId`) REFERENCES `Members` (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, `discordRoleId` BIGINT NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `UQ_spigotId` (`spigotId`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+REVIEWS_TABLE+"`(`memberId` int NOT NULL, `date` timestamp NOT NULL, `reviewId` int NOT NULL, `resourceId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_132` (`memberId`), CONSTRAINT `FK_130` FOREIGN KEY `fkIdx_132` (`memberId`) REFERENCES `Members` (`id`), KEY `fkIdx_135` (`resourceId`), CONSTRAINT `FK_133` FOREIGN KEY `fkIdx_135` (`resourceId`) REFERENCES `Resources` (`id`), UNIQUE KEY `UQ_reviewId` (`reviewId`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+SUBVERIFIED_TABLE+"`(`subMembersId` int NOT NULL, `verificationId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_126` (`subMembersId`), CONSTRAINT `FK_124` FOREIGN KEY `fkIdx_126` (`subMembersId`) REFERENCES `Members` (`id`),KEY `fkIdx_129` (`verificationId`), CONSTRAINT `FK_127` FOREIGN KEY `fkIdx_129` (`verificationId`) REFERENCES `Verification` (`id`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, `payerID` varchar(100) NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_89` (`memberId`), CONSTRAINT `FK_87` FOREIGN KEY `fkIdx_89` (`memberId`) REFERENCES `Members` (`id`), UNIQUE KEY `UQ_memberId` (`memberId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+PUNISHMENTS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `type` varchar(100) NOT NULL, `memberId` int NOT NULL, `reason` text NOT NULL, `date` timestamp NOT NULL, `expired` timestamp NOT NULL, `punisherId` int NOT NULL, PRIMARY KEY (`id`),KEY `fkIdx_119` (`memberId`), CONSTRAINT `FK_117` FOREIGN KEY `fkIdx_119` (`memberId`) REFERENCES `Members` (`id`),KEY `fkIdx_123` (`punisherId`), CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_123` (`punisherId`) REFERENCES `Members` (`id`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+REMINDERS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `channelID` varchar(100) NOT NULL, `time` timestamp NOT NULL, `type` varchar(100) NOT NULL, `reminder` text NOT NULL, `memberId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_113` (`memberId`), CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_113` (`memberId`) REFERENCES `Members` (`id`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+RESOURCES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `name` varchar(100) NOT NULL, `spigotId` int NOT NULL, `discordRoleId` bigint(20) NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `UQ_spigotId` (`spigotId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+REVIEWS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, `date` timestamp NOT NULL, `reviewId` int NOT NULL, `resourceId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_132` (`memberId`), CONSTRAINT `FK_130` FOREIGN KEY `fkIdx_132` (`memberId`) REFERENCES `Members` (`id`), KEY `fkIdx_135` (`resourceId`), CONSTRAINT `FK_133` FOREIGN KEY `fkIdx_135` (`resourceId`) REFERENCES `Resources` (`id`), UNIQUE KEY `UQ_reviewId` (`reviewId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+SUBVERIFIED_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `subMembersId` int NOT NULL, `verificationId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_126` (`subMembersId`), CONSTRAINT `FK_124` FOREIGN KEY `fkIdx_126` (`subMembersId`) REFERENCES `Members` (`id`),KEY `fkIdx_129` (`verificationId`), CONSTRAINT `FK_127` FOREIGN KEY `fkIdx_129` (`verificationId`) REFERENCES `Verification` (`id`));");
         mysql.update("CREATE TABLE IF NOT EXISTS `"+TRANSCRIPTS_TABLE+"`(`id` int NOT NULL, `value` text NOT NULL, PRIMARY KEY (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+UPDATES_TABLE+"`(`resourceId` int NOT NULL, `name` varchar(100) NOT NULL, `date` timestamp NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_138` (`resourceId`), CONSTRAINT `FK_136` FOREIGN KEY `fkIdx_138` (`resourceId`) REFERENCES `Resources` (`id`), UNIQUE KEY `UQ_resourceId` (`resourceId`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONMARKETS_TABLE+"`(`marketId` int NOT NULL, `VerificationId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, `userID` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_100` (`marketId`), CONSTRAINT `FK_98` FOREIGN KEY `fkIdx_100` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_103` (`VerificationId`), CONSTRAINT `FK_101` FOREIGN KEY `fkIdx_103` (`VerificationId`) REFERENCES `Verification` (`id`));");
-        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONQ_TABLE+"`(`memberId` int NOT NULL, `email` varchar(255) NOT NULL, `transactionId` varchar(255) NOT NULL, `marketId` int NOT NULL, `id` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`), KEY `fkIdx_141` (`marketId`), CONSTRAINT `FK_139` FOREIGN KEY `fkIdx_141` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_96` (`memberId`), CONSTRAINT `FK_94` FOREIGN KEY `fkIdx_96` (`memberId`) REFERENCES `Members` (`id`), UNIQUE KEY `UQ_memberId` (`memberId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+PURCHASEDPLUGINS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `marketId` int NOT NULL, `transactionId` varchar(255) NOT NULL, `purchaseData` varchar(255) NOT NULL, `reviewed` boolean NOT NULL DEFAULT false, `verificationId` int NOT NULL, `resourceId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_107` (`marketId`), CONSTRAINT `FK_105` FOREIGN KEY `fkIdx_107` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_110` (`verificationId`), CONSTRAINT `FK_108` FOREIGN KEY `fkIdx_110` (`verificationId`) REFERENCES `Verification` (`id`),KEY `fkIdx_116` (`resourceId`),CONSTRAINT `FK_114` FOREIGN KEY `fkIdx_116` (`resourceId`) REFERENCES `Resources` (`id`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+UPDATES_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `resourceId` int NOT NULL, `name` varchar(100) NOT NULL, `date` timestamp NOT NULL, `updateId` bigint(20) NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_138` (`resourceId`), CONSTRAINT `FK_136` FOREIGN KEY `fkIdx_138` (`resourceId`) REFERENCES `Resources` (`id`), UNIQUE KEY `UQ_resourceId` (`resourceId`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONMARKETS_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `marketId` int NOT NULL, `verificationId` int NOT NULL, `userID` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_100` (`marketId`), CONSTRAINT `FK_98` FOREIGN KEY `fkIdx_100` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_103` (`verificationId`), CONSTRAINT `FK_101` FOREIGN KEY `fkIdx_103` (`verificationId`) REFERENCES `Verification` (`id`));");
+        mysql.update("CREATE TABLE IF NOT EXISTS `"+VERIFICATIONQ_TABLE+"`(`id` int NOT NULL AUTO_INCREMENT, `memberId` int NOT NULL, `email` varchar(255) NOT NULL, `transactionId` varchar(255) NOT NULL, `marketId` int NOT NULL, PRIMARY KEY (`id`), KEY `fkIdx_141` (`marketId`), CONSTRAINT `FK_139` FOREIGN KEY `fkIdx_141` (`marketId`) REFERENCES `Markets` (`id`), KEY `fkIdx_96` (`memberId`), CONSTRAINT `FK_94` FOREIGN KEY `fkIdx_96` (`memberId`) REFERENCES `Members` (`id`), UNIQUE KEY `UQ_memberId` (`memberId`));");
 
         this.connected = true;
+    }
+
+    public int getAvailableId(String TABLE){
+        Random rng = new Random();
+        int min = 1;
+        int max = 11;
+        int upperBound = max - min + 1; // upper bound is exclusive, so +1
+        int num = min + rng.nextInt(upperBound);
+        boolean idExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + TABLE + " WHERE `id`='" + num + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            idExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (idExists){
+            return getAvailableId(TABLE);
+        }else{
+            return num;
+        }
     }
 
     //-----------------------------
@@ -117,18 +147,19 @@ public class Storage {
 
     public void saveReminder(@NotNull Reminder reminder) {
         Map<Integer, String> data =new HashMap<Integer, String>();
-        data.put(1, String.valueOf(reminder.getMemberId()));
-        data.put(2, reminder.getChannelId());
-        data.put(3, String.valueOf(reminder.getType().getIndex()));
-        data.put(4, reminder.getReminder());
-        data.put(5, String.valueOf(reminder.getTime()));
-        data.put(6, String.valueOf(reminder.getMemberId()));
-        data.put(7, reminder.getChannelId());
-        data.put(8, String.valueOf(reminder.getType().getIndex()));
-        data.put(9, reminder.getReminder());
-        data.put(10, String.valueOf(reminder.getTime()));
+        data.put(1, String.valueOf(reminder.getId()));
+        data.put(2, String.valueOf(reminder.getMemberId()));
+        data.put(3, reminder.getChannelId());
+        data.put(4, String.valueOf(reminder.getType().getIndex()));
+        data.put(5, reminder.getReminder());
+        data.put(6, String.valueOf(reminder.getTime()));
+        data.put(7, String.valueOf(reminder.getMemberId()));
+        data.put(8, reminder.getChannelId());
+        data.put(9, String.valueOf(reminder.getType().getIndex()));
+        data.put(10, reminder.getReminder());
+        data.put(11, String.valueOf(reminder.getTime()));
 
-        mysql.update("INSERT INTO " + REMINDERS_TABLE + " (id, memberId, channelId, type, reminder, time) VALUES (NULL, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE memberId=?, channelId=?, type=?, reminder=?, time=?;", data);
+        mysql.update("INSERT INTO " + REMINDERS_TABLE + " (id, memberId, channelId, type, reminder, time) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE memberId=?, channelId=?, type=?, reminder=?, time=?;", data);
     }
 
     public void deleteReminder(@NotNull Reminder reminder) {
@@ -227,7 +258,7 @@ public class Storage {
     }
 
     public void saveMarket(@NotNull DbMarket market) {
-        mysql.update("INSERT INTO " + MARKETS_TABLE + " (id, name) VALUES (NULL, '"+market.getName()+"') ON DUPLICATE KEY UPDATE name='"+market.getName()+"';");
+        mysql.update("INSERT INTO " + MARKETS_TABLE + " (id, name) VALUES ('"+market.getId()+"', '"+market.getName()+"') ON DUPLICATE KEY UPDATE name='"+market.getName()+"';");
     }
 
     public void deleteMarket(@NotNull DbMarket market) {
@@ -324,7 +355,7 @@ public class Storage {
     }
 
     public void saveMember(@NotNull DbMember dbMember) {
-        mysql.update("INSERT INTO " + MEMBERS_TABLE + " (id, discordID, name, joined, staff) VALUES (NULL, '" + dbMember.getDiscordId() + "', '" + dbMember.getName() + "', " + dbMember.getJoined() + ", " + dbMember.isStaff() + ") ON DUPLICATE KEY UPDATE discordID='" + dbMember.getDiscordId() + "', name='" + dbMember.getName() + "', joined=" + dbMember.getJoined() + ", staff=" + dbMember.isStaff() + ";");
+        mysql.update("INSERT INTO " + MEMBERS_TABLE + " (id, discordID, name, joined, staff) VALUES ('"+dbMember.getId()+"', '" + dbMember.getDiscordId() + "', '" + dbMember.getName() + "', " + dbMember.getJoined() + ", " + dbMember.isStaff() + ") ON DUPLICATE KEY UPDATE discordID='" + dbMember.getDiscordId() + "', name='" + dbMember.getName() + "', joined=" + dbMember.getJoined() + ", staff=" + dbMember.isStaff() + ";");
     }
 
     public void deleteMember(@NotNull DbMember dbMember) {
@@ -383,7 +414,7 @@ public class Storage {
     }
 
     public void saveReview(@NotNull Review review) {
-        mysql.update("INSERT INTO " + REVIEWS_TABLE + " (id, memberId, resourceId, date) VALUES (NULL, '" + review.getMemberId() + "', '" + review.getResourceId() + "', '" + review.getDate() + "') ON DUPLICATE KEY UPDATE memberId='" + review.getMemberId() + "', resourceId='" + review.getResourceId() + "', date='" + review.getDate() + "';");
+        mysql.update("INSERT INTO " + REVIEWS_TABLE + " (id, memberId, resourceId, date) VALUES ('"+review.getId()+"', '" + review.getMemberId() + "', '" + review.getResourceId() + "', '" + review.getDate() + "') ON DUPLICATE KEY UPDATE memberId='" + review.getMemberId() + "', resourceId='" + review.getResourceId() + "', date='" + review.getDate() + "';");
     }
 
     public void deleteReview(@NotNull Review review) {
@@ -407,7 +438,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                updateList.add(new DbUpdate(rs.getInt("id"), rs.getInt("resourceId"), rs.getString("version"), rs.getLong("date"), rs.getLong("updateId")));
+                updateList.add(new DbUpdate(rs.getInt("id"), rs.getInt("resourceId"), rs.getString("name"), rs.getLong("date"), rs.getLong("updateId")));
 
             rs.close();
             connection.close();
@@ -416,6 +447,26 @@ public class Storage {
         }
 
         return updateList;
+    }
+
+    public DbUpdate retrieveResourceUpdateByName(@NotNull int resourceId, String Name) {
+        DbUpdate dbUpdate = null;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + UPDATES_TABLE + " WHERE `resourceId`='"+resourceId+"' AND `name`='"+Name+"';");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                dbUpdate = new DbUpdate(rs.getInt("id"), rs.getInt("resourceId"), rs.getString("name"), rs.getLong("date"), rs.getLong("updateId"));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dbUpdate;
     }
 
     public boolean updateExists(String updateId) {
@@ -438,7 +489,7 @@ public class Storage {
     }
 
     public void saveUpdate(@NotNull DbUpdate update) {
-        mysql.update("INSERT INTO " + UPDATES_TABLE + " (id, resourceId, name, date) VALUES (NULL, '" + update.getResourceId() + "', '" + update.getName() + "', '" + update.getDate() + "') ON DUPLICATE KEY UPDATE resourceId='" + update.getResourceId() + "', name='" + update.getName() + "', date='" + update.getDate() + "';");
+        mysql.update("INSERT INTO " + UPDATES_TABLE + " (id, resourceId, name, date) VALUES ('"+update.getId()+"', '" + update.getResourceId() + "', '" + update.getName() + "', '" + update.getDate() + "') ON DUPLICATE KEY UPDATE resourceId='" + update.getResourceId() + "', name='" + update.getName() + "', date='" + update.getDate() + "';");
     }
 
     public void deleteUpdate(@NotNull DbUpdate update) {
@@ -462,7 +513,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                resourcesList.add(new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId")));
+                resourcesList.add(new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"), rs.getLong("discordRoleId")));
 
             rs.close();
             connection.close();
@@ -473,6 +524,25 @@ public class Storage {
         return resourcesList;
     }
 
+    public Resource retrieveResourceByName(String resourceName) {
+        Resource resource = null;
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + RESOURCES_TABLE + " WHERE name='"+resourceName+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.first())
+                resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"), rs.getLong("discordRoleId"));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resource;
+    }
+
     public Resource retrieveResourceById(int resourceId) {
         Resource resource = null;
         try {
@@ -481,7 +551,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
-                resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"));
+                resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"), rs.getLong("discordRoleId"));
 
             rs.close();
             connection.close();
@@ -531,7 +601,7 @@ public class Storage {
     }
 
     public void saveResource(@NotNull Resource resource) {
-        mysql.update("INSERT INTO " + RESOURCES_TABLE + " (id, name, spigotId) VALUES (NULL, '" + resource.getName() + "', '" + resource.getSpigotId() + "') ON DUPLICATE KEY UPDATE name='" + resource.getName() + "', spigotId='" + resource.getSpigotId() + "';");
+        mysql.update("INSERT INTO " + RESOURCES_TABLE + " (id, name, spigotId, discordRoleId) VALUES ('"+ resource.getId()+"', '" + resource.getName() + "', '" + resource.getSpigotId() + "', '"+ resource.getDiscordRoleId()+"') ON DUPLICATE KEY UPDATE name='" + resource.getName() + "', spigotId='" + resource.getSpigotId() + "', discordRoleId='" + resource.getDiscordRoleId() + "';");
     }
 
     public void deleteResource(@NotNull Resource resource) {
@@ -583,7 +653,7 @@ public class Storage {
     }
 
     public void savePunishment(@NotNull Punishment punishment) {
-        mysql.update("INSERT INTO " + RESOURCES_TABLE + " (id, memberId, punisherId, type, reason, date, expired) VALUES (NULL, '" + punishment.getMemberId() + "', '" + punishment.getPunisherId() + "', '" + punishment.getType() + "', '" + punishment.getReason() + "', '" + punishment.getDate() + "', '" + punishment.getExpired() + "') ON DUPLICATE KEY UPDATE memberId='" + punishment.getMemberId() + "', punisherId='" + punishment.getPunisherId() + "', type='" + punishment.getType() + "', reason='" + punishment.getReason() + "', date='" + punishment.getDate() + "', expired='" + punishment.getExpired() + "';");
+        mysql.update("INSERT INTO " + RESOURCES_TABLE + " (id, memberId, punisherId, type, reason, date, expired) VALUES ('"+ punishment.getId()+"', '" + punishment.getMemberId() + "', '" + punishment.getPunisherId() + "', '" + punishment.getType() + "', '" + punishment.getReason() + "', '" + punishment.getDate() + "', '" + punishment.getExpired() + "') ON DUPLICATE KEY UPDATE memberId='" + punishment.getMemberId() + "', punisherId='" + punishment.getPunisherId() + "', type='" + punishment.getType() + "', reason='" + punishment.getReason() + "', date='" + punishment.getDate() + "', expired='" + punishment.getExpired() + "';");
     }
 
     public void deletePunishment(@NotNull Punishment punishment) {
@@ -634,11 +704,30 @@ public class Storage {
     }
 
     public void saveVerificationMarket(@NotNull VerificationMarket verificationMarket) {
-        mysql.update("INSERT INTO " + VERIFICATIONMARKETS_TABLE + " (id, marketId, VerificationId, userId) VALUES (NULL, '" + verificationMarket.getMarketId() + "', '" + verificationMarket.getVerificationId() + "', '" + verificationMarket.getUserId() + "') ON DUPLICATE KEY UPDATE marketId='" + verificationMarket.getMarketId() + "', VerificationId='" + verificationMarket.getVerificationId() + "', userId='" + verificationMarket.getUserId() + "';");
+        mysql.update("INSERT INTO " + VERIFICATIONMARKETS_TABLE + " (id, marketId, verificationId, userId) VALUES ('"+ verificationMarket.getId()+"', '" + verificationMarket.getMarketId() + "', '" + verificationMarket.getVerificationId() + "', '" + verificationMarket.getUserId() + "') ON DUPLICATE KEY UPDATE marketId='" + verificationMarket.getMarketId() + "', VerificationId='" + verificationMarket.getVerificationId() + "', userId='" + verificationMarket.getUserId() + "';");
     }
 
     public void deleteVerificationMarket(@NotNull VerificationMarket verificationMarket) {
         mysql.update("DELETE FROM " + VERIFICATIONMARKETS_TABLE + " WHERE id='" + verificationMarket.getId() + "';");
+    }
+
+    public boolean verificationMarketExists(DbVerification verification, DbMarket market) {
+        boolean verificationMarketExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONMARKETS_TABLE + " WHERE `verificationId`='"+verification.getId()+"' AND `marketId`='"+ market.getId()+"';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verificationMarketExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verificationMarketExists;
     }
 
 
@@ -741,7 +830,7 @@ public class Storage {
     }
 
     public void saveVerificationQ(@NotNull VerificationQ verificationQ) {
-        mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (id, memberId, marketId, email, transactionId) VALUES (NULL, '" + verificationQ.getMemberId() + "', '" + verificationQ.getMarketId() + "', '" + verificationQ.getEmail() + "', '" + verificationQ.getTransactionId() + "') ON DUPLICATE KEY UPDATE memberId='" + verificationQ.getMemberId() + "', marketId='" + verificationQ.getMarketId() + "', email='" + verificationQ.getEmail() + "', transactionId='" + verificationQ.getTransactionId() + "';");
+        mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (id, memberId, marketId, email, transactionId) VALUES ('"+ verificationQ.getId()+"', '" + verificationQ.getMemberId() + "', '" + verificationQ.getMarketId() + "', '" + verificationQ.getEmail() + "', '" + verificationQ.getTransactionId() + "') ON DUPLICATE KEY UPDATE memberId='" + verificationQ.getMemberId() + "', marketId='" + verificationQ.getMarketId() + "', email='" + verificationQ.getEmail() + "', transactionId='" + verificationQ.getTransactionId() + "';");
     }
 
     public void deleteVerificationQ(@NotNull VerificationQ verificationQ) {
@@ -793,7 +882,7 @@ public class Storage {
     }
 
     public void saveSubVerification(@NotNull SubVerification subVerification) {
-        mysql.update("INSERT INTO " + SUBVERIFIED_TABLE + " (id, subMemberId, VerificationId) VALUES (NULL, '" + subVerification.getSubMemberId() + "', '" + subVerification.getVerificationId() + "') ON DUPLICATE KEY UPDATE subMemberId='" + subVerification.getSubMemberId() + "', VerificationId='" + subVerification.getVerificationId() + "';");
+        mysql.update("INSERT INTO " + SUBVERIFIED_TABLE + " (id, subMemberId, VerificationId) VALUES ('"+ subVerification.getId()+"', '" + subVerification.getSubMemberId() + "', '" + subVerification.getVerification().getId() + "') ON DUPLICATE KEY UPDATE subMemberId='" + subVerification.getSubMemberId() + "', VerificationId='" + subVerification.getVerification().getId() + "';");
     }
 
     public void deleteSubVerification(@NotNull SubVerification subVerification) {
@@ -861,6 +950,25 @@ public class Storage {
         return Verification;
     }
 
+    public DbVerification retrieveVerificationByMemberId(@NotNull int memberId) {
+        DbVerification Verification = null;
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE memberId='"+memberId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.first())
+                Verification = new DbVerification(rs.getInt("id"), rs.getInt("memberId"), rs.getString("payerId"));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Verification;
+    }
+
     public boolean VerificationExists(DbMember member) {
         boolean VerificationExistsMemberId = false;
 
@@ -880,14 +988,32 @@ public class Storage {
         return VerificationExistsMemberId;
     }
 
-    public void saveVerification(@NotNull DbVerification Verification) {
-        mysql.update("INSERT INTO " + VERIFICATIONS_TABLE + " (id, memberId, payerId) VALUES (NULL, '" + Verification.getMemberId() + "', '" + Verification.getPayerId() + "') ON DUPLICATE KEY UPDATE memberId='" + Verification.getMemberId() + "', payerId='" + Verification.getPayerId() + "';");
+    public void saveVerification(@NotNull DbVerification verification) {
+        mysql.update("INSERT INTO " + VERIFICATIONS_TABLE + " (id, memberId, payerId) VALUES ('"+ verification.getId()+"', '" + verification.getMemberId() + "', '" + verification.getPayerId() + "') ON DUPLICATE KEY UPDATE memberId='" + verification.getMemberId() + "', payerId='" + verification.getPayerId() + "';");
     }
 
-    public void deleteVerification(@NotNull DbVerification Verification) {
-        mysql.update("DELETE FROM " + VERIFICATIONS_TABLE + " WHERE id='" + Verification.getId() + "';");
+    public void deleteVerification(@NotNull DbVerification verification) {
+        mysql.update("DELETE FROM " + VERIFICATIONS_TABLE + " WHERE id='" + verification.getId() + "';");
     }
 
+    public boolean verificationExists(DbMember member) {
+        boolean verificationExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONS_TABLE + " WHERE `memberId`='" + member.getId() + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verificationExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verificationExists;
+    }
 
     //-----------------------------
     //------PURCHASED_PLUGINS------
@@ -912,12 +1038,31 @@ public class Storage {
         return VerificationPluginList;
     }
 
-    public void saveVerificationPlugin(@NotNull VerificationPlugin VerificationPlugin) {
-        mysql.update("INSERT INTO " + PURCHASEDPLUGINS_TABLE + " (id, marketId, verificationId, resourceId, transactionId, purchaseData, reviewed) VALUES (NULL, '" + VerificationPlugin.getMarketId() + "', '" + VerificationPlugin.getVerificationId() + "', '" + VerificationPlugin.getResourceId() + "', '" + VerificationPlugin.getTransactionId() + "', '" + VerificationPlugin.getPurchaseData() + "', '" + VerificationPlugin.isReviewed() + "') ON DUPLICATE KEY UPDATE marketId='" + VerificationPlugin.getMarketId() + "', verificationId='" + VerificationPlugin.getVerificationId() + "', resourceId='" + VerificationPlugin.getResourceId() + "', transactionId='" + VerificationPlugin.getTransactionId() + "', purchaseData='" + VerificationPlugin.getPurchaseData() + "', reviewed='" + VerificationPlugin.isReviewed() + "';");
+    public void saveVerificationPlugin(@NotNull VerificationPlugin verificationPlugin) {
+        mysql.update("INSERT INTO " + PURCHASEDPLUGINS_TABLE + " (id, marketId, verificationId, resourceId, transactionId, purchaseData, reviewed) VALUES ('"+ verificationPlugin.getId()+"', '" + verificationPlugin.getMarketId() + "', '" + verificationPlugin.getVerificationId() + "', '" + verificationPlugin.getResourceId() + "', '" + verificationPlugin.getTransactionId() + "', '" + verificationPlugin.getPurchaseData() + "', '" + verificationPlugin.isReviewedNumber() + "') ON DUPLICATE KEY UPDATE marketId='" + verificationPlugin.getMarketId() + "', verificationId='" + verificationPlugin.getVerificationId() + "', resourceId='" + verificationPlugin.getResourceId() + "', transactionId='" + verificationPlugin.getTransactionId() + "', purchaseData='" + verificationPlugin.getPurchaseData() + "', reviewed='" + verificationPlugin.isReviewedNumber() + "';");
     }
 
-    public void deleteVerificationPlugin(@NotNull VerificationPlugin VerificationPlugin) {
-        mysql.update("DELETE FROM " + PURCHASEDPLUGINS_TABLE + " WHERE id='" + VerificationPlugin.getId() + "';");
+    public void deleteVerificationPlugin(@NotNull VerificationPlugin verificationPlugin) {
+        mysql.update("DELETE FROM " + PURCHASEDPLUGINS_TABLE + " WHERE id='" + verificationPlugin.getId() + "';");
+    }
+
+    public boolean verificationPluginExists(DbVerification verification, DbMarket market, Resource resource) {
+        boolean verificationPluginExists = false;
+
+        try {
+            Connection connection = mysql.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + PURCHASEDPLUGINS_TABLE + " WHERE `verificationId`='"+verification.getId()+"' AND `marketId`='" + market.getId() + "' AND `resourceId`='" + resource.getId() + "';");
+
+            ResultSet rs = preparedStatement.executeQuery();
+            verificationPluginExists = rs.next();
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return verificationPluginExists;
     }
 
     //-----------------------------

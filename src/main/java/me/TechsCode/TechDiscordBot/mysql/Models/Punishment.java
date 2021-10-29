@@ -20,7 +20,7 @@ public class Punishment {
     }
 
     public Punishment(DbMember member, DbMember punisher, String Type, String Reason, long Date, long Expired) {
-        this.id = 0;
+        this.id = TechDiscordBot.getStorage().getAvailableId(TechDiscordBot.getStorage().PUNISHMENTS_TABLE);
         this.memberId = member.getId();
         this.punisherId = punisher.getId();
         this.type = Type;
