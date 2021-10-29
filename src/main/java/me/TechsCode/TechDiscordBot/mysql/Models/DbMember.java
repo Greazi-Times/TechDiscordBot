@@ -88,11 +88,6 @@ public class DbMember {
         return TechDiscordBot.getStorage().retrieveMemberVerification(this);
     }
 
-    public DbVerification newVerification(String PayerId){
-        DbVerification dbVerification = new DbVerification(this, PayerId);
-        dbVerification.save();
-        return dbVerification;
-    }
 
     public ReminderList getReminders(){
         return TechDiscordBot.getStorage().retrieveMemberReminders(this);

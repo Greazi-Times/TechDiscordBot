@@ -1,5 +1,6 @@
 package me.TechsCode.TechDiscordBot.mysql.storage;
 
+import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.*;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.*;
 import me.TechsCode.TechDiscordBot.mysql.MySQL;
@@ -462,7 +463,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                resourcesList.add(new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId")));
+                resourcesList.add(new Resource(rs.getString("name"), rs.getInt("id"), rs.getInt("spigotId")));
 
             rs.close();
             connection.close();
@@ -481,7 +482,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
-                resource = new Resource(rs.getInt("id"), rs.getString("name"), rs.getInt("spigotId"));
+                resource = new Resource(rs.getString("name"), rs.getInt("id"), rs.getInt("spigotId"));
 
             rs.close();
             connection.close();
@@ -594,7 +595,7 @@ public class Storage {
     //----VERIFICATION_MARKETS-----
     //-----------------------------
     public VerificationMarketList retrieveVerificationMarkets(@NotNull DbVerification Verification) {
-        VerificationMarketList verificationMarketList = new VerificationMarketList();
+        VerificationMarketList VerificationMarketList = new VerificationMarketList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -602,7 +603,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                verificationMarketList.add(new VerificationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("VerificationId"), rs.getInt("userId")));
+                VerificationMarketList.add(new VerificationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("VerificationId"), rs.getInt("userId")));
 
             rs.close();
             connection.close();
@@ -610,11 +611,11 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return verificationMarketList;
+        return VerificationMarketList;
     }
 
     public VerificationMarketList retrieveVerificationMarket(@NotNull int userId) {
-        VerificationMarketList verificationMarketList = new VerificationMarketList();
+        VerificationMarketList VerificationMarketList = new VerificationMarketList();
 
         try {
             Connection connection = mysql.getConnection();
@@ -622,7 +623,7 @@ public class Storage {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next())
-                verificationMarketList.add(new VerificationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("VerificationId"), rs.getInt("userId")));
+                VerificationMarketList.add(new VerificationMarket(rs.getInt("id"), rs.getInt("marketId"), rs.getInt("VerificationId"), rs.getInt("userId")));
 
             rs.close();
             connection.close();
@@ -630,15 +631,15 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return verificationMarketList;
+        return VerificationMarketList;
     }
 
-    public void saveVerificationMarket(@NotNull VerificationMarket verificationMarket) {
-        mysql.update("INSERT INTO " + VERIFICATIONMARKETS_TABLE + " (id, marketId, VerificationId, userId) VALUES (NULL, '" + verificationMarket.getMarketId() + "', '" + verificationMarket.getVerificationId() + "', '" + verificationMarket.getUserId() + "') ON DUPLICATE KEY UPDATE marketId='" + verificationMarket.getMarketId() + "', VerificationId='" + verificationMarket.getVerificationId() + "', userId='" + verificationMarket.getUserId() + "';");
+    public void saveVerificationMarket(@NotNull VerificationMarket VerificationMarket) {
+        mysql.update("INSERT INTO " + VERIFICATIONMARKETS_TABLE + " (id, marketId, VerificationId, userId) VALUES (NULL, '" + VerificationMarket.getMarketId() + "', '" + VerificationMarket.getVerificationId() + "', '" + VerificationMarket.getUserId() + "') ON DUPLICATE KEY UPDATE marketId='" + VerificationMarket.getMarketId() + "', VerificationId='" + VerificationMarket.getVerificationId() + "', userId='" + VerificationMarket.getUserId() + "';");
     }
 
-    public void deleteVerificationMarket(@NotNull VerificationMarket verificationMarket) {
-        mysql.update("DELETE FROM " + VERIFICATIONMARKETS_TABLE + " WHERE id='" + verificationMarket.getId() + "';");
+    public void deleteVerificationMarket(@NotNull VerificationMarket VerificationMarket) {
+        mysql.update("DELETE FROM " + VERIFICATIONMARKETS_TABLE + " WHERE id='" + VerificationMarket.getId() + "';");
     }
 
 
@@ -665,14 +666,14 @@ public class Storage {
     }
 
     public VerificationQ retrieveMemberVerificationQ(@NotNull DbMember member) {
-        VerificationQ verificationQ = null;
+        VerificationQ VerificationQ = null;
         try {
             Connection connection = mysql.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE memberId='"+member.getId()+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
-                verificationQ = new VerificationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
+                VerificationQ = new VerificationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
 
             rs.close();
             connection.close();
@@ -680,18 +681,18 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return verificationQ;
+        return VerificationQ;
     }
 
     public VerificationQ retrieveVerificationQById(@NotNull int verificationQId) {
-        VerificationQ verificationQ = null;
+        VerificationQ VerificationQ = null;
         try {
             Connection connection = mysql.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + VERIFICATIONQ_TABLE + " WHERE id='"+verificationQId+"';", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.first())
-                verificationQ = new VerificationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
+                VerificationQ = new VerificationQ(rs.getInt("id"), rs.getInt("memberId"), rs.getInt("marketId"), rs.getString("email"), rs.getString("transactionId"));
 
             rs.close();
             connection.close();
@@ -699,7 +700,7 @@ public class Storage {
             e.printStackTrace();
         }
 
-        return verificationQ;
+        return VerificationQ;
     }
 
     public boolean VerificationQExists(DbMember member) {
@@ -740,12 +741,12 @@ public class Storage {
         return VerificationQExists;
     }
 
-    public void saveVerificationQ(@NotNull VerificationQ verificationQ) {
-        mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (id, memberId, marketId, email, transactionId) VALUES (NULL, '" + verificationQ.getMemberId() + "', '" + verificationQ.getMarketId() + "', '" + verificationQ.getEmail() + "', '" + verificationQ.getTransactionId() + "') ON DUPLICATE KEY UPDATE memberId='" + verificationQ.getMemberId() + "', marketId='" + verificationQ.getMarketId() + "', email='" + verificationQ.getEmail() + "', transactionId='" + verificationQ.getTransactionId() + "';");
+    public void saveVerificationQ(@NotNull VerificationQ VerificationQ) {
+        mysql.update("INSERT INTO " + VERIFICATIONQ_TABLE + " (id, memberId, marketId, email, transactionId) VALUES (NULL, '" + VerificationQ.getMemberId() + "', '" + VerificationQ.getMarketId() + "', '" + VerificationQ.getEmail() + "', '" + VerificationQ.getTransactionId() + "') ON DUPLICATE KEY UPDATE memberId='" + VerificationQ.getMemberId() + "', marketId='" + VerificationQ.getMarketId() + "', email='" + VerificationQ.getEmail() + "', transactionId='" + VerificationQ.getTransactionId() + "';");
     }
 
-    public void deleteVerificationQ(@NotNull VerificationQ verificationQ) {
-        mysql.update("DELETE FROM " + VERIFICATIONQ_TABLE + " WHERE id='" + verificationQ.getId() + "';");
+    public void deleteVerificationQ(@NotNull VerificationQ VerificationQ) {
+        mysql.update("DELETE FROM " + VERIFICATIONQ_TABLE + " WHERE id='" + VerificationQ.getId() + "';");
     }
 
 
