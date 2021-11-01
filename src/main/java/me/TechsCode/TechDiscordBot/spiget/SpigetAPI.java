@@ -131,15 +131,16 @@ public class SpigetAPI {
 
         for (JsonElement jsonElement : arr) {
             JsonObject resource = jsonElement.getAsJsonObject();
-
-            TechDiscordBot.log(resource.get("name").getAsString() + "|" + resource.get("id").getAsInt());
-
             List<Role> roles = TechDiscordBot.getJDA().getRolesByName(resource.get("name").getAsString(), true);
+            TechDiscordBot.log(resource.get("name").getAsString());
             if (roles.stream().findFirst().isPresent()){
+                TechDiscordBot.log("found role");
                 Role resourceRole = roles.stream().findFirst().get();
-                new Resource(resource.get("name").getAsString(), resource.get("id").getAsInt(), resourceRole.getIdLong()).save();
+                Resource dbResource = new Resource(resource.get("name").getAsString(), resource.get("id").getAsInt(), resourceRole.getIdLong());
+                dbResource.save();
             }
         }
+
     }
 
     public void fetchUpdates(String authorId) {

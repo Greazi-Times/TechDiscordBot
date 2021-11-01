@@ -79,27 +79,22 @@ public class Storage {
         int min = 1;
         int max = 99999999;
         int upperBound = max - min + 1;
-        int num = min + rng.nextInt(upperBound);
-        boolean idExists = false;
+        int num = 0;
 
-        while(!idExists){
+        while(true){
+            num = min + rng.nextInt(upperBound);
             try {
                 Connection connection = mysql.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + TABLE + " WHERE `id`='" + num + "';");
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM `" + TABLE + "` WHERE `id`='" + num + "';");
 
                 ResultSet rs = preparedStatement.executeQuery();
-                if (rs.next()){
-                    idExists = true;
-                    break;
-                }
+                if (!rs.next()) break;
 
                 rs.close();
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-            num = min + rng.nextInt(upperBound);
         }
 
         return num;
