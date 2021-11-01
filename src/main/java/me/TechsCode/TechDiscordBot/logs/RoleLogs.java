@@ -1,4 +1,4 @@
-/*package me.TechsCode.TechDiscordBot.logs;
+package me.TechsCode.TechDiscordBot.logs;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
@@ -53,4 +53,3 @@ public class RoleLogs {
         }
     }
 }
-*/

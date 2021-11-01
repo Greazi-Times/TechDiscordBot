@@ -1,4 +1,4 @@
-package me.TechsCode.TechDiscordBot.module.cmds;
+/*package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
@@ -72,4 +72,4 @@ public class VerifyCommand extends CommandModule {
         //TechDiscordBot.getStorage().createVerification(spigotId, member.getId());
         e.reply("Successfully verified " + spigotId + "! (" + member.getAsMention() + ")").queue();
     }
-}
+}*/
