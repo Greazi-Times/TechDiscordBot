@@ -8,24 +8,24 @@ public class Emojis {
 	public static JDA api = TechDiscordBot.getJDA();
 
 	public static String ULTRA_PERMISSIONS(){
-		return "<:UltraPermissions:882666109260693505>";
+		return "<:UltraPermissions:576937960176353293>";
 	}
 	public static String ULTRA_CUSTOMIZER(){
-		return "<:UltraCustomizer:882665998904361021>";
+		return "<:UltraCustomizer:576873108506411018>";
 	}
 	public static String ULTRA_PUNISHMENTS(){
-		return "<:UltraPunishments:882666158824755250>";
+		return "<:UltraPunishments:576873108422524954>";
 	}
 	public static String ULTRA_ECONOMY(){
-		return "<:UltraEconomy:882666088595329115>";
+		return "<:UltraEconomy:748004373971337216>";
 	}
 	public static String ULTRA_REGIONS(){
-		return "<:UltraRegions:882666234842333246>";
+		return "<:UltraRegions:639288786236473354>";
 	}
 	public static String ULTRA_SCOREBOARDS(){
-		return "<:UltraScoreboards:882666294032367656>";
+		return "<:UltraScoreboards:843611772481044520>";
 	}
 	public static String INSANE_SHOPS(){
-		return "<:InsaneShops:882666272674955264>";
+		return "<:InsaneShops:576871756816449536>";
 	}
 }

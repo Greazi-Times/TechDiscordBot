@@ -21,10 +21,6 @@ import java.util.stream.Collectors;
 
 public class VerificationModule extends Module {
 
-    //TODO Clean up!!!!
-    // Update the file and make the file cleaner than it is
-    // Its messy as fuck
-
     private TextChannel channel;
     private Message lastSelectionEmbed;
     private String selectedMarket = null;
@@ -110,9 +106,9 @@ public class VerificationModule extends Module {
                 .build()
         ).setActionRow(
                 Button.primary("spigot", "Spigot").withEmoji(Emoji.fromMarkdown("<:spigot:879756315747053628>")),
-                Button.primary("mc-market", "MC-Market").withEmoji(Emoji.fromMarkdown("<:mcmarket:879756190089895988>")).asDisabled(),
-                Button.primary("songoda", "Songoda").withEmoji(Emoji.fromMarkdown("<:songoda:879756362861666375>")).asDisabled(),
-                Button.primary("polymart", "Polymart").withEmoji(Emoji.fromMarkdown("<:polymart:879756228589400145>")).asDisabled()
+                Button.primary("mc-market", "MC-Market").withEmoji(Emoji.fromMarkdown("<:mcmarket:879756190089895988>")),
+                Button.primary("songoda", "Songoda").withEmoji(Emoji.fromMarkdown("<:songoda:879756362861666375>")),
+                Button.primary("polymart", "Polymart").withEmoji(Emoji.fromMarkdown("<:polymart:879756228589400145>"))
         ).queue((message) -> {
             lastSelectionEmbed = message;
         });

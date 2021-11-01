@@ -13,124 +13,124 @@ public class Roles {
 
 	// Staff roles
 	public static Role STAFF(){
-		return api.getRoleById("877248189483343899");
+		return api.getRoleById("608114002387533844");
 	}
 	public static Role TRUSTED_HELPER(){
-		return api.getRoleById("877248189525266452");
+		return api.getRoleById("740045311443075163");
 	}
 	public static Role JUNIOR_SUPPORT(){
-		return api.getRoleById("877248189525266453");
+		return api.getRoleById("664998195880919060");
 	}
 	public static Role SUPPORT(){
-		return api.getRoleById("877248189525266454");
+		return api.getRoleById("440672147422183454");
 	}
 	public static Role SENIOR_SUPPORT(){
-		return api.getRoleById("877248189525266455");
+		return api.getRoleById("854044253885956136");
 	}
 	public static Role ASSISTANT(){
-		return api.getRoleById("877248189525266458");
+		return api.getRoleById("608113993038561325");
 	}
 	public static Role DEVELOPER(){
-		return api.getRoleById("877248189525266459");
+		return api.getRoleById("774690360836096062");
 	}
 	public static Role CODING_WIZARD(){
-		return api.getRoleById("877248189525266460");
+		return api.getRoleById("311178859171282944");
 	}
 	public static Role RETIRED(){
-		return api.getRoleById("877248189424615533");
+		return api.getRoleById("522049115840839719");
 	}
 	public static Role RETIRED_DEVELOPER(){
-		return api.getRoleById("877248189424615534");
+		return api.getRoleById("848338083652960277");
 	}
 
 	// Verified roles
 	public static Role VERIFIED(){
-		return api.getRoleById("877248189483343890");
+		return api.getRoleById("416174015141642240");
 	}
 	public static Role SPIGOT(){
-		return api.getRoleById("901855109590429776");
+		return api.getRoleById("904745009096564827");
 	}
 	public static Role MCMARKET(){
-		return api.getRoleById("877248189424615532");
+		return api.getRoleById("904745041598251008");
 	}
 	public static Role SONGODA(){
-		return api.getRoleById("877248189453959197");
+		return api.getRoleById("904745048841785406");
 	}
 	public static Role POLYMART(){
-		return api.getRoleById("901854809362153483");
+		return api.getRoleById("904745044244852796");
 	}
 	public static Role SUB_VERIFIED(){
-		return api.getRoleById("877248189453959196");
+		return api.getRoleById("855858606447525928");
 	}
 
 	// Plugin roles
 	public static Role PLUGIN_LAB(){
-		return api.getRoleById("877248189453959195");
+		return api.getRoleById("742172247002710107");
 	}
 	public static Role ULTRA_ECONOMY(){
-		return api.getRoleById("877248189453959194");
+		return api.getRoleById("749034791936196649");
 	}
 	public static Role ULTRA_PERMISSIONS(){
-		return api.getRoleById("877248189453959192");
+		return api.getRoleById("416194311080771596");
 	}
 	public static Role ULTRA_SCOREBOARDS(){
-		return api.getRoleById("877248189453959193");
+		return api.getRoleById("811397836616630352");
 	}
 	public static Role ULTRA_PUNISHMENTS(){
-		return api.getRoleById("877248189453959191");
+		return api.getRoleById("531255363505487872");
 	}
 	public static Role ULTRA_CUSTOMIZER(){
-		return api.getRoleById("877248189453959190");
+		return api.getRoleById("416194287567372298");
 	}
 	public static Role ULTRA_REGIONS(){
-		return api.getRoleById("877248189453959188");
+		return api.getRoleById("465975554101739520");
 	}
 	public static Role INSANE_SHOPS(){
-		return api.getRoleById("877248189453959189");
+		return api.getRoleById("576739274297442325");
 	}
 
 	// Permission roles
 	public static Role KEEPROLES(){
-		return api.getRoleById("877248189424615530");
+		return api.getRoleById("779166270415175710");
 	}
 	public static Role MUTED(){
-		return api.getRoleById("877248189483343898");
+		return api.getRoleById("477676501739896843");
 	}
 	public static Role PATREON(){
-		return api.getRoleById("877248189483343897");
+		return api.getRoleById("795101981051977788");
 	}
 	public static Role ARTIST(){
-		return api.getRoleById("877248189483343896");
+		return api.getRoleById("811273548165021706");
 	}
 	public static Role DONATOR(){
-		return api.getRoleById("877248189483343895");
+		return api.getRoleById("311179148691505152");
 	}
 	public static Role WIKI_EDITOR(){
-		return api.getRoleById("877248189483343894");
+		return api.getRoleById("755954709231173794");
 	}
 	public static Role VERIFIED_CREATOR(){
-		return api.getRoleById("877248189483343893");
+		return api.getRoleById("435183665719541761");
 	}
 	public static Role FUNERAL_DONATOR(){
-		return api.getRoleById("877248189483343892");
+		return api.getRoleById("777665478050447432");
 	}
 	public static Role REVIEW_SQUAD(){
-		return api.getRoleById("877248189483343891");
+		return api.getRoleById("457934035549683713");
 	}
 	public static Role REQUESTED_TRANSFER(){
-		return api.getRoleById("877248189424615531");
+		return api.getRoleById("727399907291562004");
 	}
 	public static Role ANNOUNCEMENTS(){
-		return api.getRoleById("877248189424615529");
+		return api.getRoleById("837716735577554964");
 	}
 	public static Role UPDATES(){
-		return api.getRoleById("877248189424615528");
+		return api.getRoleById("837717109156872225");
 	}
 	public static Role GIVEAWAYS(){
-		return api.getRoleById("877248189424615527");
+		return api.getRoleById("837717052701016085");
 	}
 	public static Role PATREON_NEWS(){
-		return api.getRoleById("877248189424615526");
+		return api.getRoleById("873378074727694346");
 	}
 
 	public static ArrayList<String> PLUGIN_ROLES = new ArrayList<String>() {{

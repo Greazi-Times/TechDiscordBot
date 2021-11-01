@@ -4,6 +4,9 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.logs.TicketLogs;
 import me.TechsCode.TechDiscordBot.logs.TranscriptLogs;
 import me.TechsCode.TechDiscordBot.module.Module;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.SubVerificationList;
+import me.TechsCode.TechDiscordBot.mysql.Models.SubVerification;
 import me.TechsCode.TechDiscordBot.mysql.Models.Transcript;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
@@ -208,13 +211,15 @@ public class TicketModule extends Module {
                 .field("Issue", issue, false)
                 .queue(ticketChannel);
 
-        //TODO ticket module
-//        if(TechDiscordBot.getStorage().isSubVerifiedUser(member.getId())) {
-//            new TechEmbedBuilder("Sub Verified User Support")
-//                    .text("Original Plugin-holder: " + TechDiscordBot.getGuild().getMemberById(TechDiscordBot.getStorage().getVerifiedIdFromSubVerifiedId(member.getId())).getAsMention())
-//                    .color(Color.ORANGE)
-//                    .queue(ticketChannel);
-//        }
+        DbMember dbMember = TechDiscordBot.getStorage().retrieveMemberById(Integer.parseInt(member.getId()));
+        SubVerificationList subVerifications = TechDiscordBot.getStorage().retrieveMemberSubVerifications(dbMember);
+        if(!subVerifications.isEmpty()) {
+            SubVerification subVerification = subVerifications.stream().findFirst().get();
+            new TechEmbedBuilder("Sub Verified User Support")
+                    .text("Original Plugin-holder: " + subVerification.getSubMember().getDiscordMember().getAsMention())
+                    .color(Color.ORANGE)
+                    .queue(ticketChannel);
+        }
 
         TicketLogs.log(
             new TechEmbedBuilder("New Ticket")
