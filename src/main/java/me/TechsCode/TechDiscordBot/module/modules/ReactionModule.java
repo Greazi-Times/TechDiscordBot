@@ -17,7 +17,7 @@ public class ReactionModule extends Module {
 
     public Message reactionMessage;
 
-    private final TextChannel ROLES_CHANNEL = this.bot.getChannel("877248189982453836");
+    private final TextChannel ROLES_CHANNEL = this.bot.getChannel("837679014268895292");
 
     public ReactionModule(TechDiscordBot bot) {
         super(bot);

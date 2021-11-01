@@ -5,11 +5,14 @@ import me.TechsCode.TechDiscordBot.module.CommandModule;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationPluginList;
 import me.TechsCode.TechDiscordBot.mysql.Models.VerificationPlugin;
+import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
+import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.Emojis;
 import me.TechsCode.TechDiscordBot.util.Roles;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.data.Lists.TransactionsList;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -20,6 +23,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class CheckCommand extends CommandModule {
+
+    private final DefinedQuery<Role> STAFF_ROLE = new DefinedQuery<Role>() {
+        @Override
+        protected Query<Role> newQuery() { return bot.getRoles("Staff"); }
+    };
 
     public CheckCommand(TechDiscordBot bot) {
         super(bot);
@@ -37,7 +45,7 @@ public class CheckCommand extends CommandModule {
 
     @Override
     public CommandPrivilege[] getCommandPrivileges() {
-        return new CommandPrivilege[] { CommandPrivilege.enable(Roles.STAFF()) };
+        return new CommandPrivilege[] { CommandPrivilege.enable(STAFF_ROLE.query().first()) };
     }
 
     @Override

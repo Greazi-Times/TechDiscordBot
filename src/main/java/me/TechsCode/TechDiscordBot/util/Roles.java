@@ -133,7 +133,7 @@ public class Roles {
 		return api.getRoleById("873378074727694346");
 	}
 
-	public static ArrayList<String> PLUGIN_ROLES = new ArrayList<String>() {{
+	/*public static ArrayList<String> PLUGIN_ROLES = new ArrayList<String>() {{
 		add(ULTRA_PERMISSIONS().getName());
 		add(ULTRA_CUSTOMIZER().getName());
 		add(ULTRA_PUNISHMENTS().getName());
@@ -141,16 +141,16 @@ public class Roles {
 		add(ULTRA_SCOREBOARDS().getName());
 		add(ULTRA_ECONOMY().getName());
 		add(INSANE_SHOPS().getName());
-	}};
+	}};*/
 
-	public static ArrayList<String> MARKET_ROLES = new ArrayList<String>() {{
+	/*public static ArrayList<String> MARKET_ROLES = new ArrayList<String>() {{
 		add(SPIGOT().getName());
 		add(MCMARKET().getName());
 		add(SONGODA().getName());
 		add(POLYMART().getName());
-	}};
+	}};*/
 
-	public static ArrayList<String> STAFF_ROLES = new ArrayList<String>() {{
+	/*public static ArrayList<String> STAFF_ROLES = new ArrayList<String>() {{
 		add(CODING_WIZARD().getName());
 		add(DEVELOPER().getName());
 		add(ASSISTANT().getName());
@@ -158,12 +158,12 @@ public class Roles {
 		add(SUPPORT().getName());
 		add(JUNIOR_SUPPORT().getName());
 		add(STAFF().getName());
-	}};
+	}};*/
 
-	public static ArrayList<String> STAFF_ROLES_MINOR = new ArrayList<String>() {{
+	/*public static ArrayList<String> STAFF_ROLES_MINOR = new ArrayList<String>() {{
 		add(SENIOR_SUPPORT().getName());
 		add(SUPPORT().getName());
 		add(JUNIOR_SUPPORT().getName());
 		add(STAFF().getName());
-	}};
+	}};*/
 }
