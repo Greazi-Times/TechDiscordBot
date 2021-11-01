@@ -67,8 +67,7 @@ public enum Plugin {
     }
 
     public String getDescription() {
-        //return TechDiscordBot.getSpigotAPI().getSpigotResources().id(getResourceId()).get().getTagLine();
-        return "Disabled";
+        return TechDiscordBot.getSpigetAPI().fetchResourceDetails(getResourceId()).get("tag").getAsString();
     }
 
     public String getResourceLogo() {
