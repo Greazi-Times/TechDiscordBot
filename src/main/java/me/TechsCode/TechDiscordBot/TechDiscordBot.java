@@ -144,17 +144,9 @@ public class TechDiscordBot {
 
         log("Successfully loaded the bot and logged into " + guild.getName() + " as " + self.getEffectiveName() + "!");
 
+        log("Fetching spigot resources");
         getSpigetAPI().fetchResources("29620");
-
-        log("");
-
-        //TODO Songoda
-//        log("Songoda: ");
-//        if(getSongodaAPI().isLoaded()) {
-//            log("  > Purchases: " + getSongodaAPI().getSpigotPurchases().size());
-//        } else {
-//            log("  > " + ConsoleColor.RED + "Could not connect. Cannot show info!");
-//        }
+        log("Done fetching spigot resources");
 
         log("");
 
@@ -166,70 +158,70 @@ public class TechDiscordBot {
 
         log("");
 
-        HashMap<Integer, String> oldVerifications = getStorage().retrieveOldVerfications();
 
-        for (Map.Entry<Integer, String> me : oldVerifications.entrySet()) {
-            String discordId = me.getValue();
-            Integer spigotId = me.getKey();
-
-            TransactionsList transactions = getPaypalAPI().searchTransaction(String.valueOf(spigotId));
-            if (transactions.isEmpty()) {
-                TechDiscordBot.log("no transactions");
-                continue;
-            }
-
-            Member discordMember = getGuild().getMemberById(discordId);
-            if (discordMember == null) {
-                TechDiscordBot.log("member not found");
-                continue;
-            }
-
-            DbMember dbMember;
-            if(getStorage().memberExists(discordId)){
-                dbMember = getStorage().retrieveMemberByDiscordId(discordId);
-            }else{
-                dbMember = new DbMember(discordId, discordMember.getUser().getName(), discordMember.getTimeJoined().toEpochSecond(), discordMember.getRoles().contains(Roles.STAFF()));
-                dbMember.save();
-            }
-
-            Transaction firstTransaction = transactions.get(0);
-            if (firstTransaction == null) continue;
-
-            String payerId = firstTransaction.getPayerInfo().getId();
-
-            DbVerification dbVerification;
-            if(getStorage().verificationExists(dbMember)){
-                dbVerification = getStorage().retrieveMemberVerification(dbMember);
-            }else{
-                dbVerification = new DbVerification(dbMember, payerId);
-                dbVerification.save();
-            }
-
-            transactions.forEach((transaction) -> {
-                DbMarket dbMarket = getStorage().retrieveMarketByName(transaction.getMarketplace().getMarket());
-                if (dbMarket == null) {
-                    TechDiscordBot.log("Market with name "+transaction.getMarketplace().getMarket()+" not found");
-                    return;
-                }
-
-                Resource resource = getStorage().retrieveResourceByName(transaction.getPlugin().getName());
-                if (resource == null) {
-                    TechDiscordBot.log("Resource with name "+transaction.getPlugin().getName()+" not found");
-                    return;
-                }
-
-                if(!getStorage().verificationMarketExists(dbVerification, dbMarket)){
-                    dbVerification.addMarket(dbMarket, Integer.parseInt(transaction.getMarketplace().getUserId()));
-                    log("added market: "+dbMarket.getName());
-                }
-
-                if(!getStorage().verificationPluginExists(dbVerification, dbMarket, resource)){
-                    dbVerification.addPlugin(dbMarket, resource, transaction.getId(), transaction.getPayerInfo().getState().toString(), transaction.getPrice().getAmount(), transaction.getInitiation_date(), false);
-                    log("added plugin: "+resource.getName());
-                }
-
-            });
-        }
+//        HashMap<Integer, String> oldVerifications = getStorage().retrieveOldVerfications();
+//        for (Map.Entry<Integer, String> me : oldVerifications.entrySet()) {
+//            String discordId = me.getValue();
+//            Integer spigotId = me.getKey();
+//
+//            TransactionsList transactions = getPaypalAPI().searchTransaction(String.valueOf(spigotId));
+//            if (transactions.isEmpty()) {
+//                TechDiscordBot.log("no transactions");
+//                continue;
+//            }
+//
+//            Member discordMember = getGuild().getMemberById(discordId);
+//            if (discordMember == null) {
+//                TechDiscordBot.log("member not found");
+//                continue;
+//            }
+//
+//            DbMember dbMember;
+//            if(getStorage().memberExists(discordId)){
+//                dbMember = getStorage().retrieveMemberByDiscordId(discordId);
+//            }else{
+//                dbMember = new DbMember(discordId, discordMember.getUser().getName(), discordMember.getTimeJoined().toEpochSecond(), discordMember.getRoles().contains(Roles.STAFF()));
+//                dbMember.save();
+//            }
+//
+//            Transaction firstTransaction = transactions.get(0);
+//            if (firstTransaction == null) continue;
+//
+//            String payerId = firstTransaction.getPayerInfo().getId();
+//
+//            DbVerification dbVerification;
+//            if(getStorage().verificationExists(dbMember)){
+//                dbVerification = getStorage().retrieveMemberVerification(dbMember);
+//            }else{
+//                dbVerification = new DbVerification(dbMember, payerId);
+//                dbVerification.save();
+//            }
+//
+//            transactions.forEach((transaction) -> {
+//                DbMarket dbMarket = getStorage().retrieveMarketByName(transaction.getMarketplace().getMarket());
+//                if (dbMarket == null) {
+//                    TechDiscordBot.log("Market with name "+transaction.getMarketplace().getMarket()+" not found");
+//                    return;
+//                }
+//
+//                Resource resource = getStorage().retrieveResourceByName(transaction.getPlugin().getName());
+//                if (resource == null) {
+//                    TechDiscordBot.log("Resource with name "+transaction.getPlugin().getName()+" not found");
+//                    return;
+//                }
+//
+//                if(!getStorage().verificationMarketExists(dbVerification, dbMarket)){
+//                    dbVerification.addMarket(dbMarket, Integer.parseInt(transaction.getMarketplace().getUserId()));
+//                    log("added market: "+dbMarket.getName());
+//                }
+//
+//                if(!getStorage().verificationPluginExists(dbVerification, dbMarket, resource)){
+//                    dbVerification.addPlugin(dbMarket, resource, transaction.getId(), transaction.getPayerInfo().getState().toString(), transaction.getPrice().getAmount(), transaction.getInitiation_date(), false);
+//                    log("added plugin: "+resource.getName());
+//                }
+//
+//            });
+//        }
 
         getModulesManager().logLoad();
 
