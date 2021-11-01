@@ -77,29 +77,32 @@ public class Storage {
     public int getAvailableId(String TABLE){
         Random rng = new Random();
         int min = 1;
-        int max = 11;
-        int upperBound = max - min + 1; // upper bound is exclusive, so +1
+        int max = 99999999;
+        int upperBound = max - min + 1;
         int num = min + rng.nextInt(upperBound);
         boolean idExists = false;
 
-        try {
-            Connection connection = mysql.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + TABLE + " WHERE `id`='" + num + "';");
+        while(!idExists){
+            try {
+                Connection connection = mysql.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + TABLE + " WHERE `id`='" + num + "';");
 
-            ResultSet rs = preparedStatement.executeQuery();
-            idExists = rs.next();
+                ResultSet rs = preparedStatement.executeQuery();
+                if (rs.next()){
+                    idExists = true;
+                    break;
+                }
 
-            rs.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+                rs.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            num = min + rng.nextInt(upperBound);
         }
 
-        if (idExists){
-            return getAvailableId(TABLE);
-        }else{
-            return num;
-        }
+        return num;
     }
 
     //-----------------------------
