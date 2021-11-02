@@ -2,8 +2,10 @@ package me.TechsCode.TechDiscordBot.util;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbUpdate;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationPluginList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.VerificationPlugin;
 import net.dv8tion.jda.api.entities.*;
 
 import java.awt.*;
@@ -179,38 +181,49 @@ public enum Plugin {
     }
 
     public static String getMembersPluginsinEmojis(Member member, String defaultResponse) {
-        List<Plugin> plugins = Plugin.fromUser(member);
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        for (Plugin p : plugins) {
-            if (i != 0) sb.append(" ");
-            sb.append(p.getEmoji().getAsMention());
-            i++;
-        }
-        if(i == 0) sb.append(defaultResponse);
-        return sb.toString();
+        return Plugin.fromUser(member);
     }
 
-    public static List<Plugin> fromUser(Member member) {
+    public static String fromUser(Member member) {
         try {
             DbVerification verification = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId()).getVerification();
 
-            //TODO purchase list
-            /*try {
-                pc = TechDiscordBot.getSpigotAPI().getSpigotPurchases().userId(verification.getUserId());
-            } catch (NullPointerException ignored) {
-                TechDiscordBot.log(ConsoleColor.RED + "Could not find any SpigotMC plugins for " + member.getEffectiveName() + "#" + member.getUser().getDiscriminator());
-            }*/
+            String purchases = null;
 
-//            List<Plugin> plugins = new ArrayList<>();
-//            if(pc != null) plugins = pc.stream().map(purchase -> fromId(purchase.getResource().getId())).collect(Collectors.toList());
+            VerificationPluginList boughtPlugins = TechDiscordBot.getStorage().retrieveVerificationPlugins(verification);
 
-//            return plugins;
-            return null;
+            for(VerificationPlugin plugin : boughtPlugins){
+                String resource = plugin.getResource().toString();
+                String emoji = getEmoji(resource);
+
+                purchases = purchases + " " + emoji;
+            }
+            return purchases;
+
         } catch (NullPointerException ex) {
             TechDiscordBot.log(ConsoleColor.RED + "Error:");
             ex.printStackTrace();
-            return new ArrayList<>();
         }
+        return null;
+    }
+
+    private static String getEmoji(String resource){
+        switch (resource){
+            case "Ultra Permissions":
+                return Emojis.ULTRA_PERMISSIONS();
+            case "Ultra Customizer":
+                return Emojis.ULTRA_CUSTOMIZER();
+            case "Ultra Economy":
+                return Emojis.ULTRA_ECONOMY();
+            case "Ultra Punishments":
+                return Emojis.ULTRA_PUNISHMENTS();
+            case "Ultra Regions":
+                return Emojis.ULTRA_REGIONS();
+            case "Ultra Scoreboards":
+                return Emojis.ULTRA_SCOREBOARDS();
+            case "Insane Shops":
+                return Emojis.INSANE_SHOPS();
+        }
+        return "";
     }
 }

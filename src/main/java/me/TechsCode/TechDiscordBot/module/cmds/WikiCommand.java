@@ -53,7 +53,11 @@ public class WikiCommand extends CommandModule {
         boolean all = e.getOption("all") != null && e.getOption("all").getAsBoolean();
         boolean mine = e.getOption("mine") != null && e.getOption("mine").getAsBoolean();
 
-        if(Plugin.isPluginChannel(channel)) {
+        e.replyEmbeds(new TechEmbedBuilder().text("Showing all the wiki's for all the plugins.\n<:UltraPermissions~1:> https://ultrapermissions.com/wiki \n<:UltraCustomizer~1:> https://ultracustomizer.com/wiki \n:UltraRegions~1: https://ultraregions.com/wiki \n<:UltraPunishments~1:> https://ultrapunishments.com/wiki \n<:InsaneShops~1:> https://insaneshops.com/wiki \n<:UltraEconomy~1:> https://ultraeconomy.com/wiki \n<:UltraScoreboards~1:> https://ultrascoreboards.com/wiki")
+                .build()).queue();
+
+
+        /*if(Plugin.isPluginChannel(channel)) {
             if(!all && !mine) {
                 showCurrentChannel(e, channel);
             } else {
@@ -69,7 +73,7 @@ public class WikiCommand extends CommandModule {
             } else if(all) {
                 showAll(e);
             }
-        }
+        }*/
     }
 
     public void showCurrentChannel(SlashCommandEvent e, TextChannel channel) {
@@ -93,7 +97,7 @@ public class WikiCommand extends CommandModule {
         boolean apiIsUsable = false;
 
                 List<Plugin> plugins = Plugin.allWithWiki();
-        if(apiIsUsable) plugins = Plugin.fromUser(member).stream().filter(Plugin::hasWiki).collect(Collectors.toList());
+        //if(apiIsUsable) plugins = Plugin.fromUser(member);
 
         StringBuilder sb = new StringBuilder();
         if(!apiIsUsable)
