@@ -353,7 +353,19 @@ public class Storage {
     }
 
     public void saveMember(@NotNull DbMember dbMember) {
-        mysql.update("INSERT INTO " + MEMBERS_TABLE + " (id, discordID, name, joined, staff) VALUES ('"+dbMember.getId()+"', '" + dbMember.getDiscordId() + "', '" + dbMember.getName() + "', " + dbMember.getJoined() + ", " + dbMember.isStaff() + ") ON DUPLICATE KEY UPDATE discordID='" + dbMember.getDiscordId() + "', name='" + dbMember.getName() + "', joined=" + dbMember.getJoined() + ", staff=" + dbMember.isStaff() + ";");
+        Map<Integer, String> data = new HashMap<Integer, String>();
+        data.put(1, String.valueOf(dbMember.getId()));
+        data.put(2, String.valueOf(dbMember.getDiscordId()));
+        data.put(3, String.valueOf(dbMember.getName()));
+        data.put(4, String.valueOf(dbMember.getJoined()));
+        data.put(5, String.valueOf(dbMember.isStaff()));
+        data.put(6, String.valueOf(dbMember.getName()));
+        data.put(7, String.valueOf(dbMember.getJoined()));
+        data.put(8, String.valueOf(dbMember.isStaff()));
+
+        TechDiscordBot.log(data.toString());
+
+        mysql.update("INSERT INTO " + MEMBERS_TABLE + " (id, discordID, name, joined, staff) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=?, joined=?, staff=?;", data);
     }
 
     public void deleteMember(@NotNull DbMember dbMember) {

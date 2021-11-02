@@ -143,6 +143,10 @@ public class SpigetAPI {
 
     }
 
+    public JsonObject fetchResourceDetails(String resourceId) {
+        return makeObjectRequest("resources/"+resourceId);
+    }
+
     public void fetchUpdates(String authorId) {
         ResourcesList resources = TechDiscordBot.getStorage().retrieveResources();
         resources.forEach(resource -> {

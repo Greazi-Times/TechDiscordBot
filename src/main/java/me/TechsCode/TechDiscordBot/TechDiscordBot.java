@@ -223,6 +223,15 @@ public class TechDiscordBot {
 //            });
 //        }
 
+//        List<Member> members = getGuild().getMembers();
+//        members.forEach(member -> {
+//            if (!getStorage().memberExists(member.getId())){
+//                DbMember dbMember = new DbMember(member.getId(), member.getUser().getName(), member.getTimeJoined().toEpochSecond(), member.getRoles().contains(Roles.STAFF()));
+//                dbMember.save();
+//                log("imported "+member.getUser().getName());
+//            }
+//        });
+
         getModulesManager().logLoad();
 
         log("");
