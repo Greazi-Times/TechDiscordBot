@@ -85,13 +85,25 @@ public class VerificationModule extends Module {
 
         }
         if(e.getComponentId().equals("mc-market")){
+            if(member.getRoles().contains("MC-Market")){
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified a mc-market account!").error().sendTemporary(channel, 15);
+                return;
+            }
             selectedMarket = "mcmarket";
         }
         if(e.getComponentId().equals("songoda")){
+            if(member.getRoles().contains("Songoda")){
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified a songoda account!").error().sendTemporary(channel, 15);
+                return;
+            }
             //new TechEmbedBuilder("Songoda Verification").text("To verify your Songoda purchase you need to connect your discord account to your songoda account.\n\nNeed help with connecting?\n*You can connect your account [here](https://songoda.com/account/integrations)*").error().sendTemporary(channel, 15);;
             selectedMarket = "songoda";
         }
         if(e.getComponentId().equals("polymart")){
+            if(member.getRoles().contains("Polymart")){
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified a polymart account!").error().sendTemporary(channel, 15);
+                return;
+            }
             selectedMarket = "polymart";
         }
         DbMarket market = TechDiscordBot.getStorage().retrieveMarketByName(selectedMarket);

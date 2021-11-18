@@ -159,7 +159,7 @@ public class TechDiscordBot {
         log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
 
         log("");
-        
+
 //        HashMap<Integer, String> oldVerifications = getStorage().retrieveOldVerfications();
 //        for (Map.Entry<Integer, String> me : oldVerifications.entrySet()) {
 //            String discordId = me.getValue();
