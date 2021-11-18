@@ -86,38 +86,34 @@ public class SupportWrongChannelModule extends Module {
     public void triggerMessage(Message sentMessage, Member member) {
         if (messages.containsValue(member.getId())) return;
 
-        TextChannel verificationChannel = bot.getChannel("695493411117072425");
+        //TODO change support discord
+        TextChannel verificationChannel = bot.getChannel("907349490556616745");
         TechEmbedBuilder teb = new TechEmbedBuilder()
                 .text("Hello, " + member.getAsMention() + "! I've detected that you might be trying to get help in this channel! Please verify in " + verificationChannel.getAsMention() + " in order to get help, thanks!\n\n*If you are not trying to get help, you can delete this message by reacting to it!*")
                 .error();
 
         Message message;
-        DbVerification verification = TechDiscordBot.getStorage().retrieveVerificationByMemberId(Integer.parseInt(member.getId()));
-        if (verification != null) {
-            List<Plugin> pc = Arrays.stream(Plugin.values()).filter(p -> member.getRoles().stream().anyMatch(r -> r.getName().equals(p.getRoleName()))).collect(Collectors.toList());
+        List<Plugin> pc = Arrays.stream(Plugin.values()).filter(p -> member.getRoles().stream().anyMatch(r -> r.getName().equals(p.getRoleName()))).collect(Collectors.toList());
 
-            if (pc.size() > 0) {
-                StringBuilder sb = new StringBuilder();
-                String plugins = Plugin.getEmotesByList(pc.stream().map(Plugin::getRoleName).collect(Collectors.toList()));
+        if (pc.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            String plugins = Plugin.getEmotesByList(pc.stream().map(Plugin::getRoleName).collect(Collectors.toList()));
 
-                sb.append("Hello, ")
-                        .append(member.getAsMention())
-                        .append("!\n\n It looks like you have bought ")
-                        .append(pc.size() == 1 ? "this plugin" : "these plugins")
-                        .append(" already: ")
-                        .append(plugins)
-                        .append("\nHere are the corresponding channels:\n\n");
+            sb.append("Hello, ")
+                    .append(member.getAsMention())
+                    .append("!\n\n It looks like you have bought ")
+                    .append(pc.size() == 1 ? "this plugin" : "these plugins")
+                    .append(" already: ")
+                    .append(plugins)
+                    .append("\nHere are the corresponding channels:\n\n");
 
-                StringBuilder channels = new StringBuilder();
-                pc.forEach(p -> channels.append("- ").append(TechDiscordBot.getJDA().getTextChannelById(p.getChannelId()).getAsMention()).append("\n"));
+            StringBuilder channels = new StringBuilder();
+            pc.forEach(p -> channels.append("- ").append(TechDiscordBot.getJDA().getTextChannelById(p.getChannelId()).getAsMention()).append("\n"));
 
-                sb.append(channels.toString());
-                sb.append("\nPlease use the corresponding plugin channel above to get support.\nThis channel is **not** a support channel.\n\n*If you are not trying to get help, you can delete this message by reacting to it!*");
+            sb.append(channels.toString());
+            sb.append("\nPlease use the corresponding plugin channel above to get support.\nThis channel is **not** a support channel.\n\n*If you are not trying to get help, you can delete this message by reacting to it!*");
 
-                message = new TechEmbedBuilder().text(sb.toString()).error().reply(sentMessage);
-            } else {
-                message = teb.reply(sentMessage);
-            }
+            message = new TechEmbedBuilder().text(sb.toString()).error().reply(sentMessage);
         } else {
             message = teb.reply(sentMessage);
         }

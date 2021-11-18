@@ -15,6 +15,7 @@ import me.TechsCode.TechDiscordBot.objects.TicketPriority;
 import me.TechsCode.TechDiscordBot.transcripts.TicketTranscript;
 import me.TechsCode.TechDiscordBot.transcripts.TicketTranscriptOptions;
 import me.TechsCode.TechDiscordBot.util.Plugin;
+import me.TechsCode.TechDiscordBot.util.Roles;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -31,6 +32,10 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class TicketModule extends Module {
+
+    public TicketModule(TechDiscordBot bot) {
+        super(bot);
+    }
 
     private TextChannel channel;
     private Message lastInstructions;
@@ -98,10 +103,6 @@ public class TicketModule extends Module {
         }
     };
 
-    public TicketModule(TechDiscordBot bot) {
-        super(bot);
-    }
-
     @Override
     public void onEnable() {
         channel = TICKET_CREATION_CHANNEL.query().first();
@@ -156,11 +157,8 @@ public class TicketModule extends Module {
                 .text("Please select which plugin the issue corresponds with below:", "", sb, "", ERROR_EMOTE.query().first().getAsMention() + " - Cancel", "");
 
         plugin.queue(channel, message -> setLastInstructions(message, msg -> {
-            PLUGIN_EMOTES.query().all().stream().filter(emote -> msg != null).forEach(emote -> msg.addReaction(emote).queue((msg2) -> {
-                try {
-                    msg.addReaction(ERROR_EMOTE.query().first()).queue();
-                } catch (Exception ignored) {}
-            }));
+            PLUGIN_EMOTES.query().all().stream().filter(emote -> msg != null).forEach(emote -> msg.addReaction(emote).queue());
+            msg.addReaction(ERROR_EMOTE.query().first()).queue();
         }));
     }
 
@@ -177,10 +175,7 @@ public class TicketModule extends Module {
         TechEmbedBuilder issue = new TechEmbedBuilder("Ticket Creation (" + member.getEffectiveName() + ")")
                 .text("Last but not least, please tell us what you're having an issue with!", "", ERROR_EMOTE.query().first().getAsMention() + " - Cancel", "", "*Try not to make the message over 1024 chars long.*", "*We'll cut it off due to Discord's Limitations!*");
 
-        issue.queue(channel, message -> setLastInstructions(message, msg -> {
-            try {
-                msg.addReaction(ERROR_EMOTE.query().first()).queue();
-            } catch (Exception ignored) {}
+        issue.queue(channel, message -> setLastInstructions(message, msg -> { msg.addReaction(ERROR_EMOTE.query().first()).queue();
         }));
     }
 
@@ -205,13 +200,14 @@ public class TicketModule extends Module {
                 .queue();
 
         String plugins = Plugin.getMembersPluginsinEmojis(member);
+
         new TechEmbedBuilder(member.getEffectiveName() + " - " + member.getUser().getId())
                 .field("Plugin", plugin.getEmoji().getAsMention(), true)
                 .field("Owned Plugins", plugins, true)
                 .field("Issue", issue, false)
                 .queue(ticketChannel);
 
-        DbMember dbMember = TechDiscordBot.getStorage().retrieveMemberById(Integer.parseInt(member.getId()));
+        DbMember dbMember = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId());
         SubVerificationList subVerifications = TechDiscordBot.getStorage().retrieveMemberSubVerifications(dbMember);
         if(!subVerifications.isEmpty()) {
             SubVerification subVerification = subVerifications.stream().findFirst().get();

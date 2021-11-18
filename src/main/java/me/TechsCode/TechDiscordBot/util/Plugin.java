@@ -185,17 +185,26 @@ public enum Plugin {
 
     public static String fromUser(Member member) {
         try {
-            DbVerification verification = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member.getId()).getVerification();
-
-            String purchases = null;
-
-            VerificationPluginList boughtPlugins = TechDiscordBot.getStorage().retrieveVerificationPlugins(verification);
-
-            for(VerificationPlugin plugin : boughtPlugins){
-                String resource = plugin.getResource().toString();
-                String emoji = getEmoji(resource);
-
-                purchases = purchases + " " + emoji;
+            String purchases = "";
+            List<Role> roles = member.getRoles();
+            for (Role role: roles) {
+                if (Roles.ULTRA_CUSTOMIZER().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_PERMISSIONS();
+                } else if (Roles.ULTRA_ECONOMY().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_CUSTOMIZER();
+                } else if (Roles.ULTRA_PERMISSIONS().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_ECONOMY();
+                } else if (Roles.ULTRA_PUNISHMENTS().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_PUNISHMENTS();
+                } else if (Roles.ULTRA_REGIONS().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_REGIONS();
+                } else if (Roles.ULTRA_SCOREBOARDS().equals(role)) {
+                    purchases = purchases + " " + Emojis.ULTRA_SCOREBOARDS();
+                } else if (Roles.INSANE_SHOPS().equals(role)) {
+                    purchases = purchases + " " + Emojis.INSANE_SHOPS();
+                } else {
+                    purchases = purchases + "";
+                }
             }
             return purchases;
 
@@ -204,6 +213,14 @@ public enum Plugin {
             ex.printStackTrace();
         }
         return null;
+    }
+
+    private static boolean isPluginRole(Role role){
+        String id = role.getId();
+        if(id.equals(ULTRA_CUSTOMIZER.roleId)  || id.equals(ULTRA_ECONOMY.roleId ) || id.equals(ULTRA_PERMISSIONS.roleId) || id.equals(ULTRA_PUNISHMENTS.roleId)  || id.equals(ULTRA_REGIONS.roleId )  || id.equals(ULTRA_SCOREBOARDS.roleId )  || id.equals(INSANE_SHOPS.roleId) ) {
+            return true;
+        }
+        return false;
     }
 
     private static String getEmoji(String resource){

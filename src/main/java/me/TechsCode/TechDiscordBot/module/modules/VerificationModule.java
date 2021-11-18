@@ -58,10 +58,9 @@ public class VerificationModule extends Module {
 
         lastSelectionEmbed = null;
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (lastSelectionEmbed != null)
-                lastSelectionEmbed.delete().complete();
-        }));
+        if (lastSelectionEmbed != null) {
+            lastSelectionEmbed.delete().complete();
+        }
 
         sendSelection();
     }
@@ -77,7 +76,13 @@ public class VerificationModule extends Module {
         assert member != null;
 
         if(e.getComponentId().equals("spigot")){
+            if(member.getRoles().contains("Spigot")){
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified a spigot account!").error().sendTemporary(channel, 15);
+                return;
+            }
+
             selectedMarket = "spigotmc";
+
         }
         if(e.getComponentId().equals("mc-market")){
             selectedMarket = "mcmarket";

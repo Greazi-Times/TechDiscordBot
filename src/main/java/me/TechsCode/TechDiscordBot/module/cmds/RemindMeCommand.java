@@ -25,6 +25,13 @@ public class RemindMeCommand extends CommandModule {
         }
     };
 
+    private final DefinedQuery<Role> PATREON_ROLE = new DefinedQuery<Role>() {
+        @Override
+        protected Query<Role> newQuery() {
+            return bot.getRoles("Patreon");
+        }
+    };
+
     public RemindMeCommand(TechDiscordBot bot) {
         super(bot);
     }
@@ -41,7 +48,7 @@ public class RemindMeCommand extends CommandModule {
 
     @Override
     public CommandPrivilege[] getCommandPrivileges() {
-        return new CommandPrivilege[] { CommandPrivilege.enable(STAFF_ROLE.query().first()) };
+        return new CommandPrivilege[] { CommandPrivilege.enable(STAFF_ROLE.query().first()), CommandPrivilege.enable(PATREON_ROLE.query().first()) };
     }
 
     @Override

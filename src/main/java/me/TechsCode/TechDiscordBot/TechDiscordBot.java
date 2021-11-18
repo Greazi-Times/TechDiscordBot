@@ -4,6 +4,8 @@ import me.TechsCode.TechDiscordBot.module.ModulesManager;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.MemberList;
+import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
@@ -157,8 +159,7 @@ public class TechDiscordBot {
         log("  > Donators: " + getGuild().getMembers().stream().filter(member -> member.getRoles().stream().anyMatch(role -> role.getName().contains("Donator"))).count());
 
         log("");
-
-
+        
 //        HashMap<Integer, String> oldVerifications = getStorage().retrieveOldVerfications();
 //        for (Map.Entry<Integer, String> me : oldVerifications.entrySet()) {
 //            String discordId = me.getValue();

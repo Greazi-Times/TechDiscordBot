@@ -27,22 +27,6 @@ public class TechEmbedBuilder extends EmbedBuilder {
         footer("Developed by Tech & Team");
     }
 
-    public TechEmbedBuilder(String title, boolean footer) {
-        if(title != null)
-            setAuthor(title, "https://techscode.com", "https://i.imgur.com/nnegGEV.png");
-        if(footer)
-            footer("Developed by Tech & Team");
-
-        color(new Color(81, 153, 226));
-    }
-
-    public TechEmbedBuilder(boolean footer) {
-        if(footer)
-            footer("Developed by Tech & Team");
-
-        color(new Color(81, 153, 226));
-    }
-
     public TechEmbedBuilder footer(String text) {
         setFooter("Tech's Plugin Support • " + text, "https://i.imgur.com/nzfiUTy.png");
 
@@ -107,25 +91,6 @@ public class TechEmbedBuilder extends EmbedBuilder {
 
     public String getText() {
         return super.getDescriptionBuilder().toString();
-    }
-
-    @Deprecated
-    // Try not to use this as it sleeps the bot basically.
-    public Message complete(TextChannel textChannel) {
-        return textChannel.sendMessage(build()).complete();
-    }
-
-    @Deprecated
-    // Try not to use this as it sleeps the bot basically.
-    public Message complete(Member member) {
-        return complete(member.getUser());
-    }
-
-    public Message complete(User user) {
-        try {
-            return user.openPrivateChannel().complete().sendMessage(build()).complete();
-        } catch (ErrorResponseException ignore) { }
-        return null;
     }
 
     public void queue(TextChannel textChannel) {

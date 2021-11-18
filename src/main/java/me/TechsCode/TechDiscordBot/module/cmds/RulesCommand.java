@@ -113,7 +113,7 @@ public class RulesCommand extends CommandModule {
 
         i = 0;
         for(String s : embeds) {
-            new TechEmbedBuilder(i == 0 ? "Rules" : null, false)
+            new TechEmbedBuilder(i == 0 ? "Rules" : null)
                     .text(s)
                     .queue(OVERVIEW_CHANNEL.query().first());
             i++;
