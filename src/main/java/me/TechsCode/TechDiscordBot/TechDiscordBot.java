@@ -31,10 +31,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import okhttp3.OkHttpClient;
 
 import javax.security.auth.login.LoginException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -232,6 +229,24 @@ public class TechDiscordBot {
 //                log("imported "+member.getUser().getName());
 //            }
 //        });
+
+        for (DbVerification ver : storage.retrieveVerifications()) {
+            Member m = ver.getMember().getDiscordMember();
+            ver.getMarkets().forEach(verificationMarket -> {
+                if (verificationMarket.getMarket().getName().equals("spigotmc")){
+                    m.getRoles().add(Roles.SPIGOT());
+                }
+                if (verificationMarket.getMarket().getName().equals("mcmarket")){
+                    m.getRoles().add(Roles.MCMARKET());
+                }
+                if (verificationMarket.getMarket().getName().equals("songoda")){
+                    m.getRoles().add(Roles.SONGODA());
+                }
+                if (verificationMarket.getMarket().getName().equals("polymart")){
+                    m.getRoles().add(Roles.POLYMART());
+                }
+            });
+        }
 
         getModulesManager().logLoad();
 
