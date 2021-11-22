@@ -53,7 +53,7 @@ public class WikiCommand extends CommandModule {
         boolean all = e.getOption("all") != null && e.getOption("all").getAsBoolean();
         boolean mine = e.getOption("mine") != null && e.getOption("mine").getAsBoolean();
 
-        e.replyEmbeds(new TechEmbedBuilder().text("Showing all the wiki's for all the plugins.\n<:UltraPermissions~1:> https://ultrapermissions.com/wiki \n<:UltraCustomizer~1:> https://ultracustomizer.com/wiki \n:UltraRegions~1: https://ultraregions.com/wiki \n<:UltraPunishments~1:> https://ultrapunishments.com/wiki \n<:InsaneShops~1:> https://insaneshops.com/wiki \n<:UltraEconomy~1:> https://ultraeconomy.com/wiki \n<:UltraScoreboards~1:> https://ultrascoreboards.com/wiki")
+        e.replyEmbeds(new TechEmbedBuilder().text("Showing all the wiki's for all the plugins.\n<:UltraPermissions:576937960176353293> https://ultrapermissions.com/wiki \n<:UltraCustomizer:576873108506411018> https://ultracustomizer.com/wiki \n<:UltraRegions:639288786236473354> https://ultraregions.com/wiki \n<:UltraPunishments:576873108422524954> https://ultrapunishments.com/wiki \n<:InsaneShops:576871756816449536> https://insaneshops.com/wiki \n<:UltraEconomy:748004373971337216> https://ultraeconomy.com/wiki \n<:UltraScoreboards:843611772481044520> https://ultrascoreboards.com/wiki")
                 .build()).queue();
 
 
