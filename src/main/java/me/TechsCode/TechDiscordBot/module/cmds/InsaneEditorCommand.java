@@ -8,20 +8,20 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
-public class UltraEditorCommand extends CommandModule {
+public class InsaneEditorCommand extends CommandModule {
 
-    public UltraEditorCommand(TechDiscordBot bot) {
+    public InsaneEditorCommand(TechDiscordBot bot) {
         super(bot);
     }
 
     @Override
     public String getName() {
-        return "ultraeditor";
+        return "insaneeditor";
     }
 
     @Override
     public String getDescription() {
-        return "Returns the Ultra Editor website!";
+        return "Returns the Insane Editor website!";
     }
 
     @Override
@@ -41,6 +41,6 @@ public class UltraEditorCommand extends CommandModule {
 
     @Override
     public void onCommand(TextChannel channel, Member m, SlashCommandEvent e) {
-        e.reply("https://ultraeditor.tech").queue();
+        e.reply("https://insaneeditor.com/").queue();
     }
 }
