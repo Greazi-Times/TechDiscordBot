@@ -1,12 +1,9 @@
 package me.TechsCode.TechDiscordBot;
 
 import me.TechsCode.TechDiscordBot.module.ModulesManager;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
-import me.TechsCode.TechDiscordBot.mysql.Models.DbVerification;
+import me.TechsCode.TechDiscordBot.mysql.Models.*;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.MemberList;
 import me.TechsCode.TechDiscordBot.mysql.Models.Lists.VerificationList;
-import me.TechsCode.TechDiscordBot.mysql.Models.Resource;
 import me.TechsCode.TechDiscordBot.mysql.MySQLSettings;
 import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.ChannelQuery;
@@ -230,23 +227,26 @@ public class TechDiscordBot {
 //            }
 //        });
 
-        for (DbVerification ver : storage.retrieveVerifications()) {
-            Member m = ver.getMember().getDiscordMember();
-            ver.getMarkets().forEach(verificationMarket -> {
-                if (verificationMarket.getMarket().getName().equals("spigotmc")){
-                    m.getRoles().add(Roles.SPIGOT());
-                }
-                if (verificationMarket.getMarket().getName().equals("mcmarket")){
-                    m.getRoles().add(Roles.MCMARKET());
-                }
-                if (verificationMarket.getMarket().getName().equals("songoda")){
-                    m.getRoles().add(Roles.SONGODA());
-                }
-                if (verificationMarket.getMarket().getName().equals("polymart")){
-                    m.getRoles().add(Roles.POLYMART());
-                }
-            });
-        }
+//        for (DbVerification ver : storage.retrieveVerifications()) {
+//            Member m = ver.getMember().getDiscordMember();
+//            if (m == null) continue;
+//            if (!ver.getMarkets().isEmpty()){
+//                for (VerificationMarket verificationMarket : ver.getMarkets()){
+//                    if (verificationMarket.getMarket().getName().equals("spigotmc")){
+//                        TechDiscordBot.getGuild().addRoleToMember(m, Roles.SPIGOT()).queue();
+//                    }
+//                    if (verificationMarket.getMarket().getName().equals("mcmarket")){
+//                        TechDiscordBot.getGuild().addRoleToMember(m, Roles.MCMARKET()).queue();
+//                    }
+//                    if (verificationMarket.getMarket().getName().equals("songoda")){
+//                        TechDiscordBot.getGuild().addRoleToMember(m, Roles.SONGODA()).queue();
+//                    }
+//                    if (verificationMarket.getMarket().getName().equals("polymart")){
+//                        TechDiscordBot.getGuild().addRoleToMember(m, Roles.POLYMART()).queue();
+//                    }
+//                }
+//            }
+//        }
 
         getModulesManager().logLoad();
 

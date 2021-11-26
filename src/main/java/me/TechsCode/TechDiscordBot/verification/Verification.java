@@ -25,6 +25,7 @@ public class Verification {
 		String member = e.getUser().getId();
 
 		DbMember dbMember = TechDiscordBot.getStorage().retrieveMemberByDiscordId(member);
+		if(dbMember == null) return false;
 		DbVerification existingVerification = dbMember.getVerification();
 		if(existingVerification == null) return false;
 
