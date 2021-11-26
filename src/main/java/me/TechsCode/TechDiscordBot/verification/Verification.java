@@ -21,35 +21,6 @@ import java.util.stream.Stream;
 
 public class Verification {
 
-
-	public static void Verification(Member m, DbMarket market, TextChannel channel){
-		Storage storage = TechDiscordBot.getStorage();
-
-		User user = m.getUser();
-		String discordId = m.getId();
-
-		DbMember member = storage.retrieveMemberByDiscordId(discordId);
-
-		if(isVerified(m)) {
-			storage.retrieveMemberByDiscordId(discordId).getVerificationQ().delete();
-			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("Hello there,\nYou have previously verified yourself and your roles will be automatically updated as a result.\n\nThis update may take 15 to 20 minutes to complete.").sendTemporary(channel, 10);
-			return;
-		}
-		if(storage.VerificationQExists(member)) {
-			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("You have already started a verification process please finish it first!").sendTemporary(channel, 10);
-			return;
-		}
-
-		try {
-			user.openPrivateChannel().complete()
-				.sendMessageEmbeds(new TechEmbedBuilder(market.getName() + " Verification").text("Welcome to the verification system.\nTo verify you have bought one or more of our plugins, we will need some information from you.\n\n"+
-						"**What is your paypal e-mail?**\n\n*Type* `why` *to get know why we need your e-mail*\n*Type* `cancel` *to cancel your verification*").build()).queue();
-			new VerificationQ(member, market, "", "").save();
-		} catch (ErrorResponseException ignored) {
-			new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("The verification process could not be started!\n\nYou have disabled your DM's please enable them to verify your purchase!").sendTemporary(channel, 10);
-		}
-	}
-
 	public static boolean isVerified(Member e) {
 		String member = e.getUser().getId();
 
@@ -57,10 +28,7 @@ public class Verification {
 		DbVerification existingVerification = dbMember.getVerification();
 		if(existingVerification == null) return false;
 
-		VerificationMarketList markets = existingVerification.getMarkets();
-		DbMarket qMarket = dbMember.getVerificationQ().getMarket();
-
-		return markets.market(qMarket).stream().findFirst().isPresent();
+		return true;
 	}
 
 	public static void verify(PrivateMessageReceivedEvent e, DbMember member, Message message){
@@ -83,7 +51,7 @@ public class Verification {
 		TransactionsList transactions = TechDiscordBot.getPaypalAPI().emailSearchTransaction(email, market);
 		marketList = transactions.stream().map(transaction -> transaction.getPlugin().getName()).collect(Collectors.joining(", "));
 
-		message.editMessageEmbeds(new TechEmbedBuilder("Verification Success").text("Plugins that have been found on your account:\n`" + marketList + "`").build()).queue();
+		message.editMessageEmbeds(new TechEmbedBuilder("Verification Success").text("Plugins that have been found on your account:\n`" + marketList + "`").success().build()).queue();
 
 		VerificationLogs.log(new TechEmbedBuilder(e.getAuthor().getName() + "'s Verification Completed").success().text(e.getAuthor().getName() + " has successfully verified their SpigotMC Account!").thumbnail(e.getAuthor().getAvatarUrl()));
 
