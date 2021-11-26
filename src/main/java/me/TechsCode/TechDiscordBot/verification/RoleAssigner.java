@@ -21,20 +21,25 @@ public class RoleAssigner {
 		// Check if member has the verified role
 		if(!roleManager.hasRole(Roles.VERIFIED())){
 			roleManager.addRole(Roles.VERIFIED());
+			roleManager.save();
 		}
 
 		// Check if the member has the market role
 		if(Objects.equals(market, "spigotmc")) {
 			roleManager.addRole(Roles.SPIGOT());
+			roleManager.save();
 		}
 		if(Objects.equals(market, "mc-market")) {
 			roleManager.addRole(Roles.MCMARKET());
+			roleManager.save();
 		}
 		if(Objects.equals(market, "songoda")) {
 			roleManager.addRole(Roles.SONGODA());
+			roleManager.save();
 		}
 		if(Objects.equals(market, "polymart")) {
 			roleManager.addRole(Roles.POLYMART());
+			roleManager.save();
 		}
 
 		// Check if the member has the plugin roles
@@ -42,27 +47,32 @@ public class RoleAssigner {
 		for (String plugin : plugins) {
 			if (plugin.equals("Ultra Permissions")) {
 				roleManager.addRole(Roles.ULTRA_PERMISSIONS());
+				roleManager.save();
 			}
 			if (plugin.equals("Ultra Customizer")) {
 				roleManager.addRole(Roles.ULTRA_CUSTOMIZER());
+				roleManager.save();
 			}
 			if (plugin.equals("Ultra Economy")) {
 				roleManager.addRole(Roles.ULTRA_ECONOMY());
+				roleManager.save();
 			}
 			if (plugin.equals("Ultra Regions")) {
 				roleManager.addRole(Roles.ULTRA_REGIONS());
+				roleManager.save();
 			}
 			if (plugin.equals("Ultra Punishments")) {
 				roleManager.addRole(Roles.ULTRA_PUNISHMENTS());
+				roleManager.save();
 			}
 			if (plugin.equals("Ultra Scoreboards")) {
 				roleManager.addRole(Roles.ULTRA_SCOREBOARDS());
+				roleManager.save();
 			}
 			if (plugin.equals("Insane Shops")) {
 				roleManager.addRole(Roles.INSANE_SHOPS());
+				roleManager.save();
 			}
 		}
-
-		roleManager.save();
 	}
 }
