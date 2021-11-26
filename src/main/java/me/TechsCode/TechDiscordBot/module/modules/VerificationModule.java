@@ -4,16 +4,16 @@ import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.Module;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMarket;
 import me.TechsCode.TechDiscordBot.mysql.Models.DbMember;
+import me.TechsCode.TechDiscordBot.mysql.Models.VerificationQ;
+import me.TechsCode.TechDiscordBot.mysql.storage.Storage;
 import me.TechsCode.TechDiscordBot.objects.DefinedQuery;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import me.TechsCode.TechDiscordBot.verification.Verification;
-import net.dv8tion.jda.api.entities.Emoji;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
 
@@ -77,7 +77,7 @@ public class VerificationModule extends Module {
 
         if(e.getComponentId().equals("spigot")){
             if(member.getRoles().contains("Spigot")){
-                new TechEmbedBuilder("ERROR Verification").text("You have already verified a spigot account!").error().sendTemporary(channel, 15);
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified your Spigot account.\nYour roles will be updated automatically.").error().sendTemporary(channel, 15);
                 return;
             }
 
@@ -86,14 +86,14 @@ public class VerificationModule extends Module {
         }
         if(e.getComponentId().equals("mc-market")){
             if(member.getRoles().contains("MC-Market")){
-                new TechEmbedBuilder("ERROR Verification").text("You have already verified a mc-market account!").error().sendTemporary(channel, 15);
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified your MC-Market account.\nYour roles will be updated automatically.").error().sendTemporary(channel, 15);
                 return;
             }
             selectedMarket = "mcmarket";
         }
         if(e.getComponentId().equals("songoda")){
             if(member.getRoles().contains("Songoda")){
-                new TechEmbedBuilder("ERROR Verification").text("You have already verified a songoda account!").error().sendTemporary(channel, 15);
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified your Songoda account.\nYour roles will be updated automatically.").error().sendTemporary(channel, 15);
                 return;
             }
             //new TechEmbedBuilder("Songoda Verification").text("To verify your Songoda purchase you need to connect your discord account to your songoda account.\n\nNeed help with connecting?\n*You can connect your account [here](https://songoda.com/account/integrations)*").error().sendTemporary(channel, 15);;
@@ -101,16 +101,31 @@ public class VerificationModule extends Module {
         }
         if(e.getComponentId().equals("polymart")){
             if(member.getRoles().contains("Polymart")){
-                new TechEmbedBuilder("ERROR Verification").text("You have already verified a polymart account!").error().sendTemporary(channel, 15);
+                new TechEmbedBuilder("ERROR Verification").text("You have already verified your Polymart account.\nYour roles will be updated automatically.").error().sendTemporary(channel, 15);
                 return;
             }
             selectedMarket = "polymart";
         }
         DbMarket market = TechDiscordBot.getStorage().retrieveMarketByName(selectedMarket);
 
-        e.replyEmbeds(new TechEmbedBuilder("Verification").text("A DM with instructions has been send to you.").build()).setEphemeral(true).queue();
+        Storage storage = TechDiscordBot.getStorage();
 
-        Verification.Verification(member, market, channel);
+        User user = member.getUser();
+        String discordId = member.getId();
+
+        DbMember dbMember = storage.retrieveMemberByDiscordId(discordId);
+
+        try {
+            user.openPrivateChannel().complete()
+                    .sendMessageEmbeds(new TechEmbedBuilder(market.getName() + " Verification").text("Welcome to the verification system.\nTo verify you have bought one or more of our plugins, we will need some information from you.\n\n"+
+                            "**What is your paypal e-mail?**\n\n*Type* `why` *to get know why we need your e-mail*\n*Type* `cancel` *to cancel your verification*").build()).queue();
+            new VerificationQ(dbMember, market, "", "").save();
+
+            e.replyEmbeds(new TechEmbedBuilder("Verification").text("A DM with instructions has been send to you.").build()).setEphemeral(true).queue();
+        } catch (ErrorResponseException ignored) {
+            e.replyEmbeds(new TechEmbedBuilder("ERROR "+user.getAsMention()).error().text("The verification process could not be started!\n\nYou have disabled your DM's please enable them to verify your purchase!").build()).setEphemeral(true).queue();
+            return;
+        }
     }
 
     public void sendSelection() {
@@ -119,7 +134,7 @@ public class VerificationModule extends Module {
         channel.sendMessageEmbeds( new TechEmbedBuilder("Marketplace Selector")
                 .text("Have you purchased one or more of our plugins and wish to verify yourself?\n\n"+
                         "You have come to the right place!\n"+
-                        "Just select the emoji below that corresponds to the marketplace where you bought the plugin(s), and we will explain the next steps after your selection.")
+                        "Select the marketplace where you bought your plugin(s), and we will explain the next steps after your selection.")
                 .build()
         ).setActionRow(
                 Button.primary("spigot", "Spigot").withEmoji(Emoji.fromMarkdown("<:spigot:879756315747053628>")),
