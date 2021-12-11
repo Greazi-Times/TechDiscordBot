@@ -41,7 +41,7 @@ public class RoleCommand extends CommandModule {
         add("Ultra Economy");
         add("Ultra Scoreboards");
         add("Keep Roles");
-        add("SpigotMC");
+        add("Spigot");
         add("MC-Market");
         add("Songoda");
         add("Polymart");
@@ -59,7 +59,7 @@ public class RoleCommand extends CommandModule {
         add("Ultra Economy");
         add("Ultra Scoreboards");
         add("Keep Roles");
-        add("SpigotMC");
+        add("Spigot");
         add("MC-Market");
         add("Songoda");
         add("Polymart");
@@ -83,7 +83,7 @@ public class RoleCommand extends CommandModule {
         add("Ultra Economy");
         add("Ultra Scoreboards");
         add("Keep Roles");
-        add("SpigotMC");
+        add("Spigot");
         add("MC-Market");
         add("Songoda");
         add("Polymart");

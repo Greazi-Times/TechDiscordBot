@@ -18,7 +18,7 @@ public class ReactionModule extends Module {
     public Message reactionMessage;
 
     //TODO change to support discord
-    private final TextChannel ROLES_CHANNEL = this.bot.getChannel("877248189982453835");
+    private final TextChannel ROLES_CHANNEL = this.bot.getChannel("837679014268895292");
 
     public ReactionModule(TechDiscordBot bot) {
         super(bot);
