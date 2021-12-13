@@ -7,7 +7,9 @@ import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.objects.Requirement;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import net.dv8tion.jda.api.entities.Category;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageUpdateEvent;
 import net.dv8tion.jda.api.hooks.SubscribeEvent;
 
 import java.awt.*;
@@ -18,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 public class WordBlacklistModule extends Module {
@@ -60,19 +63,38 @@ public class WordBlacklistModule extends Module {
     public void onMessage(GuildMessageReceivedEvent e) {
         if (e.getMember() == null || e.getAuthor().isBot() || IGNORED_CATEGORIES.query().stream().anyMatch(c -> c.getId().equals(e.getChannel().getParent().getId()))) return;
 
-        String message = e.getMessage().getContentRaw().toLowerCase();
-        String blacklist = String.join("|", BLACKLISTED_WORDS);
-
-        String regex = "[^!@#$%^&*]*(" + blacklist + ")[^!@#$%^&*]*";
-        boolean blockMessage= Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL).matcher(message).matches();
-
-        if (blockMessage) {
+        if (runMatcher(e.getMessage().getContentRaw().toLowerCase())){
             e.getMessage().delete().queue();
             new TechEmbedBuilder("Blocked Word(s)")
                     .color(Color.RED)
                     .text("Your message contained a world which is in our blacklist.\n\nIf you think this is a mistake, take a look at our [**word blacklist**](" + URL + ").")
                     .sendTemporary(e.getChannel(), 10, TimeUnit.SECONDS);
         }
+    }
+
+    @SubscribeEvent
+    public void onMessageUpdate(GuildMessageUpdateEvent e) {
+        if (e.getMember() == null || e.getAuthor().isBot() || IGNORED_CATEGORIES.query().stream().anyMatch(c -> c.getId().equals(e.getChannel().getParent().getId()))) return;
+
+        if (runMatcher(e.getMessage().getContentRaw().toLowerCase())){
+            e.getMessage().delete().queue();
+            new TechEmbedBuilder("Blocked Word(s)")
+                    .color(Color.RED)
+                    .text("Your message contained a world which is in our blacklist.\n\nIf you think this is a mistake, take a look at our [**word blacklist**](" + URL + ").")
+                    .sendTemporary(e.getChannel(), 10, TimeUnit.SECONDS);
+        }
+    }
+
+    public boolean runMatcher(String message){
+        AtomicBoolean blockMessage = new AtomicBoolean(false);
+        for (String regex : BLACKLISTED_WORDS) {
+            boolean match = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL).matcher(message).find();
+            if (match) {
+                blockMessage.set(true);
+                break;
+            }
+        }
+        return blockMessage.get();
     }
 
     private void getBlacklist() {
@@ -88,11 +110,25 @@ public class WordBlacklistModule extends Module {
                 BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                 String inputLine;
 
+                BLACKLISTED_WORDS.clear();
                 while ((inputLine = in.readLine()) != null) {
                     String word = inputLine.trim().toLowerCase();
 
-                    if(!BLACKLISTED_WORDS.contains(word))
-                        BLACKLISTED_WORDS.add(word);
+                    String[] letters = word.split("");
+                    StringBuilder regex = new StringBuilder();
+                    regex.append("\\b(?i)(");
+                    for (int i = 0; i < letters.length; i++) {
+                        if (i == 0){
+                            regex.append(letters[i]).append("+(\\W|_)*");
+                        }else if(i == letters.length - 1){
+                            regex.append(letters[i]).append("+");
+                        }else{
+                            regex.append("(").append(letters[i]).append("?)+(\\W|_)*");
+                        }
+                    }
+                    regex.append(")");
+
+                    BLACKLISTED_WORDS.add(regex.toString());
                 }
 
                 in.close();
