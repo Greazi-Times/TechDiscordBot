@@ -2,7 +2,8 @@ package me.TechsCode.TechDiscordBot.mysql;
 
 public class MySQLSettings {
 
-    private final String host, database, username, password, port;
+    private final String host, username, password, port;
+    private String database;
 
     private MySQLSettings(String host, String port, String database, String username, String password) {
         this.host = host;
@@ -14,6 +15,10 @@ public class MySQLSettings {
 
     public static MySQLSettings of(String host, String port, String database, String username, String password) {
         return new MySQLSettings(host, port, database, username, password);
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 
     public String getHost() {

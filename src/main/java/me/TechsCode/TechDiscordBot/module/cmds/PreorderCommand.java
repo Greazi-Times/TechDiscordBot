@@ -2,6 +2,7 @@ package me.TechsCode.TechDiscordBot.module.cmds;
 
 import me.TechsCode.TechDiscordBot.TechDiscordBot;
 import me.TechsCode.TechDiscordBot.module.CommandModule;
+import me.TechsCode.TechDiscordBot.mysql.Models.DbPreorder;
 import me.TechsCode.TechDiscordBot.objects.Query;
 import me.TechsCode.TechDiscordBot.util.TechEmbedBuilder;
 import net.dv8tion.jda.api.entities.Emote;
@@ -14,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -70,32 +72,30 @@ public class PreorderCommand extends CommandModule {
         if(member == null) member = m;
 
         Member finalSelectedMember = member;
-//        Preorder preorder = TechDiscordBot.getStorage().getPreorders(getRoles().get(0).replace(" Preorder", ""), false).stream().filter(po -> po.getDiscordId() == finalSelectedMember.getUser().getIdLong()).findFirst().orElse(null);
-//
-//        if(preorder == null) {
-//            e.replyEmbeds(
-//                new TechEmbedBuilder("Preorder Command - Error")
-//                    .error()
-//                    .text("Could not find a preorder that belongs to " + member.getAsMention() + "!")
-//                    .build()
-//            ).setEphemeral(true).queue();
-//            return;
-//        }
+        DbPreorder preorder = TechDiscordBot.getStorage().retrievePreorders().stream().filter(dbPreorder -> dbPreorder.getDiscordId() == finalSelectedMember.getUser().getIdLong()).findFirst().orElse(null);
 
-//        boolean showEmail = (e.getOption("show-email") != null && e.getOption("show-email").getAsBoolean()) && (preorder.getDiscordId() == member.getUser().getIdLong() || isStaff(member));
-//        boolean showTransactionId = (e.getOption("show-transaction-id") != null && e.getOption("show-transaction-id").getAsBoolean()) && (preorder.getDiscordId() == member.getUser().getIdLong() || isStaff(member));
+        if(preorder == null) {
+            e.replyEmbeds(
+                new TechEmbedBuilder("Preorder Command - Error")
+                    .error()
+                    .text("Could not find a preorder that belongs to " + member.getAsMention() + "!")
+                    .build()
+            ).setEphemeral(true).queue();
+            return;
+        }
 
-//        Query<Emote> query = bot.getEmotes(preorder.getPlugin().replace(" ", ""));
-//
-//        e.replyEmbeds(
-//            new TechEmbedBuilder("Preorder - " + member.getEffectiveName() + "#" + member.getUser().getDiscriminator())
-//                .success()
-//                .field("Email", (showEmail ? preorder.getEmail() : obfuscateEmail(preorder.getEmail())), true)
-//                .field("Transaction ID", (showTransactionId ? preorder.getTransactionId() : obfuscateTransactionId(preorder.getTransactionId())), true)
-//                .field("Plugin", (query.hasAny() ? query.first().getAsMention() + " " : "") + preorder.getPlugin(), true)
-//                .field("Discord Name", preorder.getDiscordName() + " (" + member.getAsMention() + ")", true)
-//                .build()
-//        ).queue();
+        boolean showEmail = (e.getOption("show-email") != null && Objects.requireNonNull(e.getOption("show-email")).getAsBoolean()) && (preorder.getDiscordId() == member.getUser().getIdLong() || isStaff(member));
+        boolean showTransactionId = (e.getOption("show-transaction-id") != null && Objects.requireNonNull(e.getOption("show-transaction-id")).getAsBoolean()) && (preorder.getDiscordId() == member.getUser().getIdLong() || isStaff(member));
+
+        e.replyEmbeds(
+            new TechEmbedBuilder("Preorder - " + member.getEffectiveName() + "#" + member.getUser().getDiscriminator())
+                .success()
+                .field("Email", (showEmail ? preorder.getEmail() : obfuscateEmail(preorder.getEmail())), true)
+                .field("Transaction ID", (showTransactionId ? preorder.getTransactionId() : obfuscateTransactionId(preorder.getTransactionId())), true)
+                .field("Plugin", "<@&936284238519599104>", true)
+                .field("Discord Name", preorder.getDiscordName() + " (" + member.getAsMention() + ")", true)
+                .build()
+        ).queue();
     }
 
     public String obfuscateEmail(String email) {

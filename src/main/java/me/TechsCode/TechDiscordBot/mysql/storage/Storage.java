@@ -19,6 +19,7 @@ import java.util.Random;
 public class Storage {
 
     private final MySQL mysql;
+    private final MySQL mysqlMain;
     private boolean connected;
 
     public final String VERIFICATIONS_TABLE = "Verification";
@@ -38,6 +39,10 @@ public class Storage {
     private Storage(MySQLSettings mySQLSettings) {
         this.connected = false;
         this.mysql = MySQL.of(mySQLSettings);
+
+        MySQLSettings mainMySQLSettings = mySQLSettings;
+        mainMySQLSettings.setDatabase("Main");
+        this.mysqlMain = MySQL.of(mainMySQLSettings);
 
         createDefault();
     }
@@ -98,6 +103,29 @@ public class Storage {
         }
 
         return num;
+    }
+
+    //-----------------------------
+    //---------PREORDERS-----------
+    //-----------------------------
+    public PreorderList retrievePreorders() {
+        PreorderList preorders = new PreorderList();
+
+        try {
+            Connection connection = mysqlMain.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM UltraMotdPreorders;");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next())
+                preorders.add(new DbPreorder(rs.getInt("id"), rs.getString("email"), rs.getLong("discordId"), rs.getString("discordName"), rs.getString("transactionId"), rs.getBoolean("isPatreon")));
+
+            rs.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return preorders;
     }
 
     //-----------------------------
